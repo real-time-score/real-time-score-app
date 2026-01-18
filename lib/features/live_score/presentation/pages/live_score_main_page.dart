@@ -86,9 +86,24 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           ? AppNavigationBar(
               currentIndex: _bottomNavIndex,
               onTap: (index) {
-                setState(() {
-                  _bottomNavIndex = index;
-                });
+                if (index == _bottomNavIndex) return;
+                switch (index) {
+                  case 0:
+                    // 현재 페이지 (홈)
+                    break;
+                  case 1:
+                    Navigator.of(context).pushReplacementNamed('/pick-expert');
+                    break;
+                  case 2:
+                    Navigator.of(context).pushReplacementNamed('/community');
+                    break;
+                  case 3:
+                    Navigator.of(context).pushReplacementNamed('/ranking');
+                    break;
+                  case 4:
+                    Navigator.of(context).pushReplacementNamed('/my-page');
+                    break;
+                }
               },
             )
           : null,

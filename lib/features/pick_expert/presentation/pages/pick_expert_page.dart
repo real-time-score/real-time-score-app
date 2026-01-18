@@ -90,9 +90,24 @@ class _PickExpertPageState extends State<PickExpertPage> {
           ? AppNavigationBar(
               currentIndex: _bottomNavIndex,
               onTap: (index) {
-                setState(() {
-                  _bottomNavIndex = index;
-                });
+                if (index == _bottomNavIndex) return;
+                switch (index) {
+                  case 0:
+                    Navigator.of(context).pushReplacementNamed('/main');
+                    break;
+                  case 1:
+                    // 현재 페이지 (픽전문가)
+                    break;
+                  case 2:
+                    Navigator.of(context).pushReplacementNamed('/community');
+                    break;
+                  case 3:
+                    Navigator.of(context).pushReplacementNamed('/ranking');
+                    break;
+                  case 4:
+                    Navigator.of(context).pushReplacementNamed('/my-page');
+                    break;
+                }
               },
             )
           : null,
