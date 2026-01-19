@@ -64,17 +64,29 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
                     // LIVE / 프로토 토글
                     _buildToggle(),
                     const SizedBox(height: 8),
-                    // 스포츠 카테고리 탭
-                    _buildSportCategoryTabs(),
-                    const SizedBox(height: 8),
-                    // 서브 카테고리 칩
-                    _buildSubCategoryChips(),
-                    const SizedBox(height: 8),
-                    // 날짜 네비게이션
-                    _buildDateNavigation(),
-                    const SizedBox(height: 8),
-                    // 경기 리스트
-                    _buildMatchList(),
+                    // 토글에 따라 LIVE 또는 프로토 콘텐츠 표시
+                    if (_toggleIndex == 0) ...[
+                      // LIVE 콘텐츠
+                      // 스포츠 카테고리 탭
+                      _buildSportCategoryTabs(),
+                      const SizedBox(height: 8),
+                      // 서브 카테고리 칩
+                      _buildSubCategoryChips(),
+                      const SizedBox(height: 8),
+                      // 날짜 네비게이션
+                      _buildDateNavigation(),
+                      const SizedBox(height: 8),
+                      // 경기 리스트
+                      _buildMatchList(),
+                    ] else ...[
+                      // 프로토 콘텐츠
+                      const SizedBox(height: 8),
+                      // 프로모션 카드들
+                      _buildProtoPromotionCards(),
+                      const SizedBox(height: 16),
+                      // 경기 섹션
+                      _buildProtoMatchSection(),
+                    ],
                   ],
                 ),
               ),
@@ -233,10 +245,6 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           setState(() {
             _toggleIndex = index;
           });
-          // 프로토 탭 선택 시 프로토 메인 페이지로 이동
-          if (index == 1) {
-            Navigator.of(context).pushNamed('/proto-main');
-          }
         },
         size: AppToggleSize.large,
         colorType: AppToggleColorType.active,
@@ -722,6 +730,158 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           ),
         ),
       ],
+    );
+  }
+
+  // ============================================
+  // 프로토 콘텐츠 섹션
+  // ============================================
+
+  /// 프로토 프로모션 카드들
+  Widget _buildProtoPromotionCards() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          // 복권형 스포츠 배팅
+          _buildProtoPromotionCard(
+            title: '복권형 스포츠 배팅',
+            subtitle: '이지토토',
+            description: '소액으로 즐기는\n스포츠 복권',
+            gradientColors: [
+              const Color(0xFF6366F1),
+              const Color(0xFF8B5CF6),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // 실력형 스포츠 복권
+          _buildProtoPromotionCard(
+            title: '실력형 스포츠 복권',
+            subtitle: '프로토 승부식',
+            description: '나만의 경기 분석으로\n배당률 적중',
+            gradientColors: [
+              const Color(0xFF3B82F6),
+              const Color(0xFF06B6D4),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // 스포츠 베팅
+          _buildProtoPromotionCard(
+            title: '스포츠 베팅',
+            subtitle: '스포츠토토',
+            description: '간단한 선택으로\n스포츠 즐기기',
+            gradientColors: [
+              const Color(0xFF10B981),
+              const Color(0xFF34D399),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 프로토 프로모션 카드
+  Widget _buildProtoPromotionCard({
+    required String title,
+    required String subtitle,
+    required String description,
+    required List<Color> gradientColors,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: gradientColors,
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: [
+          // 텍스트 영역
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 서브타이틀
+                Text(
+                  subtitle,
+                  style: AppTextStyles.caption1Medium.copyWith(
+                    color: AppColors.white.withValues(alpha: 0.8),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                // 타이틀
+                Text(
+                  title,
+                  style: AppTextStyles.h4Bold.copyWith(
+                    color: AppColors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                // 설명
+                Text(
+                  description,
+                  style: AppTextStyles.body2NormalMedium.copyWith(
+                    color: AppColors.white.withValues(alpha: 0.9),
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // 아이콘 영역
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: AppColors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.sports_soccer,
+                size: 32,
+                color: AppColors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 프로토 경기 섹션
+  Widget _buildProtoMatchSection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.borderNormal),
+      ),
+      child: Column(
+        children: [
+          // 리그 헤더
+          _buildLeagueHeader(
+            leagueName: '리그명',
+            hasPick: true,
+            temperature: '12°C',
+          ),
+          const SizedBox(height: 8),
+          // 운영자 등록글 노출
+          _buildAdminNotice(),
+          const SizedBox(height: 12),
+          // 경기 카드
+          _buildMatchCard(),
+          const SizedBox(height: 8),
+          // 배당률 테이블
+          _buildOddsTable(),
+        ],
+      ),
     );
   }
 }
