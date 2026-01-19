@@ -488,11 +488,11 @@ class MyPage extends StatelessWidget {
         if (label == '홈') {
           Navigator.pushReplacementNamed(context, '/main');
         } else if (label == '픽전문가') {
-          Navigator.pushReplacementNamed(context, '/pick-expert');
+          Navigator.pushReplacementNamed(context, '/main/pick-expert');
         } else if (label == '커뮤니티') {
-          Navigator.pushReplacementNamed(context, '/community');
+          Navigator.pushReplacementNamed(context, '/main/community');
         } else if (label == '랭킹') {
-          Navigator.pushReplacementNamed(context, '/ranking');
+          Navigator.pushReplacementNamed(context, '/main/ranking');
         }
       },
       child: Container(

@@ -96,16 +96,16 @@ class _PickExpertPageState extends State<PickExpertPage> {
                     Navigator.of(context).pushReplacementNamed('/main');
                     break;
                   case 1:
-                    // 현재 페이지 (픽전문가)
+                    Navigator.of(context).pushReplacementNamed('/main/pick-expert');
                     break;
                   case 2:
-                    Navigator.of(context).pushReplacementNamed('/community');
+                    Navigator.of(context).pushReplacementNamed('/main/community');
                     break;
                   case 3:
-                    Navigator.of(context).pushReplacementNamed('/ranking');
+                    Navigator.of(context).pushReplacementNamed('/main/ranking');
                     break;
                   case 4:
-                    Navigator.of(context).pushReplacementNamed('/my-page');
+                    Navigator.of(context).pushReplacementNamed('/main/my');
                     break;
                 }
               },
@@ -159,12 +159,6 @@ class _PickExpertPageState extends State<PickExpertPage> {
           setState(() {
             _toggleIndex = index;
           });
-          // 페이지 전환
-          if (index == 0) {
-            Navigator.of(context).pushReplacementNamed('/pick-expert/paid');
-          } else {
-            Navigator.of(context).pushReplacementNamed('/pick-expert/free');
-          }
         },
         size: AppToggleSize.large,
         colorType: AppToggleColorType.active,

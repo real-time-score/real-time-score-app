@@ -64,16 +64,16 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
               Navigator.of(context).pushReplacementNamed('/main');
               break;
             case 1:
-              Navigator.of(context).pushReplacementNamed('/pick-expert');
+              Navigator.of(context).pushReplacementNamed('/main/pick-expert');
               break;
             case 2:
-              Navigator.of(context).pushReplacementNamed('/community');
+              Navigator.of(context).pushReplacementNamed('/main/community');
               break;
             case 3:
-              Navigator.of(context).pushReplacementNamed('/ranking');
+              Navigator.of(context).pushReplacementNamed('/main/ranking');
               break;
             case 4:
-              Navigator.of(context).pushReplacementNamed('/my-page');
+              Navigator.of(context).pushReplacementNamed('/main/my');
               break;
           }
         },

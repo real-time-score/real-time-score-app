@@ -445,11 +445,11 @@ class _CommunityPageState extends State<CommunityPage> {
         if (label == '홈') {
           Navigator.pushReplacementNamed(context, '/main');
         } else if (label == '픽전문가') {
-          Navigator.pushReplacementNamed(context, '/pick-expert');
+          Navigator.pushReplacementNamed(context, '/main/pick-expert');
         } else if (label == '랭킹') {
-          Navigator.pushReplacementNamed(context, '/ranking');
+          Navigator.pushReplacementNamed(context, '/main/ranking');
         } else if (label == 'MY') {
-          Navigator.pushReplacementNamed(context, '/my-page');
+          Navigator.pushReplacementNamed(context, '/main/my');
         }
       },
       child: Container(
