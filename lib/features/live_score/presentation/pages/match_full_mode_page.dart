@@ -450,29 +450,37 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
   }
 
   /// 배당률 셀
+  /// 역배(up): 빨간색 텍스트, 정배(down): 볼드 처리
   Widget _buildOddsCell({
     required String odds,
     required OddsChange change,
   }) {
     Color textColor = AppColors.labelNeutral;
+    FontWeight fontWeight = FontWeight.w500;
     Widget? icon;
 
     if (change == OddsChange.up) {
-      icon = Icon(
+      // 역배: 빨간색 + 화살표
+      icon = const Icon(
         Icons.arrow_drop_up,
         size: 24,
         color: AppColors.negative,
       );
+      textColor = AppColors.negative;
     } else if (change == OddsChange.down) {
-      icon = Icon(
+      // 정배: 볼드 처리 + 화살표
+      icon = const Icon(
         Icons.arrow_drop_down,
         size: 24,
         color: AppColors.positiveGreen,
       );
+      fontWeight = FontWeight.bold;
+      textColor = AppColors.labelNormal;
     } else if (change == OddsChange.negative) {
       textColor = AppColors.negative;
     } else if (change == OddsChange.positive) {
       textColor = AppColors.positiveGreen;
+      fontWeight = FontWeight.bold;
     }
 
     return Container(
@@ -491,6 +499,7 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
               odds,
               style: AppTextStyles.label1NormalMedium.copyWith(
                 color: textColor,
+                fontWeight: fontWeight,
               ),
             ),
           ],

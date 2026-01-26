@@ -494,7 +494,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
-              color: AppColors.primaryFigma,
+              color: AppColors.negative,
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
@@ -562,41 +562,121 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
     );
   }
 
+  /// 경기 상태 enum
+  /// [scheduled] 경기 전, [live] 경기 중, [finished] 경기 후
+
   /// 경기 카드
-  Widget _buildMatchCard() {
+  Widget _buildMatchCard({
+    String matchStatus = 'live', // 'scheduled', 'live', 'finished'
+    int homeScore = 0,
+    int awayScore = 0,
+  }) {
+    // 경기 상태에 따른 색상 결정
+    Color statusColor;
+    Color scoreColor;
+    String statusText;
+
+    switch (matchStatus) {
+      case 'scheduled':
+        statusColor = AppColors.labelNeutral;
+        scoreColor = AppColors.labelNeutral;
+        statusText = '예정';
+        break;
+      case 'live':
+        statusColor = AppColors.negative;
+        scoreColor = AppColors.negative;
+        statusText = 'LIVE';
+        break;
+      case 'finished':
+      default:
+        statusColor = AppColors.labelAlternative;
+        scoreColor = AppColors.labelNormal;
+        statusText = '종료';
+        break;
+    }
+
+    // 이기고 있는 팀 판별
+    bool isHomeWinning = homeScore > awayScore;
+    bool isAwayWinning = awayScore > homeScore;
+    bool isDraw = homeScore == awayScore;
+
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed('/live-match-detail');
       },
-      child: Row(
-      children: [
-        // 홈팀
-        Expanded(
-          child: _buildTeamInfo(
-            teamName: '팀명',
-            ranking: '순위',
-            isHome: true,
-          ),
-        ),
-        // 스코어
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'NN:NN',
-            style: AppTextStyles.h3Bold.copyWith(
-              color: AppColors.labelNormal,
+      child: Column(
+        children: [
+          // 경기 상태 표시
+          if (matchStatus == 'live')
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.negative,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                statusText,
+                style: AppTextStyles.caption2Bold.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
             ),
+          Row(
+            children: [
+              // 홈팀
+              Expanded(
+                child: _buildTeamInfo(
+                  teamName: '팀명',
+                  ranking: '순위',
+                  isHome: true,
+                  isWinning: matchStatus == 'live' && isHomeWinning,
+                  isLosing: matchStatus == 'finished' && !isHomeWinning && !isDraw,
+                ),
+              ),
+              // 스코어
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Text(
+                      '$homeScore',
+                      style: AppTextStyles.h3Bold.copyWith(
+                        color: matchStatus == 'live' && isHomeWinning
+                            ? AppColors.negative
+                            : scoreColor,
+                      ),
+                    ),
+                    Text(
+                      ':',
+                      style: AppTextStyles.h3Bold.copyWith(
+                        color: scoreColor,
+                      ),
+                    ),
+                    Text(
+                      '$awayScore',
+                      style: AppTextStyles.h3Bold.copyWith(
+                        color: matchStatus == 'live' && isAwayWinning
+                            ? AppColors.negative
+                            : scoreColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // 원정팀
+              Expanded(
+                child: _buildTeamInfo(
+                  teamName: '팀명',
+                  ranking: '순위',
+                  isHome: false,
+                  isWinning: matchStatus == 'live' && isAwayWinning,
+                  isLosing: matchStatus == 'finished' && !isAwayWinning && !isDraw,
+                ),
+              ),
+            ],
           ),
-        ),
-        // 원정팀
-        Expanded(
-          child: _buildTeamInfo(
-            teamName: '팀명',
-            ranking: '순위',
-            isHome: false,
-          ),
-        ),
-      ],
+        ],
       ),
     );
   }
@@ -606,34 +686,50 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
     required String teamName,
     required String ranking,
     required bool isHome,
+    bool isWinning = false,
+    bool isLosing = false,
   }) {
-    return Column(
-      children: [
-        // 팀 로고 (플레이스홀더)
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.containerNormal,
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: Icon(
-              Icons.sports_soccer,
-              size: 24,
-              color: AppColors.labelAlternative,
+    // 이기고 있으면 빨간색, 지고 있으면 투명 처리
+    final Color teamNameColor = isWinning
+        ? AppColors.negative
+        : isLosing
+            ? AppColors.labelAlternative.withValues(alpha: 0.5)
+            : AppColors.labelNeutral;
+
+    return Opacity(
+      opacity: isLosing ? 0.5 : 1.0,
+      child: Column(
+        children: [
+          // 팀 로고 (플레이스홀더)
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: AppColors.containerNormal,
+              shape: BoxShape.circle,
+              border: isWinning
+                  ? Border.all(color: AppColors.negative, width: 2)
+                  : null,
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.sports_soccer,
+                size: 24,
+                color: AppColors.labelAlternative,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 4),
-        // 팀명 (순위)
-        Text(
-          '$teamName ($ranking)',
-          style: AppTextStyles.caption1Medium.copyWith(
-            color: AppColors.labelNeutral,
+          const SizedBox(height: 4),
+          // 팀명 (순위)
+          Text(
+            '$teamName ($ranking)',
+            style: AppTextStyles.caption1Medium.copyWith(
+              color: teamNameColor,
+              fontWeight: isWinning ? FontWeight.bold : FontWeight.w500,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -709,6 +805,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
   }
 
   /// 배당률 셀
+  /// [isUp] true: 역배(빨간색), false: 정배(볼드)
   Widget _buildOddsCell({
     required String odds,
     required bool isUp,
@@ -722,12 +819,16 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           size: 16,
           color: isUp ? AppColors.negative : AppColors.positive,
         ),
-        // 배당률
+        // 배당률 - 역배는 빨간색, 정배는 볼드
         Text(
           odds,
-          style: AppTextStyles.caption1Medium.copyWith(
-            color: AppColors.labelNeutral,
-          ),
+          style: isUp
+              ? AppTextStyles.caption1Medium.copyWith(
+                  color: AppColors.negative,
+                )
+              : AppTextStyles.caption1Bold.copyWith(
+                  color: AppColors.labelNormal,
+                ),
         ),
       ],
     );

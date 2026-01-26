@@ -273,7 +273,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryFigma,
+                    color: AppColors.negative,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
