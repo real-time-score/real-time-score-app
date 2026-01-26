@@ -636,87 +636,75 @@ class _PickExpertPageState extends State<PickExpertPage> {
     return Row(
       children: [
         // 승패 버튼
-        Expanded(
-          child: _buildPredictionButton(
-            label: '승패',
-          ),
+        _buildPredictionButtonWithLabel(
+          label: '승패',
+          topLabel: '승 N패',
+          topLabelColor: AppColors.labelNeutral,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         // 1 버튼
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '승 N패',
-                style: AppTextStyles.caption1Medium.copyWith(
-                  color: AppColors.labelNeutral,
-                ),
-              ),
-              const SizedBox(height: 4),
-              _buildPredictionButton(
-                label: '1',
-              ),
-            ],
-          ),
+        _buildPredictionButtonWithLabel(
+          label: '1',
+          topLabel: '+N.N',
+          topLabelColor: AppColors.negative,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         // 핸디 버튼
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '+N.N',
-                style: AppTextStyles.caption1Medium.copyWith(
-                  color: AppColors.negative,
-                ),
-              ),
-              const SizedBox(height: 4),
-              _buildPredictionButton(
-                label: '핸디',
-              ),
-            ],
-          ),
+        _buildPredictionButtonWithLabel(
+          label: '핸디',
+          topLabel: '+N.N',
+          topLabelColor: AppColors.negative,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         // U/O 버튼
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                'N.N',
-                style: AppTextStyles.caption1Medium.copyWith(
-                  color: AppColors.negative,
-                ),
-              ),
-              const SizedBox(height: 4),
-              _buildPredictionButton(
-                label: 'U/O',
-              ),
-            ],
-          ),
+        _buildPredictionButtonWithLabel(
+          label: 'U/O',
+          topLabel: 'N.N',
+          topLabelColor: AppColors.negative,
         ),
       ],
     );
   }
 
-  /// 예측 버튼
-  Widget _buildPredictionButton({required String label}) {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        border: Border.all(color: AppColors.borderNormal),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Center(
-        child: Text(
-          label,
-          style: AppTextStyles.label1Medium.copyWith(
-            color: AppColors.labelNormal,
+  /// 예측 버튼 (라벨 포함)
+  Widget _buildPredictionButtonWithLabel({
+    required String label,
+    required String topLabel,
+    required Color topLabelColor,
+  }) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // 상단 라벨
+          SizedBox(
+            height: 16,
+            child: Text(
+              topLabel,
+              textAlign: TextAlign.center,
+              style: AppTextStyles.caption2Medium.copyWith(
+                color: topLabelColor,
+              ),
+            ),
           ),
-        ),
+          const SizedBox(height: 4),
+          // 버튼
+          Container(
+            height: 36,
+            decoration: BoxDecoration(
+              border: Border.all(color: AppColors.borderNormal),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                label,
+                style: AppTextStyles.label1Medium.copyWith(
+                  color: AppColors.labelNormal,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

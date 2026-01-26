@@ -46,7 +46,7 @@ class _LineupPageState extends State<LineupPage> {
   int _selectedMainTabIndex = 2; // 라인업 탭 선택
   late LineupTeamType _selectedTeam;
 
-  final List<String> _mainTabs = ['라이브', '차트', '라인업', '예측게임', '픽전문가'];
+  final List<String> _mainTabs = ['라이브', '차트', '라인업', '예측게임'];
 
   @override
   void initState() {
@@ -70,12 +70,6 @@ class _LineupPageState extends State<LineupPage> {
         break;
       case 3: // 예측게임
         Navigator.of(context).pushReplacementNamed('/prediction-game');
-        break;
-      case 4: // 픽전문가 (추후 구현)
-        setState(() {
-          _selectedMainTabIndex = index;
-        });
-        // TODO: Navigator.of(context).pushReplacementNamed('/pick-expert');
         break;
     }
   }

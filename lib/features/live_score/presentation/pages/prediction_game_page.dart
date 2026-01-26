@@ -14,7 +14,7 @@ class PredictionGamePage extends StatefulWidget {
 class _PredictionGamePageState extends State<PredictionGamePage> {
   int _selectedMainTabIndex = 3; // 예측게임 탭 선택
 
-  final List<String> _mainTabs = ['라이브', '차트', '라인업', '예측게임', '픽전문가'];
+  final List<String> _mainTabs = ['라이브', '차트', '라인업', '예측게임'];
 
   // 예측 선택 상태
   int? _winnerSelection; // 0: 홈팀, 1: 원정팀
@@ -127,12 +127,6 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
         setState(() {
           _selectedMainTabIndex = index;
         });
-        break;
-      case 4: // 픽전문가 (추후 구현)
-        setState(() {
-          _selectedMainTabIndex = index;
-        });
-        // TODO: Navigator.of(context).pushReplacementNamed('/pick-expert');
         break;
     }
   }
@@ -488,20 +482,18 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
       height: 20,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
+        color: isSelected ? AppColors.primaryFigma : AppColors.white,
         border: Border.all(
           color: isSelected ? AppColors.primaryFigma : AppColors.borderNormal,
           width: 2,
         ),
       ),
       child: isSelected
-          ? Center(
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primaryFigma,
-                ),
+          ? const Center(
+              child: Icon(
+                Icons.circle,
+                size: 8,
+                color: AppColors.white,
               ),
             )
           : null,

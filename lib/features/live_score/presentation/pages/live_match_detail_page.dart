@@ -31,17 +31,27 @@ class LiveMatchDetailPage extends StatefulWidget {
   State<LiveMatchDetailPage> createState() => _LiveMatchDetailPageState();
 }
 
+/// 태깅 타입 (구중/진중)
+enum TagType {
+  /// 구중 (빨간색)
+  gujung,
+
+  /// 진중 (파란색)
+  jinjung,
+}
+
 class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
   int _selectedTabIndex = 0;
   int? _showMenuForIndex; // 메뉴가 표시되는 메시지 인덱스
   final Set<int> _blockedUsers = {}; // 차단된 사용자 인덱스
+  final Map<int, TagType> _taggedUsers = {}; // 태깅된 사용자 (구중/진중)
   bool _isCheerInputMode = false; // 응원 메시지 입력 모드
   bool _isHomeTeamCheer = true; // 홈팀 응원 여부
   bool _isMentionMode = false; // 멘션 모드
   String? _mentionTargetUser; // 멘션 대상 사용자
   final TextEditingController _cheerMessageController = TextEditingController();
 
-  final List<String> _tabs = ['라이브', '차트', '라인업', '예측게임', '픽전문가'];
+  final List<String> _tabs = ['라이브', '차트', '라인업', '예측게임'];
 
   @override
   void dispose() {
@@ -65,12 +75,6 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
         break;
       case 3: // 예측게임
         Navigator.of(context).pushReplacementNamed('/prediction-game');
-        break;
-      case 4: // 픽전문가 (추후 구현)
-        setState(() {
-          _selectedTabIndex = index;
-        });
-        // TODO: Navigator.of(context).pushReplacementNamed('/pick-expert');
         break;
     }
   }
@@ -170,6 +174,8 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
     return SingleChildScrollView(
       child: Column(
         children: [
+          // 탭과 운영자 등록글 사이 간격
+          const SizedBox(height: 8),
           // 운영자 공지
           _buildNoticeBar(),
           // 예측 결과 & 경기 정보
@@ -542,6 +548,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
         final isHomeTeam = index % 2 == 0;
         final isBlocked = _blockedUsers.contains(index);
         final showMenu = _showMenuForIndex == index;
+        final tagType = _taggedUsers[index];
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),
@@ -554,6 +561,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
             isHomeTeam: isHomeTeam,
             isBlocked: isBlocked,
             showMenu: showMenu,
+            tagType: tagType,
           ),
         );
       },
@@ -570,15 +578,21 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
     required bool isHomeTeam,
     bool isBlocked = false,
     bool showMenu = false,
+    TagType? tagType,
   }) {
     final bubbleColor = isHomeTeam
         ? const Color(0xFFE6F7E9) // positive container
         : const Color(0xFFE4F2FD); // decrease container
 
-    // 차단된 사용자는 분홍색 배경
-    final backgroundColor = isBlocked
-        ? const Color(0xFFFDE4E4)
-        : Colors.transparent;
+    // 태깅된 사용자 배경 색상
+    Color backgroundColor;
+    if (tagType == TagType.gujung) {
+      backgroundColor = const Color(0x4DE6533E); // rgba(230,83,62,0.3)
+    } else if (tagType == TagType.jinjung) {
+      backgroundColor = const Color(0x4D3F94EE); // rgba(63,148,238,0.3)
+    } else {
+      backgroundColor = Colors.transparent;
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -589,34 +603,50 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 프로필 이미지 (탭하면 메뉴 토글)
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                if (_showMenuForIndex == index) {
-                  _showMenuForIndex = null;
-                } else {
-                  _showMenuForIndex = index;
-                }
-              });
-            },
-            child: Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
-                color: AppColors.containerNormal,
-                shape: BoxShape.circle,
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.person,
-                  size: 20,
-                  color: AppColors.labelAlternative,
+          // 프로필 이미지 + 태깅 배지
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              // 프로필 이미지 (탭하면 메뉴 토글)
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (_showMenuForIndex == index) {
+                      _showMenuForIndex = null;
+                    } else {
+                      _showMenuForIndex = index;
+                    }
+                  });
+                },
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  decoration: const BoxDecoration(
+                    color: AppColors.containerNormal,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.person,
+                      size: 20,
+                      color: AppColors.labelAlternative,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              // 태깅 배지
+              if (tagType != null)
+                Positioned(
+                  left: -8,
+                  top: -4,
+                  child: Transform.rotate(
+                    angle: -0.523599, // -30도 (라디안)
+                    child: _buildTagBadge(tagType),
+                  ),
+                ),
+            ],
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 16),
           // 메뉴 또는 메시지 컨텐츠
           Expanded(
             child: Stack(
@@ -722,47 +752,71 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
     );
   }
 
+  /// 태깅 배지 (구중/진중)
+  Widget _buildTagBadge(TagType tagType) {
+    final isGujung = tagType == TagType.gujung;
+    final bgColor = isGujung
+        ? const Color(0xFFFDECEE) // error container
+        : const Color(0xFFE4F2FD); // decrease container
+    final borderColor = isGujung
+        ? const Color(0xFFE6533E) // error
+        : const Color(0xFF3F94EE); // decrease
+    final textColor = borderColor;
+    final label = isGujung ? '구중' : '진중';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
+      decoration: BoxDecoration(
+        color: bgColor,
+        border: Border.all(color: borderColor),
+        borderRadius: BorderRadius.circular(2),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontFamily: 'Pretendard',
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          color: textColor,
+          height: 1.4,
+        ),
+      ),
+    );
+  }
+
   /// 사용자 인터랙션 메뉴
   Widget _buildUserInteractionMenu(int userIndex) {
     return Container(
+      width: 144,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(color: AppColors.borderNormal),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildMenuOption(
+          _buildMenuTableItem(
             icon: Icons.auto_awesome,
             label: '진중',
             onTap: () {
               setState(() {
+                _taggedUsers[userIndex] = TagType.jinjung;
                 _showMenuForIndex = null;
               });
-              // TODO: 진중 기능 구현
             },
           ),
-          _buildMenuDivider(),
-          _buildMenuOption(
+          _buildMenuTableItem(
             icon: Icons.settings,
             label: '구중',
             onTap: () {
               setState(() {
+                _taggedUsers[userIndex] = TagType.gujung;
                 _showMenuForIndex = null;
               });
-              // TODO: 구중 기능 구현
             },
           ),
-          _buildMenuDivider(),
-          _buildMenuOption(
-            icon: Icons.flag_outlined,
+          _buildMenuTableItem(
+            icon: Icons.campaign_outlined,
             label: '신고',
             onTap: () {
               setState(() {
@@ -771,11 +825,9 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
               // TODO: 신고 기능 구현
             },
           ),
-          _buildMenuDivider(),
-          _buildMenuOption(
-            icon: Icons.close,
+          _buildMenuTableItem(
+            icon: Icons.block,
             label: '차단',
-            isDestructive: true,
             onTap: () {
               setState(() {
                 _blockedUsers.add(userIndex);
@@ -788,27 +840,35 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
     );
   }
 
-  /// 메뉴 옵션 아이템
-  Widget _buildMenuOption({
+  /// 메뉴 테이블 아이템 (Figma 디자인 기준)
+  Widget _buildMenuTableItem({
     required IconData icon,
     required String label,
     required VoidCallback onTap,
-    bool isDestructive = false,
   }) {
-    final color = isDestructive ? AppColors.negative : AppColors.labelNormal;
-
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      child: Container(
+        height: 40,
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(color: AppColors.borderNormal),
+          ),
+        ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 20, color: color),
-            const SizedBox(width: 8),
+            Icon(
+              icon,
+              size: 24,
+              color: AppColors.labelNeutral,
+            ),
+            const SizedBox(width: 4),
             Text(
               label,
-              style: AppTextStyles.body2NormalMedium.copyWith(color: color),
+              style: AppTextStyles.label1NormalMedium.copyWith(
+                color: AppColors.labelNeutral,
+              ),
             ),
           ],
         ),
@@ -816,18 +876,11 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
     );
   }
 
-  /// 메뉴 구분선
-  Widget _buildMenuDivider() {
-    return Container(
-      height: 1,
-      color: AppColors.borderNormal,
-    );
-  }
-
   /// 하단 응원 바
   Widget _buildCheerBar() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      color: AppColors.white,
       child: Row(
         children: [
           // 홈팀 응원 버튼
@@ -838,10 +891,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                 _isHomeTeamCheer = true;
               });
             },
-            child: _buildCheerButton(
-              count: '500',
-              isHome: true,
-            ),
+            child: _buildHomeCheerButton(count: '500'),
           ),
           const SizedBox(width: 8),
           // 원정팀 응원 버튼
@@ -853,10 +903,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                   _isHomeTeamCheer = false;
                 });
               },
-              child: _buildCheerButton(
-                count: '300',
-                isHome: false,
-              ),
+              child: _buildAwayCheerButton(count: '300'),
             ),
           ),
         ],
@@ -864,24 +911,17 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
     );
   }
 
-  Widget _buildCheerButton({
-    required String count,
-    required bool isHome,
-  }) {
-    final bgColor = isHome ? AppColors.positiveGreen : AppColors.positive;
-    final containerColor = isHome
-        ? const Color(0xFFE6F7E9)
-        : const Color(0xFFE4F2FD);
-    final textColor = isHome ? AppColors.positiveGreen : AppColors.positive;
-
+  /// 홈팀 응원 버튼 (녹색, 아이콘 왼쪽)
+  Widget _buildHomeCheerButton({required String count}) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         // 다이아몬드 아이콘 박스
         Container(
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: bgColor,
+            color: AppColors.positiveGreen,
             borderRadius: BorderRadius.circular(8),
           ),
           child: const Center(
@@ -897,51 +937,90 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
           height: 32,
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            color: containerColor,
-            border: Border.all(color: bgColor),
-            borderRadius: isHome
-                ? const BorderRadius.only(
-                    topRight: Radius.circular(24),
-                    bottomRight: Radius.circular(24),
-                  )
-                : const BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    bottomLeft: Radius.circular(24),
-                  ),
+            color: const Color(0xFFE6F7E9),
+            border: Border.all(color: AppColors.positiveGreen),
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(24),
+              bottomRight: Radius.circular(24),
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children: isHome
-                ? [
-                    Text(
-                      '응원',
-                      style: AppTextStyles.body1NormalBold.copyWith(
-                        color: textColor,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      count,
-                      style: AppTextStyles.caption1Medium.copyWith(
-                        color: textColor,
-                      ),
-                    ),
-                  ]
-                : [
-                    Text(
-                      count,
-                      style: AppTextStyles.caption1Medium.copyWith(
-                        color: textColor,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '응원',
-                      style: AppTextStyles.body1NormalBold.copyWith(
-                        color: textColor,
-                      ),
-                    ),
-                  ],
+            children: [
+              Text(
+                '응원',
+                style: AppTextStyles.body1NormalBold.copyWith(
+                  color: AppColors.positiveGreen,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                count,
+                style: AppTextStyles.caption1Medium.copyWith(
+                  color: AppColors.positiveGreen,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// 원정팀 응원 버튼 (파란색, 아이콘 오른쪽)
+  Widget _buildAwayCheerButton({required String count}) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        // 응원 텍스트 버튼
+        Expanded(
+          child: Container(
+            height: 32,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFFE4F2FD),
+              border: Border.all(color: AppColors.positive),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(24),
+                bottomLeft: Radius.circular(24),
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  count,
+                  style: AppTextStyles.caption1Medium.copyWith(
+                    color: AppColors.positive,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '응원',
+                  style: AppTextStyles.body1NormalBold.copyWith(
+                    color: AppColors.positive,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        // 다이아몬드 아이콘 박스
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: AppColors.positive,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Center(
+            child: Icon(
+              Icons.diamond,
+              size: 24,
+              color: AppColors.white,
+            ),
           ),
         ),
       ],
@@ -1002,37 +1081,38 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                 child: const Icon(
                   Icons.add,
                   size: 24,
-                  color: AppColors.labelNeutral,
+                  color: AppColors.labelNormal,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               // 텍스트 입력 필드
               Expanded(
                 child: Container(
-                  height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  height: 48,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: AppColors.containerNormal,
-                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.white,
+                    border: Border.all(color: AppColors.borderNormal),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
                     controller: _cheerMessageController,
                     decoration: InputDecoration(
                       hintText: '응원 메시지 입력',
-                      hintStyle: AppTextStyles.body2NormalMedium.copyWith(
+                      hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                         color: AppColors.labelAlternative,
                       ),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                       isDense: true,
                     ),
-                    style: AppTextStyles.body2NormalMedium.copyWith(
+                    style: AppTextStyles.body1NormalMedium.copyWith(
                       color: AppColors.labelNormal,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 6),
               // 전송 버튼
               GestureDetector(
                 onTap: () {
@@ -1045,16 +1125,18 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                   }
                 },
                 child: Container(
-                  width: 40,
-                  height: 40,
+                  width: 48,
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: headerColor,
+                    color: _cheerMessageController.text.isEmpty
+                        ? const Color(0xFFCCCCCC)
+                        : headerColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.send,
-                      size: 20,
+                      size: 24,
                       color: AppColors.white,
                     ),
                   ),
@@ -1117,37 +1199,38 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                 child: const Icon(
                   Icons.add,
                   size: 24,
-                  color: AppColors.labelNeutral,
+                  color: AppColors.labelNormal,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               // 텍스트 입력 필드
               Expanded(
                 child: Container(
-                  height: 40,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  height: 48,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: AppColors.containerNormal,
-                    borderRadius: BorderRadius.circular(20),
+                    color: AppColors.white,
+                    border: Border.all(color: AppColors.borderNormal),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: TextField(
                     controller: _cheerMessageController,
                     decoration: InputDecoration(
                       hintText: '응원 메시지 입력',
-                      hintStyle: AppTextStyles.body2NormalMedium.copyWith(
+                      hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                         color: AppColors.labelAlternative,
                       ),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: const EdgeInsets.symmetric(vertical: 12),
                       isDense: true,
                     ),
-                    style: AppTextStyles.body2NormalMedium.copyWith(
+                    style: AppTextStyles.body1NormalMedium.copyWith(
                       color: AppColors.labelNormal,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 6),
               // 전송 버튼 (파란색)
               GestureDetector(
                 onTap: () {
@@ -1161,16 +1244,18 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                   }
                 },
                 child: Container(
-                  width: 40,
-                  height: 40,
+                  width: 48,
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: AppColors.positive,
+                    color: _cheerMessageController.text.isEmpty
+                        ? const Color(0xFFCCCCCC)
+                        : AppColors.positive,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Center(
                     child: Icon(
                       Icons.send,
-                      size: 20,
+                      size: 24,
                       color: AppColors.white,
                     ),
                   ),

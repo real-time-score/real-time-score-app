@@ -231,6 +231,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
   /// 정렬 옵션
   Widget _buildSortOption(String sort) {
+    final isSelected = _selectedSort == sort;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -241,13 +242,32 @@ class _CommunityPageState extends State<CommunityPage> {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Text(
-          sort,
-          style: AppTextStyles.body1NormalMedium.copyWith(
-            color: _selectedSort == sort
-                ? AppColors.primaryFigma
-                : AppColors.labelNormal,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              sort,
+              style: AppTextStyles.body1NormalMedium.copyWith(
+                color: isSelected
+                    ? AppColors.primaryFigma
+                    : AppColors.labelNormal,
+              ),
+            ),
+            if (isSelected)
+              Container(
+                width: 24,
+                height: 24,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryFigma,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check,
+                  size: 16,
+                  color: AppColors.white,
+                ),
+              ),
+          ],
         ),
       ),
     );

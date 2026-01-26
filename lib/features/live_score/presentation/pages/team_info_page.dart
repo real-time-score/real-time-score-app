@@ -325,31 +325,34 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
 
   /// 팀 아이템
   Widget _buildTeamItem({required String teamName}) {
-    return Column(
-      children: [
-        Container(
-          width: 48,
-          height: 48,
-          decoration: const BoxDecoration(
-            color: AppColors.containerNormal,
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: Icon(
-              Icons.sports_soccer,
-              size: 24,
-              color: AppColors.labelAlternative,
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, '/team-info'),
+      child: Column(
+        children: [
+          Container(
+            width: 48,
+            height: 48,
+            decoration: const BoxDecoration(
+              color: AppColors.containerNormal,
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: Icon(
+                Icons.sports_soccer,
+                size: 24,
+                color: AppColors.labelAlternative,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          teamName,
-          style: AppTextStyles.caption1Medium.copyWith(
-            color: AppColors.labelNeutral,
+          const SizedBox(height: 4),
+          Text(
+            teamName,
+            style: AppTextStyles.caption1Medium.copyWith(
+              color: AppColors.labelNeutral,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

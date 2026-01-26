@@ -32,6 +32,8 @@ class RankingPage extends StatefulWidget {
 class _RankingPageState extends State<RankingPage> {
   late RankingType _selectedType;
   late RankingPeriod _selectedPeriod;
+  String _selectedCategory = '전체';
+  final List<String> _categories = ['전체', '축구', '야구', '농구', '배구', 'e스포츠'];
 
   @override
   void initState() {
@@ -54,6 +56,9 @@ class _RankingPageState extends State<RankingPage> {
             const SizedBox(height: 8),
             // 기간 탭
             _buildPeriodTabs(),
+            // 카테고리 드롭다운 (예측게임 랭킹일 때만)
+            if (_selectedType == RankingType.prediction)
+              _buildCategoryDropdown(),
             // 랭킹 리스트
             Expanded(
               child: _buildRankingList(),
@@ -236,6 +241,143 @@ class _RankingPageState extends State<RankingPage> {
           ),
         ],
       ),
+    );
+  }
+
+  /// 카테고리 드롭다운 (예측게임 랭킹용)
+  Widget _buildCategoryDropdown() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: GestureDetector(
+        onTap: () => _showCategoryBottomSheet(),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.borderNormal),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _selectedCategory,
+                style: AppTextStyles.body1NormalMedium.copyWith(
+                  color: AppColors.labelNormal,
+                ),
+              ),
+              const SizedBox(width: 4),
+              SvgPicture.asset(
+                AppIcons.caretDown,
+                width: 20,
+                height: 20,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.labelNormal,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 카테고리 선택 바텀시트
+  void _showCategoryBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 핸들바
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.labelAlternative,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 제목
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '카테고리',
+                      style: AppTextStyles.h4Bold.copyWith(
+                        color: AppColors.labelNormal,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(
+                        Icons.close,
+                        size: 24,
+                        color: AppColors.labelNormal,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              // 카테고리 목록
+              ..._categories.map((category) {
+                final isSelected = category == _selectedCategory;
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _selectedCategory = category;
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          category,
+                          style: AppTextStyles.body1NormalMedium.copyWith(
+                            color: isSelected ? AppColors.primaryFigma : AppColors.labelNormal,
+                          ),
+                        ),
+                        if (isSelected)
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: const BoxDecoration(
+                              color: AppColors.primaryFigma,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.check,
+                              size: 16,
+                              color: AppColors.white,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
     );
   }
 
