@@ -1,0 +1,103 @@
+{
+  "@@locale": "ko",
+
+  "appTitle": "리얼타임스코어",
+  "@appTitle": {
+    "description": "앱 타이틀"
+  },
+
+  "home": "홈",
+  "pickExpert": "픽전문가",
+  "community": "커뮤니티",
+  "ranking": "랭킹",
+  "my": "MY",
+
+  "live": "LIVE",
+  "proto": "프로토",
+
+  "all": "전체",
+  "esports": "e스포츠",
+  "soccer": "축구",
+  "baseball": "야구",
+  "basketball": "농구",
+  "volleyball": "배구",
+  "hockey": "하키",
+  "tennis": "테니스",
+
+  "today": "TODAY",
+  "scheduled": "예정",
+  "finished": "종료",
+
+  "pick": "픽",
+  "freePick": "무료픽",
+  "paidPick": "유료픽",
+  "myPick": "MY 픽",
+
+  "leagueName": "리그명",
+  "teamName": "팀명",
+  "playerName": "선수명",
+
+  "scheduleResult": "일정/결과",
+  "rankingTab": "순위",
+  "players": "선수",
+
+  "chart": "차트",
+  "lineup": "라인업",
+  "predictionGame": "예측게임",
+
+  "comparison": "비교",
+  "record": "기록",
+  "rankingRecord": "순위",
+
+  "recentMatches": "최근 5경기",
+  "headToHead": "맞대결",
+  "recentHeadToHead": "최근 맞대결 전적",
+  "recentBothTeamRecord": "최근 양팀 전적",
+
+  "domestic": "국내",
+  "overseas": "해외",
+
+  "win": "승",
+  "draw": "무",
+  "lose": "패",
+
+  "notificationRanking": "알림 랭킹",
+  "predictionRanking": "예측게임 랭킹",
+
+  "sort": "정렬",
+  "latest": "최신순",
+  "popular": "인기순",
+  "comments": "댓글순",
+  "views": "조회순",
+
+  "totalCount": "총 {count}개 등록",
+  "@totalCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+
+  "submit": "제출하기",
+  "cancel": "취소",
+  "confirm": "확인",
+  "save": "저장",
+  "delete": "삭제",
+  "edit": "수정",
+
+  "search": "검색",
+  "searchHintExpert": "전문가명, 경기명을 입력해주세요",
+  "searchHintNickname": "닉네임, 경기명을 입력해주세요",
+
+  "category": "카테고리",
+  "adminNotice": "운영자 등록글 노출",
+
+  "predictMatch": "승부를 예측해보세요",
+  "victoryTeam": "승리팀",
+  "handicap": "핸디캡",
+  "underOver": "언더오버",
+  "homerun": "홈런",
+  "score": "스코어",
+  "goal": "골"
+}

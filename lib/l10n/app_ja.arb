@@ -1,0 +1,93 @@
+{
+  "@@locale": "ja",
+
+  "appTitle": "リアルタイムスコア",
+
+  "home": "ホーム",
+  "pickExpert": "ピック専門家",
+  "community": "コミュニティ",
+  "ranking": "ランキング",
+  "my": "MY",
+
+  "live": "LIVE",
+  "proto": "プロト",
+
+  "all": "全体",
+  "esports": "eスポーツ",
+  "soccer": "サッカー",
+  "baseball": "野球",
+  "basketball": "バスケ",
+  "volleyball": "バレー",
+  "hockey": "ホッケー",
+  "tennis": "テニス",
+
+  "today": "TODAY",
+  "scheduled": "予定",
+  "finished": "終了",
+
+  "pick": "ピック",
+  "freePick": "無料ピック",
+  "paidPick": "有料ピック",
+  "myPick": "MY ピック",
+
+  "leagueName": "リーグ名",
+  "teamName": "チーム名",
+  "playerName": "選手名",
+
+  "scheduleResult": "日程/結果",
+  "rankingTab": "順位",
+  "players": "選手",
+
+  "chart": "チャート",
+  "lineup": "ラインナップ",
+  "predictionGame": "予測ゲーム",
+
+  "comparison": "比較",
+  "record": "記録",
+  "rankingRecord": "順位",
+
+  "recentMatches": "最近5試合",
+  "headToHead": "対戦",
+  "recentHeadToHead": "最近の対戦成績",
+  "recentBothTeamRecord": "最近の両チーム戦績",
+
+  "domestic": "国内",
+  "overseas": "海外",
+
+  "win": "勝",
+  "draw": "引",
+  "lose": "敗",
+
+  "notificationRanking": "通知ランキング",
+  "predictionRanking": "予測ゲームランキング",
+
+  "sort": "並び替え",
+  "latest": "新着順",
+  "popular": "人気順",
+  "comments": "コメント順",
+  "views": "閲覧順",
+
+  "totalCount": "合計 {count}件 登録",
+
+  "submit": "提出する",
+  "cancel": "キャンセル",
+  "confirm": "確認",
+  "save": "保存",
+  "delete": "削除",
+  "edit": "修正",
+
+  "search": "検索",
+  "searchHintExpert": "専門家名、試合名を入力してください",
+  "searchHintNickname": "ニックネーム、試合名を入力してください",
+
+  "category": "カテゴリー",
+  "adminNotice": "運営者登録記事表示",
+
+  "predictMatch": "勝敗を予測してみてください",
+  "victoryTeam": "勝利チーム",
+  "handicap": "ハンディキャップ",
+  "underOver": "アンダーオーバー",
+  "homerun": "ホームラン",
+  "score": "スコア",
+  "goal": "ゴール"
+}

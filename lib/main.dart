@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'core/theme/app_theme.dart';
 import 'config/app_config.dart';
 import 'features/splash/presentation/pages/splash_page.dart';
@@ -79,6 +81,28 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
       themeMode: ThemeMode.light,
+      // 다국어 설정
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko'), // 한국어
+        Locale('ja'), // 일본어
+      ],
+      // 기기 언어 설정에 따라 자동 선택, 지원하지 않으면 한국어
+      localeResolutionCallback: (locale, supportedLocales) {
+        if (locale != null) {
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == locale.languageCode) {
+              return supportedLocale;
+            }
+          }
+        }
+        return const Locale('ko'); // 기본값: 한국어
+      },
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashPage(),
