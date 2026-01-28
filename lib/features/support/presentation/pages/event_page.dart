@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 이벤트 페이지
 class EventPage extends StatelessWidget {
@@ -20,7 +19,7 @@ class EventPage extends StatelessWidget {
             _buildHeader(context),
             // 이벤트 리스트
             Expanded(
-              child: _buildEventList(),
+              child: _buildEventList(context),
             ),
           ],
         ),
@@ -30,14 +29,15 @@ class EventPage extends StatelessWidget {
 
   /// 헤더
   Widget _buildHeader(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AppHeader.withTitle(
-      title: '이벤트',
+      title: l10n.event,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 이벤트 리스트
-  Widget _buildEventList() {
+  Widget _buildEventList(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: 5,
@@ -49,6 +49,7 @@ class EventPage extends StatelessWidget {
 
   /// 이벤트 카드
   Widget _buildEventCard(BuildContext context, int index) {
+    final l10n = AppLocalizations.of(context)!;
     final bool isOngoing = index < 2;
 
     return Container(
@@ -59,7 +60,7 @@ class EventPage extends StatelessWidget {
         border: Border.all(color: AppColors.borderNormal),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -88,7 +89,7 @@ class EventPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '이벤트 이미지',
+                    l10n.eventImage,
                     style: AppTextStyles.body2NormalMedium.copyWith(
                       color: AppColors.labelAlternative,
                     ),
@@ -111,12 +112,12 @@ class EventPage extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: isOngoing
-                        ? AppColors.positive.withOpacity(0.1)
-                        : AppColors.labelAlternative.withOpacity(0.1),
+                        ? AppColors.positive.withValues(alpha: 0.1)
+                        : AppColors.labelAlternative.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    isOngoing ? '진행중' : '종료',
+                    isOngoing ? l10n.ongoing : l10n.finished,
                     style: AppTextStyles.caption1Medium.copyWith(
                       color: isOngoing
                           ? AppColors.positive
@@ -127,7 +128,7 @@ class EventPage extends StatelessWidget {
                 const SizedBox(height: 8),
                 // 이벤트 제목
                 Text(
-                  '이벤트 제목 ${index + 1}',
+                  '${l10n.eventTitle} ${index + 1}',
                   style: AppTextStyles.body1NormalBold.copyWith(
                     color: AppColors.labelNormal,
                   ),

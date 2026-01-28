@@ -67,7 +67,6 @@ class AppButton extends StatelessWidget {
     required this.text,
     this.onPressed,
     this.status = AppButtonStatus.active,
-    @Deprecated('Use status instead') this.type,
     this.size = AppButtonSize.large,
     this.fontSize = AppButtonFontSize.large,
     this.isLoading = false,
@@ -81,8 +80,6 @@ class AppButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final AppButtonStatus status;
-  @Deprecated('Use status instead')
-  final AppButtonType? type;
   final AppButtonSize size;
   final AppButtonFontSize fontSize;
   final bool isLoading;
@@ -92,11 +89,8 @@ class AppButton extends StatelessWidget {
   final String? svgIcon;
   final bool showIcon;
 
-  /// 실제 사용할 상태 (기존 type 호환성 지원)
+  /// 실제 사용할 상태
   AppButtonStatus get _effectiveStatus {
-    if (type != null) {
-      return type!.toStatus();
-    }
     if (isDisabled) {
       return AppButtonStatus.disabled;
     }
@@ -1440,68 +1434,6 @@ class AppRadioButton<T> extends StatelessWidget {
   }
 }
 
-/// 체크박스 버튼
-class AppCheckbox extends StatelessWidget {
-  const AppCheckbox({
-    super.key,
-    required this.value,
-    required this.onChanged,
-    this.label,
-    this.activeColor,
-    this.size = 20,
-  });
-
-  final bool value;
-  final ValueChanged<bool> onChanged;
-  final String? label;
-  final Color? activeColor;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = activeColor ?? AppColors.primaryFigma;
-
-    return GestureDetector(
-      onTap: () => onChanged(!value),
-      behavior: HitTestBehavior.opaque,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            width: size,
-            height: size,
-            decoration: BoxDecoration(
-              color: value ? color : Colors.transparent,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                color: value ? color : AppColors.borderNormal,
-                width: 2,
-              ),
-            ),
-            child: value
-                ? Icon(
-                    Icons.check,
-                    size: size - 6,
-                    color: AppColors.white,
-                  )
-                : null,
-          ),
-          if (label != null) ...[
-            const SizedBox(width: 8),
-            Text(
-              label!,
-              style: AppTextStyles.body1NormalMedium.copyWith(
-                color: value ? AppColors.labelNormal : AppColors.labelNeutral,
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
 /// 듀얼 버튼 세트 (Figma: 왼쪽 Normal + 오른쪽 Primary 조합)
 ///
 /// 두 버튼이 나란히 배치되는 패턴입니다.
@@ -1747,40 +1679,3 @@ class AppSwitch extends StatelessWidget {
 /// @deprecated Use AppButtonSize instead
 @Deprecated('Use AppButtonSize instead')
 typedef LegacyAppButtonSize = AppButtonSize;
-
-/// @deprecated Use AppButtonStatus instead
-@Deprecated('Use AppButtonStatus instead')
-enum AppButtonType {
-  primary,
-  secondary,
-  outlined,
-  ghost,
-  danger,
-  tonal,
-  success,
-  neutral,
-}
-
-/// 기존 AppButtonType을 AppButtonStatus로 변환
-extension AppButtonTypeToStatus on AppButtonType {
-  AppButtonStatus toStatus() {
-    switch (this) {
-      case AppButtonType.primary:
-        return AppButtonStatus.active;
-      case AppButtonType.secondary:
-        return AppButtonStatus.contents;
-      case AppButtonType.outlined:
-        return AppButtonStatus.noBg;
-      case AppButtonType.ghost:
-        return AppButtonStatus.noBg;
-      case AppButtonType.danger:
-        return AppButtonStatus.error;
-      case AppButtonType.tonal:
-        return AppButtonStatus.active2;
-      case AppButtonType.success:
-        return AppButtonStatus.active;
-      case AppButtonType.neutral:
-        return AppButtonStatus.neutral;
-    }
-  }
-}

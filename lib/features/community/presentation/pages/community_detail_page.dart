@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 커뮤니티 상세보기 페이지
 class CommunityDetailPage extends StatefulWidget {
@@ -104,26 +105,36 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // 카테고리 칩
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryBackground,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        '카테고리 명',
-                        style: AppTextStyles.caption1Medium.copyWith(
-                          color: AppColors.primaryFigma,
-                        ),
-                      ),
+                    Builder(
+                      builder: (context) {
+                        final l10n = AppLocalizations.of(context)!;
+                        return Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: AppColors.primaryBackground,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            l10n.categoryName,
+                            style: AppTextStyles.caption1Medium.copyWith(
+                              color: AppColors.primaryFigma,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 4),
                     // 제목
-                    Text(
-                      '제목',
-                      style: AppTextStyles.h4Bold.copyWith(
-                        color: AppColors.labelNormal,
-                      ),
+                    Builder(
+                      builder: (context) {
+                        final l10n = AppLocalizations.of(context)!;
+                        return Text(
+                          l10n.title,
+                          style: AppTextStyles.h4Bold.copyWith(
+                            color: AppColors.labelNormal,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -163,11 +174,16 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
                     ),
                     const SizedBox(width: 8),
                     // 닉네임
-                    Text(
-                      '닉네임',
-                      style: AppTextStyles.caption1SemiBold.copyWith(
-                        color: AppColors.labelNormal,
-                      ),
+                    Builder(
+                      builder: (context) {
+                        final l10n = AppLocalizations.of(context)!;
+                        return Text(
+                          l10n.nickname,
+                          style: AppTextStyles.caption1SemiBold.copyWith(
+                            color: AppColors.labelNormal,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -246,6 +262,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
 
   /// 댓글 헤더
   Widget _buildCommentHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -255,7 +272,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
           Row(
             children: [
               Text(
-                '댓글',
+                l10n.commentLabel,
                 style: AppTextStyles.h4Bold.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -317,6 +334,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
 
   /// 댓글 아이템
   Widget _buildCommentItem({bool hasReplies = false, int replyCount = 0}) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
@@ -329,14 +347,14 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
               Row(
                 children: [
                   Text(
-                    '닉네임',
+                    l10n.nickname,
                     style: AppTextStyles.label1Bold.copyWith(
                       color: AppColors.labelNormal,
                     ),
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'N분 전',
+                    l10n.minutesAgo('N'),
                     style: AppTextStyles.label1Medium.copyWith(
                       color: AppColors.labelNeutral,
                     ),
@@ -344,7 +362,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
                 ],
               ),
               Text(
-                '신고',
+                l10n.report,
                 style: AppTextStyles.label1Medium.copyWith(
                   color: AppColors.negative,
                 ),
@@ -387,7 +405,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
               const SizedBox(width: 24),
               // 답글달기
               Text(
-                '답글달기',
+                l10n.replyToComment,
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
@@ -428,6 +446,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
 
   /// 댓글 입력
   Widget _buildCommentInput() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -450,7 +469,7 @@ class _CommunityDetailPageState extends State<CommunityDetailPage> {
                 child: TextField(
                   controller: _commentController,
                   decoration: InputDecoration(
-                    hintText: '댓글을 입력하세요.',
+                    hintText: l10n.enterComment,
                     hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                       color: AppColors.labelAlternative,
                     ),

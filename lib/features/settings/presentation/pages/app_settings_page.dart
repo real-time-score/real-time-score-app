@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 앱설정 페이지
 class AppSettingsPage extends StatelessWidget {
@@ -11,6 +12,7 @@ class AppSettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -18,7 +20,7 @@ class AppSettingsPage extends StatelessWidget {
           children: [
             // 헤더
             AppHeader.withTitle(
-              title: '앱설정',
+              title: l10n.appSettings,
               onBackPressed: () => Navigator.of(context).pop(),
             ),
             // 메뉴 리스트
@@ -31,16 +33,17 @@ class AppSettingsPage extends StatelessWidget {
 
   /// 메뉴 리스트
   Widget _buildMenuList(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         _buildMenuItem(
           context,
-          '알림설정',
+          l10n.notificationSettings,
           () => Navigator.pushNamed(context, '/notification-settings'),
         ),
         _buildMenuItem(
           context,
-          '마케팅 수신 동의',
+          l10n.marketingConsent,
           () => Navigator.pushNamed(context, '/marketing-consent'),
         ),
       ],

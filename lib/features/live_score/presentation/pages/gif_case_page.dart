@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// GIF 적용 케이스 페이지
 class GifCasePage extends StatefulWidget {
@@ -14,7 +15,11 @@ class GifCasePage extends StatefulWidget {
 
 class _GifCasePageState extends State<GifCasePage> {
   int _selectedTab = 0;
-  final List<String> _tabs = ['라이브', '차트', '라인업', '예측게임', '픽전문가'];
+
+  List<String> _getTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.liveTab, l10n.chart, l10n.lineup, l10n.predictionGame, l10n.pickExpert];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +112,7 @@ class _GifCasePageState extends State<GifCasePage> {
       height: 44,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        children: _tabs.asMap().entries.map((entry) {
+        children: _getTabs(context).asMap().entries.map((entry) {
           final index = entry.key;
           final tab = entry.value;
           final isSelected = index == _selectedTab;
@@ -139,13 +144,14 @@ class _GifCasePageState extends State<GifCasePage> {
 
   /// 운영자 등록글 배너
   Widget _buildAdminBanner() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 12),
       color: AppColors.containerNormal,
       child: Center(
         child: Text(
-          '운영자 등록글 노출',
+          l10n.adminNotice,
           style: AppTextStyles.body2NormalMedium.copyWith(
             color: AppColors.primaryFigma,
             decoration: TextDecoration.underline,
@@ -236,6 +242,7 @@ class _GifCasePageState extends State<GifCasePage> {
 
   /// GIF 표시 영역
   Widget _buildGifArea() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.all(16),
       height: 200,
@@ -254,16 +261,16 @@ class _GifCasePageState extends State<GifCasePage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'GIF 애니메이션 영역',
+              l10n.gifAnimationArea,
               style: AppTextStyles.body1NormalMedium.copyWith(
                 color: AppColors.white,
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              '경기 하이라이트, 골 장면 등',
+              l10n.highlightGolScenes,
               style: AppTextStyles.caption1Medium.copyWith(
-                color: AppColors.white.withOpacity(0.7),
+                color: AppColors.white.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -274,6 +281,7 @@ class _GifCasePageState extends State<GifCasePage> {
 
   /// 스코어보드
   Widget _buildScoreboard() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
@@ -292,7 +300,7 @@ class _GifCasePageState extends State<GifCasePage> {
               ),
               const SizedBox(height: 4),
               Text(
-                '팀명',
+                l10n.teamName,
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
@@ -316,7 +324,7 @@ class _GifCasePageState extends State<GifCasePage> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              '8회 초',
+              '8${l10n.inningTop}',
               style: AppTextStyles.caption1Medium.copyWith(
                 color: AppColors.labelNeutral,
               ),
@@ -344,7 +352,7 @@ class _GifCasePageState extends State<GifCasePage> {
               ),
               const SizedBox(height: 4),
               Text(
-                '팀명',
+                l10n.teamName,
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
@@ -358,22 +366,25 @@ class _GifCasePageState extends State<GifCasePage> {
 
   /// 채팅 메시지
   Widget _buildChatMessages() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           _buildChatMessage(
-            nickname: '도라에몽',
-            message: '메세지 노출',
-            time: '오후 hh:mm',
+            nickname: 'User',
+            message: l10n.messageDisplay,
+            time: 'PM hh:mm',
             isNewbie: true,
+            l10n: l10n,
           ),
           const SizedBox(height: 12),
           _buildChatMessage(
-            nickname: '도라에몽',
-            message: '메세지 노출',
-            time: '오후 hh:mm',
+            nickname: 'User',
+            message: l10n.messageDisplay,
+            time: 'PM hh:mm',
             isNewbie: true,
+            l10n: l10n,
           ),
           const SizedBox(height: 16),
         ],
@@ -386,6 +397,7 @@ class _GifCasePageState extends State<GifCasePage> {
     required String message,
     required String time,
     bool isNewbie = false,
+    required AppLocalizations l10n,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -433,7 +445,7 @@ class _GifCasePageState extends State<GifCasePage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        '뉴비',
+                        l10n.newbie,
                         style: AppTextStyles.caption2Medium.copyWith(
                           color: AppColors.white,
                         ),
@@ -475,7 +487,7 @@ class _GifCasePageState extends State<GifCasePage> {
         GestureDetector(
           onTap: () {},
           child: Text(
-            '@멘션',
+            l10n.atMention,
             style: AppTextStyles.caption1Medium.copyWith(
               color: AppColors.primaryFigma,
             ),
@@ -487,6 +499,7 @@ class _GifCasePageState extends State<GifCasePage> {
 
   /// 메시지 입력바
   Widget _buildMessageInputBar() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -508,7 +521,7 @@ class _GifCasePageState extends State<GifCasePage> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      '(팀명)응원 메세지',
+                      l10n.cheerMessage(l10n.teamName),
                       style: AppTextStyles.body2NormalMedium.copyWith(
                         color: AppColors.white,
                       ),
@@ -559,7 +572,7 @@ class _GifCasePageState extends State<GifCasePage> {
                       children: [
                         Expanded(
                           child: Text(
-                            '응원 메시지 입력',
+                            l10n.cheerMessageHint,
                             style: AppTextStyles.body2NormalMedium.copyWith(
                               color: AppColors.labelAlternative,
                             ),

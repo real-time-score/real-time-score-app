@@ -6,7 +6,6 @@ import 'core/theme/app_theme.dart';
 import 'config/app_config.dart';
 import 'features/splash/presentation/pages/splash_page.dart';
 import 'features/splash/presentation/pages/notification_permission_page.dart';
-import 'features/live_score/presentation/pages/live_score_main_page.dart';
 import 'features/live_score/presentation/pages/alarm_list_page.dart';
 import 'features/live_score/presentation/pages/match_full_mode_page.dart';
 import 'features/live_score/presentation/pages/live_match_detail_page.dart';
@@ -191,43 +190,48 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  final List<String> _titles = ['라이브', '프로토', '픽전문가', '커뮤니티', 'MY'];
+  List<String> _getTitles(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.liveTab, l10n.proto, l10n.pickExpert, l10n.community, l10n.my];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final titles = _getTitles(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_currentIndex]),
+        title: Text(titles[_currentIndex]),
       ),
       body: Center(
         child: Text(
-          '${_titles[_currentIndex]} 화면',
+          titles[_currentIndex],
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.sports_soccer),
-            label: '라이브',
+            icon: const Icon(Icons.sports_soccer),
+            label: l10n.liveTab,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long),
-            label: '프로토',
+            icon: const Icon(Icons.receipt_long),
+            label: l10n.proto,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.verified),
-            label: '픽전문가',
+            icon: const Icon(Icons.verified),
+            label: l10n.pickExpert,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.forum),
-            label: '커뮤니티',
+            icon: const Icon(Icons.forum),
+            label: l10n.community,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'MY',
+            icon: const Icon(Icons.person),
+            label: l10n.my,
           ),
         ],
       ),

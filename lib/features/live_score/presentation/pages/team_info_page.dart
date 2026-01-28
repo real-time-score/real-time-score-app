@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 팀 정보 메인 탭 타입
 enum TeamInfoTab {
@@ -53,10 +54,25 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
   int _selectedRankingLeague = 0;
   int _selectedPlayersLeague = 0;
 
-  final List<String> _mainTabs = ['일정/결과', '순위', '선수'];
-  final List<String> _subTabs = ['전체', '홈', '맞대결'];
-  final List<String> _rankingLeagues = ['전체', '리그명', '리그명', '리그명', '리그명', '리그명'];
-  final List<String> _playersLeagues = ['전체', '리그명', '리그명', '리그명', '리그명', '리그명'];
+  List<String> _getMainTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.scheduleResult, l10n.rankingTab, l10n.players];
+  }
+
+  List<String> _getSubTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, l10n.homeMatch, l10n.versus];
+  }
+
+  List<String> _getRankingLeagues(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, l10n.leagueName, l10n.leagueName, l10n.leagueName, l10n.leagueName, l10n.leagueName];
+  }
+
+  List<String> _getPlayersLeagues(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, l10n.leagueName, l10n.leagueName, l10n.leagueName, l10n.leagueName, l10n.leagueName];
+  }
 
   @override
   void initState() {
@@ -67,6 +83,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -74,7 +91,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
           children: [
             // 헤더
             AppHeader.withTitle(
-              title: '팀명',
+              title: l10n.teamName,
               onBackPressed: () => Navigator.of(context).pop(),
             ),
             // 메인 탭 토글
@@ -129,7 +146,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                 ),
                 child: Center(
                   child: Text(
-                    _mainTabs[index],
+                    _getMainTabs(context)[index],
                     style: isSelected
                         ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.white)
                         : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelNormal),
@@ -172,7 +189,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                 ),
                 child: Center(
                   child: Text(
-                    _subTabs[index],
+                    _getSubTabs(context)[index],
                     style: isSelected
                         ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.primaryFigma)
                         : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelNeutral),
@@ -200,36 +217,37 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
 
   /// 일정/결과 컨텐츠
   Widget _buildScheduleContent() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           // 예정된 경기 1
           _buildMatchCard(
-            leagueName: '리그명',
+            leagueName: l10n.leagueName,
             hasPick: true,
-            homeTeam: '팀명',
-            awayTeam: '팀명',
-            dateTime: '7/11 (금)\n15 : 30',
+            homeTeam: l10n.teamName,
+            awayTeam: l10n.teamName,
+            dateTime: '7/11\n15 : 30',
             isFinished: false,
           ),
           const SizedBox(height: 12),
           // 예정된 경기 2
           _buildMatchCard(
-            leagueName: '리그명',
+            leagueName: l10n.leagueName,
             hasPick: true,
-            homeTeam: '팀명',
-            awayTeam: '팀명',
-            dateTime: '7/11 (금)\n15 : 30',
+            homeTeam: l10n.teamName,
+            awayTeam: l10n.teamName,
+            dateTime: '7/11\n15 : 30',
             isFinished: false,
           ),
           const SizedBox(height: 12),
           // 종료된 경기
           _buildMatchCard(
-            leagueName: '리그명',
+            leagueName: l10n.leagueName,
             hasPick: true,
-            homeTeam: '팀명',
-            awayTeam: '팀명',
+            homeTeam: l10n.teamName,
+            awayTeam: l10n.teamName,
             homeScore: 1,
             awayScore: 5,
             isFinished: true,
@@ -250,6 +268,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
     int? awayScore,
     required bool isFinished,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -277,7 +296,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    '픽',
+                    l10n.pick,
                     style: AppTextStyles.caption2Bold.copyWith(
                       color: AppColors.white,
                     ),
@@ -376,6 +395,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
 
   /// 스코어 박스
   Widget _buildScoreBox({required int homeScore, required int awayScore}) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Text(
@@ -392,7 +412,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
-            '종료',
+            l10n.finished,
             style: AppTextStyles.caption2Medium.copyWith(
               color: AppColors.labelNeutral,
             ),
@@ -421,7 +441,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: _rankingLeagues.length,
+        itemCount: _getRankingLeagues(context).length,
         itemBuilder: (context, index) {
           final isSelected = index == _selectedRankingLeague;
           return GestureDetector(
@@ -442,7 +462,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
               ),
               child: Center(
                 child: Text(
-                  _rankingLeagues[index],
+                  _getRankingLeagues(context)[index],
                   style: isSelected
                       ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.primaryFigma)
                       : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelAlternative),
@@ -465,7 +485,8 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
 
   /// 순위 테이블
   Widget _buildRankingTable() {
-    final columns = ['순위', '팀명', '경기', '승점', '승', '무'];
+    final l10n = AppLocalizations.of(context)!;
+    final columns = [l10n.rankingTab, l10n.teamName, l10n.matches, l10n.points, l10n.win, l10n.draw];
 
     // 샘플 데이터 (11팀)
     final List<List<String>> rows = List.generate(
@@ -539,7 +560,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: _playersLeagues.length,
+        itemCount: _getPlayersLeagues(context).length,
         itemBuilder: (context, index) {
           final isSelected = index == _selectedPlayersLeague;
           return GestureDetector(
@@ -560,7 +581,7 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
               ),
               child: Center(
                 child: Text(
-                  _playersLeagues[index],
+                  _getPlayersLeagues(context)[index],
                   style: isSelected
                       ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.primaryFigma)
                       : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelAlternative),
@@ -583,12 +604,13 @@ class _TeamInfoPageState extends State<TeamInfoPage> {
 
   /// 선수 테이블
   Widget _buildPlayersTable() {
-    final columns = ['포지션', '선수명', '국적', '나이', '방어율'];
+    final l10n = AppLocalizations.of(context)!;
+    final columns = [l10n.position, l10n.playerName, l10n.nationality, l10n.age, l10n.defenseRate];
 
     // 샘플 데이터 (12명)
     final List<List<String>> rows = List.generate(
       12,
-      (index) => ['정보', '정보', '정보', '정보', '정보'],
+      (index) => [l10n.info, l10n.info, l10n.info, l10n.info, l10n.info],
     );
 
     return Column(

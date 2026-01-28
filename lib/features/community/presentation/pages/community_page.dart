@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 커뮤니티 페이지
 class CommunityPage extends StatefulWidget {
@@ -20,17 +21,17 @@ class CommunityPage extends StatefulWidget {
 
 class _CommunityPageState extends State<CommunityPage> {
   int _selectedCategoryIndex = 0;
-  String _selectedSort = '최신순';
+  int _selectedSortIndex = 0;
 
-  final List<String> _categories = [
-    '전체',
-    '자유게시판',
-    '축구',
-    '야구',
-    '농구',
-    '배구',
-    '기타',
-  ];
+  List<String> _getCategories(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, l10n.freeBoard, l10n.soccer, l10n.baseball, l10n.basketball, l10n.volleyball, l10n.etc];
+  }
+
+  List<String> _getSortOptions(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.latest, l10n.popular, l10n.comments, l10n.views];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +62,14 @@ class _CommunityPageState extends State<CommunityPage> {
 
   /// 헤더
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '커뮤니티',
+            l10n.community,
             style: AppTextStyles.h3Bold.copyWith(
               color: AppColors.labelStrong,
             ),
@@ -79,6 +81,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
   /// 카테고리 탭
   Widget _buildCategoryTabs() {
+    final categories = _getCategories(context);
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -89,7 +92,7 @@ class _CommunityPageState extends State<CommunityPage> {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          children: List.generate(_categories.length, (index) {
+          children: List.generate(categories.length, (index) {
             final isSelected = _selectedCategoryIndex == index;
             return GestureDetector(
               onTap: () {
@@ -108,7 +111,7 @@ class _CommunityPageState extends State<CommunityPage> {
                   ),
                 ),
                 child: Text(
-                  _categories[index],
+                  categories[index],
                   style: isSelected
                       ? AppTextStyles.body1NormalBold.copyWith(
                           color: AppColors.primaryFigma,
@@ -127,33 +130,19 @@ class _CommunityPageState extends State<CommunityPage> {
 
   /// 요약 정보
   Widget _buildSummaryRow() {
+    final l10n = AppLocalizations.of(context)!;
+    final sortOptions = _getSortOptions(context);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // 총 개수
-          Row(
-            children: [
-              Text(
-                '총 ',
-                style: AppTextStyles.label1Medium.copyWith(
-                  color: AppColors.labelNormal,
-                ),
-              ),
-              Text(
-                'NNNNN개',
-                style: AppTextStyles.label1Medium.copyWith(
-                  color: AppColors.primaryFigma,
-                ),
-              ),
-              Text(
-                ' 등록',
-                style: AppTextStyles.label1Medium.copyWith(
-                  color: AppColors.labelNormal,
-                ),
-              ),
-            ],
+          Text(
+            l10n.totalCount('NNNNN'),
+            style: AppTextStyles.label1Medium.copyWith(
+              color: AppColors.labelNormal,
+            ),
           ),
           // 정렬 드롭다운
           GestureDetector(
@@ -161,7 +150,7 @@ class _CommunityPageState extends State<CommunityPage> {
             child: Row(
               children: [
                 Text(
-                  _selectedSort,
+                  sortOptions[_selectedSortIndex],
                   style: AppTextStyles.label1Medium.copyWith(
                     color: AppColors.labelNormal,
                   ),
@@ -185,13 +174,15 @@ class _CommunityPageState extends State<CommunityPage> {
 
   /// 정렬 바텀시트
   void _showSortBottomSheet() {
+    final l10n = AppLocalizations.of(context)!;
+    final sortOptions = _getSortOptions(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) {
+      builder: (sheetContext) {
         return Container(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -211,16 +202,17 @@ class _CommunityPageState extends State<CommunityPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                '정렬',
+                l10n.sort,
                 style: AppTextStyles.h4Bold.copyWith(
                   color: AppColors.labelNormal,
                 ),
               ),
               const SizedBox(height: 16),
-              _buildSortOption('최신순'),
-              _buildSortOption('인기순'),
-              _buildSortOption('댓글순'),
-              _buildSortOption('조회순'),
+              ...sortOptions.asMap().entries.map((entry) {
+                final index = entry.key;
+                final sortName = entry.value;
+                return _buildSortOption(index, sortName, sheetContext);
+              }),
               const SizedBox(height: 16),
             ],
           ),
@@ -230,14 +222,14 @@ class _CommunityPageState extends State<CommunityPage> {
   }
 
   /// 정렬 옵션
-  Widget _buildSortOption(String sort) {
-    final isSelected = _selectedSort == sort;
+  Widget _buildSortOption(int index, String sortName, BuildContext sheetContext) {
+    final isSelected = _selectedSortIndex == index;
     return GestureDetector(
       onTap: () {
         setState(() {
-          _selectedSort = sort;
+          _selectedSortIndex = index;
         });
-        Navigator.pop(context);
+        Navigator.pop(sheetContext);
       },
       child: Container(
         width: double.infinity,
@@ -246,7 +238,7 @@ class _CommunityPageState extends State<CommunityPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              sort,
+              sortName,
               style: AppTextStyles.body1NormalMedium.copyWith(
                 color: isSelected
                     ? AppColors.primaryFigma
@@ -311,26 +303,36 @@ class _CommunityPageState extends State<CommunityPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 카테고리 칩
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: AppColors.primaryBackground,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          '카테고리 명',
-                          style: AppTextStyles.caption1Medium.copyWith(
-                            color: AppColors.primaryFigma,
-                          ),
-                        ),
+                      Builder(
+                        builder: (context) {
+                          final l10n = AppLocalizations.of(context)!;
+                          return Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryBackground,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              l10n.categoryName,
+                              style: AppTextStyles.caption1Medium.copyWith(
+                                color: AppColors.primaryFigma,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 4),
                       // 제목
-                      Text(
-                        '제목',
-                        style: AppTextStyles.body1NormalBold.copyWith(
-                          color: AppColors.labelNormal,
-                        ),
+                      Builder(
+                        builder: (context) {
+                          final l10n = AppLocalizations.of(context)!;
+                          return Text(
+                            l10n.title,
+                            style: AppTextStyles.body1NormalBold.copyWith(
+                              color: AppColors.labelNormal,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -431,6 +433,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
   /// 하단 네비게이션
   Widget _buildBottomNavigation() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -445,11 +448,11 @@ class _CommunityPageState extends State<CommunityPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildNavItem(AppIcons.home, '홈', false),
-              _buildNavItem(AppIcons.check, '픽전문가', false),
-              _buildNavItem(AppIcons.persons, '커뮤니티', true),
-              _buildNavItem(AppIcons.trophy, '랭킹', false),
-              _buildNavItem(AppIcons.person, 'MY', false),
+              _buildNavItem(AppIcons.home, l10n.home, '/main', false),
+              _buildNavItem(AppIcons.check, l10n.pickExpert, '/main/pick-expert', false),
+              _buildNavItem(AppIcons.persons, l10n.community, '', true),
+              _buildNavItem(AppIcons.trophy, l10n.ranking, '/main/ranking', false),
+              _buildNavItem(AppIcons.person, l10n.my, '/main/my', false),
             ],
           ),
         ),
@@ -458,18 +461,11 @@ class _CommunityPageState extends State<CommunityPage> {
   }
 
   /// 네비게이션 아이템
-  Widget _buildNavItem(String iconPath, String label, bool isActive) {
+  Widget _buildNavItem(String iconPath, String label, String route, bool isActive) {
     return GestureDetector(
       onTap: () {
-        // 네비게이션 처리
-        if (label == '홈') {
-          Navigator.pushReplacementNamed(context, '/main');
-        } else if (label == '픽전문가') {
-          Navigator.pushReplacementNamed(context, '/main/pick-expert');
-        } else if (label == '랭킹') {
-          Navigator.pushReplacementNamed(context, '/main/ranking');
-        } else if (label == 'MY') {
-          Navigator.pushReplacementNamed(context, '/main/my');
+        if (route.isNotEmpty) {
+          Navigator.pushReplacementNamed(context, route);
         }
       },
       child: Container(

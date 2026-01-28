@@ -199,6 +199,63 @@ docs/UI_DEVELOPMENT_PLAN.md 업데이트:
 
 ---
 
+## 관리자 웹 (Admin) 개발 가이드
+
+### 프로젝트 정보
+- **위치**: `/admin`
+- **기술스택**: Next.js 15, TypeScript, Tailwind CSS
+- **프로덕션 URL**: https://admin-alpha-rust.vercel.app
+- **호스팅**: Vercel
+
+### 개발 서버 실행
+```bash
+cd admin
+npm install
+npm run dev
+```
+
+### 빌드 및 검증
+```bash
+cd admin
+npm run build
+```
+- 빌드 전 ESLint 경고/에러가 없는지 확인
+- 빌드 실패 시 에러 메시지 확인 후 수정
+
+### 배포
+
+#### 배포 요청 시 수행할 작업
+사용자가 "관리자 웹 배포해줘" 또는 유사한 요청을 하면:
+
+1. **빌드 확인**
+   ```bash
+   cd /Users/parktaejun/Documents/flutter/realtime-score/admin
+   npm run build
+   ```
+
+2. **Vercel 프로덕션 배포**
+   ```bash
+   vercel --prod
+   ```
+
+3. **배포 결과 확인**
+   - 배포 URL 확인
+   - 빌드 성공 여부 확인
+   - 사용자에게 프로덕션 URL 전달
+
+#### 배포 URL
+- **프로덕션**: https://admin-alpha-rust.vercel.app
+- **Vercel 대시보드**: https://vercel.com/puze8681-9708s-projects/admin
+
+### 코드 품질 기준
+- ESLint 경고 0건 유지
+- TypeScript 타입 에러 0건 유지
+- 빌드 경고 최소화
+- `next/image` 컴포넌트 사용 (외부 이미지)
+- useCallback/useEffect 의존성 배열 올바르게 설정
+
+---
+
 ## 주의사항
 
 - 스펙 문서 작성 시 반드시 원본 PDF 내용을 기반으로 작성

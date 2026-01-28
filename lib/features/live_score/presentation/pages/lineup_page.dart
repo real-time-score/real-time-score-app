@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 라인업 스포츠 타입
 enum LineupSportType {
@@ -46,7 +47,10 @@ class _LineupPageState extends State<LineupPage> {
   int _selectedMainTabIndex = 2; // 라인업 탭 선택
   late LineupTeamType _selectedTeam;
 
-  final List<String> _mainTabs = ['라이브', '차트', '라인업', '예측게임'];
+  List<String> _getMainTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.liveTab, l10n.chart, l10n.lineup, l10n.predictionGame];
+  }
 
   @override
   void initState() {
@@ -126,7 +130,7 @@ class _LineupPageState extends State<LineupPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
-        children: _mainTabs.asMap().entries.map((entry) {
+        children: _getMainTabs(context).asMap().entries.map((entry) {
           final index = entry.key;
           final label = entry.value;
           final isSelected = index == _selectedMainTabIndex;
@@ -161,12 +165,13 @@ class _LineupPageState extends State<LineupPage> {
 
   /// 팀 토글 (홈팀/원정팀)
   Widget _buildTeamToggle() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: LineupTeamType.values.map((team) {
           final isSelected = team == _selectedTeam;
-          final label = team == LineupTeamType.home ? '홈팀 라인업' : '원정팀 라인업';
+          final label = team == LineupTeamType.home ? l10n.homeTeamLineup : l10n.awayTeamLineup;
 
           return Expanded(
             child: GestureDetector(
@@ -220,7 +225,7 @@ class _LineupPageState extends State<LineupPage> {
         const SizedBox(height: 16),
         // 팀 정보 헤더
         _buildTeamInfoHeader(
-          teamName: '팀명',
+          teamName: AppLocalizations.of(context)!.teamName,
           formation: '4-2-3-1',
         ),
         const SizedBox(height: 16),
@@ -303,27 +308,27 @@ class _LineupPageState extends State<LineupPage> {
             left: null,
             centerX: true,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 미드필더 (3명)
-          _buildPlayerPosition(top: 120, left: 30, number: 12, name: '선수명'),
-          _buildPlayerPosition(top: 120, left: null, centerX: true, number: 12, name: '선수명'),
-          _buildPlayerPosition(top: 120, right: 30, number: 12, name: '선수명'),
+          _buildPlayerPosition(top: 120, left: 30, number: 12, name: AppLocalizations.of(context)!.playerName),
+          _buildPlayerPosition(top: 120, left: null, centerX: true, number: 12, name: AppLocalizations.of(context)!.playerName),
+          _buildPlayerPosition(top: 120, right: 30, number: 12, name: AppLocalizations.of(context)!.playerName),
           // 수비형 미드필더 (2명)
-          _buildPlayerPosition(top: 200, left: 60, number: 12, name: '선수명'),
-          _buildPlayerPosition(top: 200, right: 60, number: 12, name: '선수명'),
+          _buildPlayerPosition(top: 200, left: 60, number: 12, name: AppLocalizations.of(context)!.playerName),
+          _buildPlayerPosition(top: 200, right: 60, number: 12, name: AppLocalizations.of(context)!.playerName),
           // 수비수 (4명)
-          _buildPlayerPosition(top: 280, left: 20, number: 12, name: '선수명'),
-          _buildPlayerPosition(top: 280, left: 90, number: 12, name: '선수명'),
-          _buildPlayerPosition(top: 280, right: 90, number: 12, name: '선수명'),
-          _buildPlayerPosition(top: 280, right: 20, number: 12, name: '선수명'),
+          _buildPlayerPosition(top: 280, left: 20, number: 12, name: AppLocalizations.of(context)!.playerName),
+          _buildPlayerPosition(top: 280, left: 90, number: 12, name: AppLocalizations.of(context)!.playerName),
+          _buildPlayerPosition(top: 280, right: 90, number: 12, name: AppLocalizations.of(context)!.playerName),
+          _buildPlayerPosition(top: 280, right: 20, number: 12, name: AppLocalizations.of(context)!.playerName),
           // 골키퍼 (1명)
           _buildPlayerPosition(
             top: 350,
             left: null,
             centerX: true,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
             isGoalkeeper: true,
           ),
         ],
@@ -409,6 +414,7 @@ class _LineupPageState extends State<LineupPage> {
 
   /// 축구 선수 테이블
   Widget _buildSoccerPlayerTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 테이블 헤더
@@ -424,7 +430,7 @@ class _LineupPageState extends State<LineupPage> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  '이름',
+                  l10n.name,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -433,7 +439,7 @@ class _LineupPageState extends State<LineupPage> {
               ),
               Expanded(
                 child: Text(
-                  '포지션',
+                  l10n.position,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -442,7 +448,7 @@ class _LineupPageState extends State<LineupPage> {
               ),
               Expanded(
                 child: Text(
-                  '백넘버',
+                  l10n.backNumber,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -452,7 +458,7 @@ class _LineupPageState extends State<LineupPage> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  '신장/몸무게',
+                  l10n.heightWeight,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -463,18 +469,18 @@ class _LineupPageState extends State<LineupPage> {
           ),
         ),
         // 테이블 행들
-        _buildSoccerPlayerRow(name: '이름', position: 'GK', number: 5, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'DF', number: 12, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'DF', number: 1, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'DF', number: 3, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'DF', number: 4, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'MF', number: 4, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'MF', number: 4, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'MF', number: 4, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'MF', number: 4, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'MF', number: 4, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'MF', number: 4, height: '183cm / 85kg'),
-        _buildSoccerPlayerRow(name: '이름', position: 'FW', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'GK', number: 5, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'DF', number: 12, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'DF', number: 1, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'DF', number: 3, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'DF', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'MF', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'MF', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'MF', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'MF', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'MF', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'MF', number: 4, height: '183cm / 85kg'),
+        _buildSoccerPlayerRow(name: l10n.name, position: 'FW', number: 4, height: '183cm / 85kg'),
       ],
     );
   }
@@ -544,7 +550,7 @@ class _LineupPageState extends State<LineupPage> {
       children: [
         const SizedBox(height: 16),
         // 팀 정보 헤더 (포메이션 없음)
-        _buildTeamInfoHeaderSimple(teamName: '팀명'),
+        _buildTeamInfoHeaderSimple(teamName: AppLocalizations.of(context)!.teamName),
         const SizedBox(height: 16),
         // 농구 코트
         _buildBasketballCourt(),
@@ -614,7 +620,7 @@ class _LineupPageState extends State<LineupPage> {
             centerX: true,
             number: 12,
             positionLabel: 'C',
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 가드 (G) - 좌측
           _buildBasketballPlayerPosition(
@@ -622,7 +628,7 @@ class _LineupPageState extends State<LineupPage> {
             left: 20,
             number: 12,
             positionLabel: 'G',
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 가드 (G) - 우측
           _buildBasketballPlayerPosition(
@@ -630,7 +636,7 @@ class _LineupPageState extends State<LineupPage> {
             right: 20,
             number: 12,
             positionLabel: 'G',
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 포워드 (F) - 좌측 하단
           _buildBasketballPlayerPosition(
@@ -638,7 +644,7 @@ class _LineupPageState extends State<LineupPage> {
             left: 60,
             number: 12,
             positionLabel: 'F',
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 포워드 (F) - 우측 하단
           _buildBasketballPlayerPosition(
@@ -646,7 +652,7 @@ class _LineupPageState extends State<LineupPage> {
             right: 60,
             number: 12,
             positionLabel: 'F',
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
         ],
       ),
@@ -720,6 +726,7 @@ class _LineupPageState extends State<LineupPage> {
 
   /// 농구 선수 테이블
   Widget _buildBasketballPlayerTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 테이블 헤더
@@ -735,7 +742,7 @@ class _LineupPageState extends State<LineupPage> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  '이름',
+                  l10n.name,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -744,7 +751,7 @@ class _LineupPageState extends State<LineupPage> {
               ),
               Expanded(
                 child: Text(
-                  '포지션',
+                  l10n.position,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -753,7 +760,7 @@ class _LineupPageState extends State<LineupPage> {
               ),
               Expanded(
                 child: Text(
-                  '백넘버',
+                  l10n.backNumber,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -763,7 +770,7 @@ class _LineupPageState extends State<LineupPage> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  '신장/몸무게',
+                  l10n.heightWeight,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -774,11 +781,11 @@ class _LineupPageState extends State<LineupPage> {
           ),
         ),
         // 테이블 행들
-        _buildPlayerRow(name: '이름', position: 'G', number: 5, height: '183cm / 85kg'),
-        _buildPlayerRow(name: '이름', position: 'G', number: 12, height: '183cm / 85kg'),
-        _buildPlayerRow(name: '이름', position: 'F', number: 1, height: '183cm / 85kg'),
-        _buildPlayerRow(name: '이름', position: 'F', number: 3, height: '183cm / 85kg'),
-        _buildPlayerRow(name: '이름', position: 'C', number: 4, height: '183cm / 85kg'),
+        _buildPlayerRow(name: l10n.name, position: 'G', number: 5, height: '183cm / 85kg'),
+        _buildPlayerRow(name: l10n.name, position: 'G', number: 12, height: '183cm / 85kg'),
+        _buildPlayerRow(name: l10n.name, position: 'F', number: 1, height: '183cm / 85kg'),
+        _buildPlayerRow(name: l10n.name, position: 'F', number: 3, height: '183cm / 85kg'),
+        _buildPlayerRow(name: l10n.name, position: 'C', number: 4, height: '183cm / 85kg'),
       ],
     );
   }
@@ -851,7 +858,7 @@ class _LineupPageState extends State<LineupPage> {
       children: [
         const SizedBox(height: 16),
         // 팀 정보 헤더 (포메이션 없음)
-        _buildTeamInfoHeaderSimple(teamName: '팀명'),
+        _buildTeamInfoHeaderSimple(teamName: AppLocalizations.of(context)!.teamName),
         const SizedBox(height: 16),
         // 야구 다이아몬드
         _buildBaseballDiamond(),
@@ -885,21 +892,21 @@ class _LineupPageState extends State<LineupPage> {
             top: 30,
             left: 30,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 중견수
           _buildBaseballPlayerPosition(
             top: 20,
             centerX: true,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 우익수
           _buildBaseballPlayerPosition(
             top: 30,
             right: 30,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 내야수 (4명)
           // 3루수
@@ -907,42 +914,42 @@ class _LineupPageState extends State<LineupPage> {
             top: 100,
             left: 20,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 유격수
           _buildBaseballPlayerPosition(
             top: 110,
             left: 80,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 2루수
           _buildBaseballPlayerPosition(
             top: 110,
             right: 80,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 1루수
           _buildBaseballPlayerPosition(
             top: 100,
             right: 20,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 투수
           _buildBaseballPlayerPosition(
             top: 170,
             centerX: true,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
           // 포수
           _buildBaseballPlayerPosition(
             top: 260,
             centerX: true,
             number: 12,
-            name: '선수명',
+            name: AppLocalizations.of(context)!.playerName,
           ),
         ],
       ),
@@ -1016,6 +1023,7 @@ class _LineupPageState extends State<LineupPage> {
 
   /// 야구 선수 테이블
   Widget _buildBaseballPlayerTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 테이블 헤더
@@ -1041,7 +1049,7 @@ class _LineupPageState extends State<LineupPage> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  '이름(백넘버)',
+                  '${l10n.name}(${l10n.backNumber})',
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -1050,7 +1058,7 @@ class _LineupPageState extends State<LineupPage> {
               ),
               Expanded(
                 child: Text(
-                  '포지션',
+                  l10n.position,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -1060,7 +1068,7 @@ class _LineupPageState extends State<LineupPage> {
               Expanded(
                 flex: 2,
                 child: Text(
-                  '시즌성적(타율)',
+                  l10n.heightWeight,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.caption2Medium.copyWith(
                     color: AppColors.labelAlternative,
@@ -1070,17 +1078,17 @@ class _LineupPageState extends State<LineupPage> {
             ],
           ),
         ),
-        // 테이블 행들
-        _buildBaseballPlayerRow(order: '1번', name: '이름(번호)', position: '유격수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '2번', name: '이름(번호)', position: '2루수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '3번', name: '이름(번호)', position: '3루수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '4번', name: '이름(번호)', position: '1루수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '5번', name: '이름(번호)', position: '중견수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '6번', name: '이름(번호)', position: '우익수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '7번', name: '이름(번호)', position: '포수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '8번', name: '이름(번호)', position: '좌익수', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '9번', name: '이름(번호)', position: '지명타자', stats: '183cm / 85kg'),
-        _buildBaseballPlayerRow(order: '선발', name: '이름(번호)', position: '투수', stats: '183cm / 85kg'),
+        // 테이블 행들 (placeholder data)
+        _buildBaseballPlayerRow(order: '1', name: '${l10n.name}(#)', position: 'SS', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '2', name: '${l10n.name}(#)', position: '2B', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '3', name: '${l10n.name}(#)', position: '3B', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '4', name: '${l10n.name}(#)', position: '1B', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '5', name: '${l10n.name}(#)', position: 'CF', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '6', name: '${l10n.name}(#)', position: 'RF', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '7', name: '${l10n.name}(#)', position: 'C', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '8', name: '${l10n.name}(#)', position: 'LF', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: '9', name: '${l10n.name}(#)', position: 'DH', stats: '183cm / 85kg'),
+        _buildBaseballPlayerRow(order: l10n.starter, name: '${l10n.name}(#)', position: 'P', stats: '183cm / 85kg'),
       ],
     );
   }

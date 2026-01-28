@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 약관 페이지
 class TermsPage extends StatelessWidget {
@@ -11,6 +12,7 @@ class TermsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -21,12 +23,12 @@ class TermsPage extends StatelessWidget {
             // 메뉴 리스트
             _buildMenuItem(
               context,
-              title: '개인정보처리방침',
+              title: l10n.privacyPolicy,
               onTap: () => Navigator.pushNamed(context, '/privacy-policy'),
             ),
             _buildMenuItem(
               context,
-              title: '서비스 이용약관',
+              title: l10n.serviceTerms,
               onTap: () => Navigator.pushNamed(context, '/service-terms'),
             ),
           ],
@@ -37,8 +39,9 @@ class TermsPage extends StatelessWidget {
 
   /// 헤더
   Widget _buildHeader(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AppHeader.withTitle(
-      title: '약관',
+      title: l10n.terms,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }

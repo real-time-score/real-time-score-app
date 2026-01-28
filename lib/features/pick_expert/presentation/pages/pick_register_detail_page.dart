@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 예측 타입
 enum PredictionType {
@@ -52,9 +51,9 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
 
   // 샘플 데이터
   final String _matchDate = '2025.07.11 15:30';
-  final String _category = '축구 / EPL';
-  final String _homeTeam = '맨체스터 유나이티드';
-  final String _awayTeam = '리버풀';
+  String _category(AppLocalizations l10n) => '${l10n.soccer} / EPL';
+  String _homeTeam(AppLocalizations l10n) => l10n.sampleTeamManUtd;
+  String _awayTeam(AppLocalizations l10n) => l10n.sampleTeamLiverpool;
   final double _handicapValue = 1.5;
   final double _underOverValue = 2.5;
 
@@ -76,13 +75,14 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
             // 헤더
-            _buildHeader(),
+            _buildHeader(l10n),
             // 컨텐츠
             Expanded(
               child: SingleChildScrollView(
@@ -91,29 +91,29 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
                   children: [
                     const SizedBox(height: 16),
                     // 경기선택 영역
-                    _buildMatchSelectionHeader(),
+                    _buildMatchSelectionHeader(l10n),
                     const SizedBox(height: 16),
                     // 안내 문구
-                    _buildInfoBanner(),
+                    _buildInfoBanner(l10n),
                     const SizedBox(height: 16),
                     // 경기 정보 테이블
-                    _buildMatchInfoTable(),
+                    _buildMatchInfoTable(l10n),
                     const SizedBox(height: 24),
                     // 예측 선택 테이블
-                    _buildPredictionTable(),
+                    _buildPredictionTable(l10n),
                     const SizedBox(height: 24),
                     // 타이틀 입력
-                    _buildTitleInput(),
+                    _buildTitleInput(l10n),
                     const SizedBox(height: 16),
                     // 분석정보 입력
-                    _buildAnalysisInput(),
+                    _buildAnalysisInput(l10n),
                     const SizedBox(height: 24),
                   ],
                 ),
               ),
             ),
             // 하단 버튼
-            _buildBottomButtons(),
+            _buildBottomButtons(l10n),
           ],
         ),
       ),
@@ -121,22 +121,22 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
   }
 
   /// 헤더
-  Widget _buildHeader() {
+  Widget _buildHeader(AppLocalizations l10n) {
     return AppHeader.withTitle(
-      title: '무료픽 등록',
+      title: l10n.freePickRegister,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 경기선택 헤더
-  Widget _buildMatchSelectionHeader() {
+  Widget _buildMatchSelectionHeader(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '경기선택',
+            l10n.matchSelection,
             style: AppTextStyles.h4Bold.copyWith(
               color: AppColors.labelNormal,
             ),
@@ -155,7 +155,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
               ),
               child: Center(
                 child: Text(
-                  '경기선택',
+                  l10n.selectMatch,
                   style: AppTextStyles.label1Medium.copyWith(
                     color: AppColors.labelNormal,
                   ),
@@ -169,14 +169,14 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
   }
 
   /// 안내 문구 배너
-  Widget _buildInfoBanner() {
+  Widget _buildInfoBanner(AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       color: AppColors.primaryBackground,
       child: Center(
         child: Text(
-          '경기 시작 2일 전까지의 픽만 등록 가능합니다.',
+          l10n.matchNotice,
           style: AppTextStyles.label1Medium.copyWith(
             color: AppColors.primaryFigma,
           ),
@@ -186,7 +186,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
   }
 
   /// 경기 정보 테이블
-  Widget _buildMatchInfoTable() {
+  Widget _buildMatchInfoTable(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -198,7 +198,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
           children: [
             // 경기일시
             _buildInfoRow(
-              label: '경기일시',
+              label: l10n.matchDateTime,
               value: _matchDate,
               isFirst: true,
             ),
@@ -209,8 +209,8 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
             ),
             // 카테고리
             _buildInfoRow(
-              label: '카테고리',
-              value: _category,
+              label: l10n.category,
+              value: _category(l10n),
             ),
             // 구분선
             Container(
@@ -219,8 +219,8 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
             ),
             // 팀 정보
             _buildInfoRow(
-              label: '팀 정보',
-              value: '$_homeTeam VS $_awayTeam',
+              label: l10n.teamInfo,
+              value: '${_homeTeam(l10n)} VS ${_awayTeam(l10n)}',
               isLast: true,
             ),
           ],
@@ -273,7 +273,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
   }
 
   /// 예측 선택 테이블
-  Widget _buildPredictionTable() {
+  Widget _buildPredictionTable(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -285,8 +285,8 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
           children: [
             // 승무패
             _buildPredictionRow(
-              label: '승무패',
-              options: ['홈승', '무승부', '홈패'],
+              label: l10n.winDrawLose,
+              options: [l10n.homeWin, l10n.drawMatch, l10n.homeLose],
               selectedIndex: _winDrawLoseSelection?.index,
               onSelect: (index) {
                 setState(() {
@@ -302,8 +302,8 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
             ),
             // 핸디캡
             _buildPredictionRow(
-              label: '핸디캡($_handicapValue)',
-              options: ['홈승', '무승부', '홈패'],
+              label: '${l10n.handicap}($_handicapValue)',
+              options: [l10n.homeWin, l10n.drawMatch, l10n.homeLose],
               selectedIndex: _handicapSelection?.index,
               onSelect: (index) {
                 setState(() {
@@ -318,8 +318,8 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
             ),
             // 언더/오버
             _buildPredictionRow(
-              label: '언더/오버($_underOverValue)',
-              options: ['언더', '오버'],
+              label: '${l10n.underOver}($_underOverValue)',
+              options: [l10n.under, l10n.over],
               selectedIndex: _underOverSelection?.index,
               onSelect: (index) {
                 setState(() {
@@ -426,14 +426,14 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
   }
 
   /// 타이틀 입력
-  Widget _buildTitleInput() {
+  Widget _buildTitleInput(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '타이틀',
+            l10n.titleLabel,
             style: AppTextStyles.label1NormalBold.copyWith(
               color: AppColors.labelNormal,
             ),
@@ -447,7 +447,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
             child: TextField(
               controller: _titleController,
               decoration: InputDecoration(
-                hintText: '제목을 입력해주세요',
+                hintText: l10n.enterTitle,
                 hintStyle: AppTextStyles.body2NormalMedium.copyWith(
                   color: AppColors.labelAlternative,
                 ),
@@ -469,14 +469,14 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
   }
 
   /// 분석정보 입력
-  Widget _buildAnalysisInput() {
+  Widget _buildAnalysisInput(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '분석정보',
+            l10n.analysisInfo,
             style: AppTextStyles.label1NormalBold.copyWith(
               color: AppColors.labelNormal,
             ),
@@ -491,7 +491,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
               controller: _analysisController,
               maxLines: 8,
               decoration: InputDecoration(
-                hintText: '분석 내용을 입력해주세요',
+                hintText: l10n.enterAnalysis,
                 hintStyle: AppTextStyles.body2NormalMedium.copyWith(
                   color: AppColors.labelAlternative,
                 ),
@@ -513,7 +513,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
   }
 
   /// 하단 버튼
-  Widget _buildBottomButtons() {
+  Widget _buildBottomButtons(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -530,7 +530,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
               onTap: () => Navigator.of(context).pop(),
               child: Center(
                 child: Text(
-                  '닫기',
+                  l10n.close,
                   style: AppTextStyles.body1NormalMedium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -558,7 +558,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
                 ),
                 child: Center(
                   child: Text(
-                    '등록하기',
+                    l10n.register,
                     style: AppTextStyles.body1NormalBold.copyWith(
                       color: _canRegister
                           ? AppColors.white
@@ -576,6 +576,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
 
   /// 등록 완료 다이얼로그
   void _showRegistrationComplete() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) {
@@ -584,13 +585,13 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
             borderRadius: BorderRadius.circular(16),
           ),
           title: Text(
-            '등록 완료',
+            l10n.registrationComplete,
             style: AppTextStyles.h4Bold.copyWith(
               color: AppColors.labelNormal,
             ),
           ),
           content: Text(
-            '무료픽이 등록되었습니다.',
+            l10n.freePickRegistered,
             style: AppTextStyles.body2NormalMedium.copyWith(
               color: AppColors.labelNeutral,
             ),
@@ -603,7 +604,7 @@ class _PickRegisterDetailPageState extends State<PickRegisterDetailPage> {
                 Navigator.of(context).pop(); // 등록 페이지 닫기
               },
               child: Text(
-                '확인',
+                l10n.confirm,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.primaryFigma,
                 ),

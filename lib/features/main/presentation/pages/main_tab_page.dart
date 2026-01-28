@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../live_score/presentation/pages/live_score_main_page.dart';
 import '../../../pick_expert/presentation/pages/pick_expert_page.dart';
 import '../../../community/presentation/pages/community_page.dart';
@@ -48,6 +49,7 @@ class _MainTabPageState extends State<MainTabPage> {
 
   /// 하단 네비게이션
   Widget _buildBottomNavigation() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -62,11 +64,11 @@ class _MainTabPageState extends State<MainTabPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildNavItem(0, AppIcons.home, '홈'),
-              _buildNavItem(1, AppIcons.check, '픽전문가'),
-              _buildNavItem(2, AppIcons.persons, '커뮤니티'),
-              _buildNavItem(3, AppIcons.trophy, '랭킹'),
-              _buildNavItem(4, AppIcons.person, 'MY'),
+              _buildNavItem(0, AppIcons.home, l10n.home),
+              _buildNavItem(1, AppIcons.check, l10n.pickExpert),
+              _buildNavItem(2, AppIcons.persons, l10n.community),
+              _buildNavItem(3, AppIcons.trophy, l10n.ranking),
+              _buildNavItem(4, AppIcons.person, l10n.my),
             ],
           ),
         ),

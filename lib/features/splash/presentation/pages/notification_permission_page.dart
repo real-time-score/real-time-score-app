@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_button.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 알림 설정 안내 화면 (푸시 권한 요청)
 class NotificationPermissionPage extends StatelessWidget {
@@ -14,7 +15,7 @@ class NotificationPermissionPage extends StatelessWidget {
       body: Stack(
         children: [
           // 배경 (스플래쉬와 유사)
-          _buildBackground(),
+          _buildBackground(context),
           // 딤 오버레이
           _buildDimOverlay(),
           // 모달
@@ -24,7 +25,7 @@ class NotificationPermissionPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBackground() {
+  Widget _buildBackground(BuildContext context) {
     return SafeArea(
       child: Center(
         child: Column(
@@ -34,7 +35,7 @@ class NotificationPermissionPage extends StatelessWidget {
             _buildLogo(),
             const SizedBox(height: 20),
             // 서비스명
-            _buildServiceName(),
+            _buildServiceName(context),
           ],
         ),
       ),
@@ -94,10 +95,11 @@ class NotificationPermissionPage extends StatelessWidget {
     );
   }
 
-  Widget _buildServiceName() {
-    return const Text(
-      'リアルタイムスコア',
-      style: TextStyle(
+  Widget _buildServiceName(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Text(
+      l10n.appTitle,
+      style: const TextStyle(
         fontFamily: 'Pretendard',
         fontSize: 20,
         fontWeight: FontWeight.w700,
@@ -114,6 +116,7 @@ class NotificationPermissionPage extends StatelessWidget {
   }
 
   Widget _buildModal(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Container(
         width: 324,
@@ -128,7 +131,7 @@ class NotificationPermissionPage extends StatelessWidget {
           children: [
             // 제목
             Text(
-              '서비스명 알림 설정 안내',
+              l10n.notificationGuide,
               style: AppTextStyles.h4Bold.copyWith(
                 color: AppColors.labelNormal,
               ),
@@ -137,7 +140,7 @@ class NotificationPermissionPage extends StatelessWidget {
             const SizedBox(height: 16),
             // 내용
             Text(
-              '고객님을 위한 다양한 스포츠 추천 정보와\n이벤트 알림을 받으시겠습니까?',
+              l10n.notificationQuestion,
               style: AppTextStyles.body1NormalMedium.copyWith(
                 color: AppColors.labelNeutral,
               ),
@@ -146,7 +149,7 @@ class NotificationPermissionPage extends StatelessWidget {
             const SizedBox(height: 4),
             // 부가 설명
             Text(
-              '(수신동의는 MY 메뉴에서 변경 가능)',
+              l10n.consentWithdrawal,
               style: AppTextStyles.body1NormalMedium.copyWith(
                 color: AppColors.labelAlternative,
               ),
@@ -159,7 +162,7 @@ class NotificationPermissionPage extends StatelessWidget {
                 // 아니요 버튼
                 Expanded(
                   child: AppButton.normal(
-                    text: '아니요',
+                    text: l10n.no,
                     onPressed: () => _onDecline(context),
                   ),
                 ),
@@ -167,7 +170,7 @@ class NotificationPermissionPage extends StatelessWidget {
                 // 알림받기 버튼
                 Expanded(
                   child: AppButton.primary(
-                    text: '알림받기',
+                    text: l10n.receiveNotification,
                     onPressed: () => _onAccept(context),
                   ),
                 ),

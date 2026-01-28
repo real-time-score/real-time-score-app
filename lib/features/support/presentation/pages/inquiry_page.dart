@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 1:1 문의 페이지
 class InquiryPage extends StatefulWidget {
@@ -60,14 +59,16 @@ class _InquiryPageState extends State<InquiryPage> {
 
   /// 헤더
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return AppHeader.withTitle(
-      title: '1:1문의',
+      title: l10n.inquiry,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 안내 섹션
   Widget _buildInfoSection() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -76,14 +77,14 @@ class _InquiryPageState extends State<InquiryPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '서비스 이용 관련해서 궁금한 점 있으신가요?',
+            l10n.inquiryQuestion,
             style: AppTextStyles.body1NormalMedium.copyWith(
               color: AppColors.labelNormal,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            '문의사항을 남겨 주시면 이메일 주소로 답변을 보내드립니다.',
+            l10n.inquiryDescription,
             style: AppTextStyles.body2NormalMedium.copyWith(
               color: AppColors.labelNeutral,
             ),
@@ -95,33 +96,34 @@ class _InquiryPageState extends State<InquiryPage> {
 
   /// 폼
   Widget _buildForm() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 제목
-          _buildLabel('제목'),
+          _buildLabel(l10n.title),
           const SizedBox(height: 8),
           _buildTextField(
             controller: _titleController,
-            hintText: '문의 제목을 입력해주세요',
+            hintText: l10n.inquiryTitle,
           ),
           const SizedBox(height: 24),
           // 문의 내용
-          _buildLabel('문의 내용'),
+          _buildLabel(l10n.inquiryContent),
           const SizedBox(height: 8),
           _buildTextArea(
             controller: _contentController,
-            hintText: '문의 제목을 입력해주세요',
+            hintText: l10n.inquiryContentHint,
           ),
           const SizedBox(height: 24),
           // 이메일 주소
-          _buildLabelWithRequired('이메일 주소'),
+          _buildLabelWithRequired(l10n.emailAddress),
           const SizedBox(height: 8),
           _buildTextField(
             controller: _emailController,
-            hintText: '이메일을 입력해주세요',
+            hintText: l10n.emailHint,
             keyboardType: TextInputType.emailAddress,
           ),
         ],
@@ -141,6 +143,7 @@ class _InquiryPageState extends State<InquiryPage> {
 
   /// 필수 표시 라벨
   Widget _buildLabelWithRequired(String text) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Text(
@@ -151,7 +154,7 @@ class _InquiryPageState extends State<InquiryPage> {
         ),
         const SizedBox(width: 4),
         Text(
-          '(필수)',
+          l10n.required,
           style: AppTextStyles.body2NormalMedium.copyWith(
             color: AppColors.primaryFigma,
           ),
@@ -226,6 +229,7 @@ class _InquiryPageState extends State<InquiryPage> {
 
   /// 제출 버튼
   Widget _buildSubmitButton() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       child: GestureDetector(
@@ -241,7 +245,7 @@ class _InquiryPageState extends State<InquiryPage> {
           ),
           child: Center(
             child: Text(
-              '문의하기',
+              l10n.submitInquiry,
               style: AppTextStyles.body1NormalBold.copyWith(
                 color: AppColors.white,
               ),

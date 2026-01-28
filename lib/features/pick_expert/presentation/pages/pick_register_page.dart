@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 무료픽 등록 페이지
 class PickRegisterPage extends StatefulWidget {
@@ -18,6 +17,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -25,7 +25,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
           children: [
             // 헤더
             AppHeader.withTitle(
-              title: '무료픽 등록',
+              title: l10n.freePickRegister,
               onBackPressed: () => Navigator.of(context).pop(),
             ),
             // 컨텐츠
@@ -36,16 +36,16 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
                   children: [
                     const SizedBox(height: 16),
                     // 경기선택 영역
-                    _buildMatchSelection(),
+                    _buildMatchSelection(l10n),
                     const SizedBox(height: 16),
                     // 안내 문구
-                    _buildInfoBanner(),
+                    _buildInfoBanner(l10n),
                   ],
                 ),
               ),
             ),
             // 하단 버튼
-            _buildBottomButtons(),
+            _buildBottomButtons(l10n),
           ],
         ),
       ),
@@ -53,14 +53,14 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
   }
 
   /// 경기선택 영역
-  Widget _buildMatchSelection() {
+  Widget _buildMatchSelection(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '경기선택',
+            l10n.matchSelection,
             style: AppTextStyles.h4Bold.copyWith(
               color: AppColors.labelNormal,
             ),
@@ -79,7 +79,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
               ),
               child: Center(
                 child: Text(
-                  '경기선택',
+                  l10n.selectMatch,
                   style: AppTextStyles.label1Medium.copyWith(
                     color: AppColors.labelNormal,
                   ),
@@ -94,6 +94,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
 
   /// 경기 선택 모달
   void _showMatchSelectionModal() {
+    final l10n = AppLocalizations.of(context)!;
     // TODO: 경기 선택 바텀시트 구현
     showModalBottomSheet(
       context: context,
@@ -122,7 +123,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                '경기 선택',
+                l10n.selectMatch,
                 style: AppTextStyles.h4Bold.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -156,14 +157,14 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '리그명',
+                                  l10n.leagueName,
                                   style: AppTextStyles.caption1Medium.copyWith(
                                     color: AppColors.labelNeutral,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '팀명 vs 팀명',
+                                  '${l10n.teamName} vs ${l10n.teamName}',
                                   style: AppTextStyles.body1NormalBold.copyWith(
                                     color: AppColors.labelNormal,
                                   ),
@@ -191,14 +192,14 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
   }
 
   /// 안내 문구 배너
-  Widget _buildInfoBanner() {
+  Widget _buildInfoBanner(AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       color: AppColors.primaryBackground,
       child: Center(
         child: Text(
-          '경기 시작 2일 전까지의 픽만 등록 가능합니다.',
+          l10n.matchNotice,
           style: AppTextStyles.label1Medium.copyWith(
             color: AppColors.primaryFigma,
           ),
@@ -208,7 +209,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
   }
 
   /// 하단 버튼
-  Widget _buildBottomButtons() {
+  Widget _buildBottomButtons(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -225,7 +226,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
               onTap: () => Navigator.of(context).pop(),
               child: Center(
                 child: Text(
-                  '닫기',
+                  l10n.close,
                   style: AppTextStyles.body1NormalMedium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -252,7 +253,7 @@ class _PickRegisterPageState extends State<PickRegisterPage> {
                     : null,
                 child: Center(
                   child: Text(
-                    '등록하기',
+                    l10n.register,
                     style: AppTextStyles.body1NormalBold.copyWith(
                       color: _isMatchSelected
                           ? AppColors.white

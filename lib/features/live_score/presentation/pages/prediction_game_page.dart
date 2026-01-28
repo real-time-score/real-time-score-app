@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 예측게임 페이지
 class PredictionGamePage extends StatefulWidget {
@@ -14,7 +15,10 @@ class PredictionGamePage extends StatefulWidget {
 class _PredictionGamePageState extends State<PredictionGamePage> {
   int _selectedMainTabIndex = 3; // 예측게임 탭 선택
 
-  final List<String> _mainTabs = ['라이브', '차트', '라인업', '예측게임'];
+  List<String> _getMainTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.liveTab, l10n.chart, l10n.lineup, l10n.predictionGame];
+  }
 
   // 예측 선택 상태
   int? _winnerSelection; // 0: 홈팀, 1: 원정팀
@@ -78,7 +82,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
-        children: _mainTabs.asMap().entries.map((entry) {
+        children: _getMainTabs(context).asMap().entries.map((entry) {
           final index = entry.key;
           final label = entry.value;
           final isSelected = index == _selectedMainTabIndex;
@@ -133,6 +137,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 컨텐츠
   Widget _buildContent() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -143,7 +148,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
           const SizedBox(height: 24),
           // 예측 섹션 타이틀
           Text(
-            '승부를 예측해보세요',
+            l10n.predictMatch,
             style: AppTextStyles.body1NormalBold.copyWith(
               color: AppColors.labelNormal,
             ),
@@ -158,6 +163,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 경기 정보 카드
   Widget _buildMatchInfoCard() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -169,7 +175,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
         children: [
           // 리그명 + 날짜
           Text(
-            '리그명 mm/dd/mm',
+            '${l10n.leagueName} mm/dd/mm',
             style: AppTextStyles.caption1Medium.copyWith(
               color: AppColors.labelNeutral,
             ),
@@ -180,7 +186,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // 홈팀
-              _buildTeamInfo(teamName: '팀명'),
+              _buildTeamInfo(teamName: l10n.teamName),
               const SizedBox(width: 24),
               // VS
               Text(
@@ -191,7 +197,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
               ),
               const SizedBox(width: 24),
               // 원정팀
-              _buildTeamInfo(teamName: '팀명'),
+              _buildTeamInfo(teamName: l10n.teamName),
             ],
           ),
         ],
@@ -261,6 +267,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 테이블 헤더
   Widget _buildTableHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.containerNormal,
@@ -277,7 +284,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Center(
                 child: Text(
-                  '팀명',
+                  l10n.teamName,
                   style: AppTextStyles.caption1Medium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -291,7 +298,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Center(
                 child: Text(
-                  '팀명',
+                  l10n.teamName,
                   style: AppTextStyles.caption1Medium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -305,7 +312,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Center(
                 child: Text(
-                  '팀명',
+                  l10n.teamName,
                   style: AppTextStyles.caption1Medium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -320,8 +327,9 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 승리팀 행
   Widget _buildWinnerRow() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildRadioRow(
-      label: '승리팀',
+      label: l10n.victoryTeam,
       homeValue: 'NN%',
       awayValue: 'NN%',
       groupValue: _winnerSelection,
@@ -340,8 +348,9 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 핸디캡 행
   Widget _buildHandicapRow() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildRadioRow(
-      label: '핸디캡',
+      label: l10n.handicap,
       subLabel: 'NN',
       subLabelColor: AppColors.primaryFigma,
       homeValue: 'NN%',
@@ -362,8 +371,9 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 언더오버 행
   Widget _buildUnderOverRow() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildRadioRow(
-      label: '언더오버',
+      label: l10n.underOver,
       subLabel: 'NNN.NN',
       subLabelColor: AppColors.primaryFigma,
       homeValue: 'NN%',
@@ -502,10 +512,11 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 홈런 행
   Widget _buildHomeRunRow() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildDropdownRow(
-      label: '홈런',
-      homeValue: _homeRunHomePlayer ?? '선수명',
-      awayValue: _homeRunAwayPlayer ?? '선수명',
+      label: l10n.homerun,
+      homeValue: _homeRunHomePlayer ?? l10n.playerName,
+      awayValue: _homeRunAwayPlayer ?? l10n.playerName,
       onHomeTap: () {
         // TODO: 선수 선택 바텀시트
       },
@@ -517,8 +528,9 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 스코어 행
   Widget _buildScoreRow() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildDropdownRow(
-      label: '스코어',
+      label: l10n.score,
       homeValue: _scoreHome?.toString() ?? 'N',
       awayValue: _scoreAway?.toString() ?? 'N',
       onHomeTap: () {
@@ -532,10 +544,11 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 골 행
   Widget _buildGoalRow() {
+    final l10n = AppLocalizations.of(context)!;
     return _buildDropdownRow(
-      label: '골',
-      homeValue: _goalHomePlayer ?? '선수명',
-      awayValue: _goalAwayPlayer ?? '선수명',
+      label: l10n.goal,
+      homeValue: _goalHomePlayer ?? l10n.playerName,
+      awayValue: _goalAwayPlayer ?? l10n.playerName,
       onHomeTap: () {
         // TODO: 선수 선택 바텀시트
       },
@@ -638,6 +651,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
 
   /// 제출 버튼
   Widget _buildSubmitButton() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       child: SizedBox(
@@ -656,7 +670,7 @@ class _PredictionGamePageState extends State<PredictionGamePage> {
             elevation: 0,
           ),
           child: Text(
-            '제출하기',
+            l10n.submit,
             style: AppTextStyles.body1NormalBold.copyWith(
               color: AppColors.white,
             ),

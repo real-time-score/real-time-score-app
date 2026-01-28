@@ -5,6 +5,7 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_navigation_bar.dart';
 import '../../../../shared/widgets/app_toggle.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 프로토 메인 페이지
 class ProtoMainPage extends StatefulWidget {
@@ -17,10 +18,10 @@ class ProtoMainPage extends StatefulWidget {
 class _ProtoMainPageState extends State<ProtoMainPage> {
   // 탭 인덱스
   int _toggleIndex = 1; // LIVE / 프로토 (프로토 선택)
-  int _bottomNavIndex = 0; // 하단 네비게이션
+  final int _bottomNavIndex = 0; // 하단 네비게이션
 
   // 배너 페이지
-  int _bannerPage = 0;
+  final int _bannerPage = 0;
   final int _totalBannerPages = 3;
 
   @override
@@ -93,7 +94,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
           const SizedBox(width: 8),
           // 타이틀
           Text(
-            'リアルタイムスコア',
+            AppLocalizations.of(context)!.appTitle,
             style: AppTextStyles.h4Bold.copyWith(
               color: AppColors.primaryFigma,
             ),
@@ -211,10 +212,11 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
 
   /// LIVE / 프로토 토글
   Widget _buildToggle() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: AppToggle(
-        labels: const ['LIVE', '프로토'],
+        labels: [l10n.live, l10n.proto],
         selectedIndex: _toggleIndex,
         onChanged: (index) {
           setState(() {
@@ -233,15 +235,16 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
 
   /// 프로모션 카드들
   Widget _buildPromotionCards() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           // 복권형 스포츠 배팅
           _buildPromotionCard(
-            title: '복권형 스포츠 배팅',
-            subtitle: '이지토토',
-            description: '소액으로 즐기는\n스포츠 복권',
+            title: l10n.easyToto,
+            subtitle: l10n.easyToto,
+            description: l10n.easyTotoDesc,
             gradientColors: [
               const Color(0xFF6366F1),
               const Color(0xFF8B5CF6),
@@ -250,9 +253,9 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
           const SizedBox(height: 12),
           // 실력형 스포츠 복권
           _buildPromotionCard(
-            title: '실력형 스포츠 복권',
-            subtitle: '프로토 승부식',
-            description: '나만의 경기 분석으로\n배당률 적중',
+            title: l10n.protoMatch,
+            subtitle: l10n.protoMatch,
+            description: l10n.protoMatchDesc,
             gradientColors: [
               const Color(0xFF3B82F6),
               const Color(0xFF06B6D4),
@@ -261,9 +264,9 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
           const SizedBox(height: 12),
           // 스포츠 베팅
           _buildPromotionCard(
-            title: '스포츠 베팅',
-            subtitle: '스포츠토토',
-            description: '간단한 선택으로\n스포츠 즐기기',
+            title: l10n.sportsToto,
+            subtitle: l10n.sportsToto,
+            description: l10n.sportsTotoDesc,
             gradientColors: [
               const Color(0xFF10B981),
               const Color(0xFF34D399),
@@ -349,6 +352,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
 
   /// 경기 섹션
   Widget _buildMatchSection() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(12),
@@ -361,7 +365,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
         children: [
           // 리그 헤더
           _buildLeagueHeader(
-            leagueName: '리그명',
+            leagueName: l10n.leagueName,
             hasPick: true,
             temperature: '12°C',
           ),
@@ -397,18 +401,23 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
         const SizedBox(width: 8),
         // 픽 뱃지
         if (hasPick)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: AppColors.primaryFigma,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              '픽',
-              style: AppTextStyles.caption2Bold.copyWith(
-                color: AppColors.white,
-              ),
-            ),
+          Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryFigma,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  l10n.pick,
+                  style: AppTextStyles.caption2Bold.copyWith(
+                    color: AppColors.white,
+                  ),
+                ),
+              );
+            },
           ),
         const SizedBox(width: 8),
         // 날씨 아이콘 + 온도
@@ -450,6 +459,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
 
   /// 운영자 등록글 노출 배너
   Widget _buildAdminNotice() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -459,7 +469,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
       ),
       child: Center(
         child: Text(
-          '운영자 등록글 노출',
+          l10n.adminNotice,
           style: AppTextStyles.caption1Medium.copyWith(
             color: AppColors.labelNeutral,
           ),
@@ -470,6 +480,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
 
   /// 경기 카드
   Widget _buildMatchCard() {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed('/live-match-detail');
@@ -479,8 +490,8 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
           // 홈팀
           Expanded(
             child: _buildTeamInfo(
-              teamName: '팀명',
-              ranking: '순위',
+              teamName: l10n.teamName,
+              ranking: l10n.rankingTab,
             ),
           ),
           // 스코어
@@ -496,8 +507,8 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
           // 원정팀
           Expanded(
             child: _buildTeamInfo(
-              teamName: '팀명',
-              ranking: '순위',
+              teamName: l10n.teamName,
+              ranking: l10n.rankingTab,
             ),
           ),
         ],
@@ -542,6 +553,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
 
   /// 배당률 테이블
   Widget _buildOddsTable() {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed('/match-full-mode');
@@ -550,7 +562,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
         children: [
           // 국내
           _buildOddsRow(
-            label: '국내',
+            label: l10n.domestic,
             homeOdds: 'N.NN',
             drawOdds: '-',
             awayOdds: 'N.NN',
@@ -560,7 +572,7 @@ class _ProtoMainPageState extends State<ProtoMainPage> {
           const SizedBox(height: 4),
           // 해외
           _buildOddsRow(
-            label: '해외',
+            label: l10n.overseas,
             homeOdds: 'N.NN',
             drawOdds: '-',
             awayOdds: 'N.NN',

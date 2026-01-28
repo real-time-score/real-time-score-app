@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 마케팅 수신 동의 페이지
 class MarketingConsentPage extends StatefulWidget {
@@ -46,14 +45,16 @@ class _MarketingConsentPageState extends State<MarketingConsentPage> {
 
   /// 헤더
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return AppHeader.withTitle(
-      title: '마케팅 수신 동의',
+      title: l10n.marketingConsent,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 동의 토글
   Widget _buildConsentToggle() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -69,14 +70,14 @@ class _MarketingConsentPageState extends State<MarketingConsentPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '마케팅 수신 동의',
+                  l10n.marketingConsent,
                   style: AppTextStyles.body1NormalMedium.copyWith(
                     color: AppColors.labelNormal,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '이벤트, 혜택, 상품 추천 등',
+                  l10n.eventBenefitInfo,
                   style: AppTextStyles.caption1Medium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -137,6 +138,7 @@ class _MarketingConsentPageState extends State<MarketingConsentPage> {
 
   /// 하단 정보
   Widget _buildBottomInfo() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.all(16),
@@ -155,9 +157,9 @@ class _MarketingConsentPageState extends State<MarketingConsentPage> {
           ),
           const SizedBox(height: 4),
           Text(
-            '수신 동의 철회: MY > 앱 설정',
+            l10n.consentWithdrawal,
             style: AppTextStyles.caption1Medium.copyWith(
-              color: AppColors.white.withOpacity(0.7),
+              color: AppColors.white.withValues(alpha: 0.7),
             ),
           ),
         ],

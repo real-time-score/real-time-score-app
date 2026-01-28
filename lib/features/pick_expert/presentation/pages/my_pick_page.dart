@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// MY 픽 탭 타입
 enum MyPickTab {
@@ -26,7 +27,7 @@ class MyPickPage extends StatefulWidget {
 
 class _MyPickPageState extends State<MyPickPage> {
   late MyPickTab _selectedTab;
-  String _selectedMatchStatus = '경기상태';
+  String? _selectedMatchStatus;
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -43,6 +44,8 @@ class _MyPickPageState extends State<MyPickPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    _selectedMatchStatus ??= l10n.matchStatus;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -50,7 +53,7 @@ class _MyPickPageState extends State<MyPickPage> {
           children: [
             // 헤더
             AppHeader.withTitle(
-              title: 'MY 픽',
+              title: l10n.myPick,
               onBackPressed: () => Navigator.of(context).pop(),
             ),
             // 컨텐츠
@@ -60,13 +63,13 @@ class _MyPickPageState extends State<MyPickPage> {
                   children: [
                     const SizedBox(height: 16),
                     // 토글
-                    _buildToggle(),
+                    _buildToggle(l10n),
                     const SizedBox(height: 16),
                     // 필터 섹션
-                    _buildFilterSection(),
+                    _buildFilterSection(l10n),
                     const SizedBox(height: 16),
                     // 픽 카드 리스트
-                    _buildPickCardList(),
+                    _buildPickCardList(l10n),
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -79,7 +82,7 @@ class _MyPickPageState extends State<MyPickPage> {
   }
 
   /// 토글
-  Widget _buildToggle() {
+  Widget _buildToggle(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
@@ -108,7 +111,7 @@ class _MyPickPageState extends State<MyPickPage> {
                   ),
                   child: Center(
                     child: Text(
-                      '구매한 픽',
+                      l10n.purchasedPick,
                       style: _selectedTab == MyPickTab.purchased
                           ? AppTextStyles.body1NormalBold.copyWith(
                               color: AppColors.white,
@@ -139,7 +142,7 @@ class _MyPickPageState extends State<MyPickPage> {
                   ),
                   child: Center(
                     child: Text(
-                      '알림한 픽',
+                      l10n.alertedPick,
                       style: _selectedTab == MyPickTab.alerted
                           ? AppTextStyles.body1NormalBold.copyWith(
                               color: AppColors.white,
@@ -159,7 +162,7 @@ class _MyPickPageState extends State<MyPickPage> {
   }
 
   /// 필터 섹션
-  Widget _buildFilterSection() {
+  Widget _buildFilterSection(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -187,7 +190,7 @@ class _MyPickPageState extends State<MyPickPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 15),
                       child: Text(
-                        _selectedMatchStatus,
+                        _selectedMatchStatus!,
                         style: AppTextStyles.body1NormalMedium.copyWith(
                           color: AppColors.labelAlternative,
                         ),
@@ -221,7 +224,7 @@ class _MyPickPageState extends State<MyPickPage> {
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: '텍스트홀더',
+                    hintText: l10n.textPlaceholder,
                     hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                       color: AppColors.labelAlternative,
                     ),
@@ -245,6 +248,7 @@ class _MyPickPageState extends State<MyPickPage> {
 
   /// 경기상태 바텀시트
   void _showMatchStatusBottomSheet() {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.white,
@@ -271,17 +275,17 @@ class _MyPickPageState extends State<MyPickPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                '경기상태',
+                l10n.matchStatus,
                 style: AppTextStyles.h4Bold.copyWith(
                   color: AppColors.labelNormal,
                 ),
               ),
               const SizedBox(height: 16),
               // 옵션들
-              _buildMatchStatusOption('전체'),
-              _buildMatchStatusOption('경기 전'),
-              _buildMatchStatusOption('경기 중'),
-              _buildMatchStatusOption('경기 종료'),
+              _buildMatchStatusOption(l10n.all),
+              _buildMatchStatusOption(l10n.beforeMatch),
+              _buildMatchStatusOption(l10n.duringMatch),
+              _buildMatchStatusOption(l10n.afterMatch),
               const SizedBox(height: 16),
             ],
           ),
@@ -315,21 +319,21 @@ class _MyPickPageState extends State<MyPickPage> {
   }
 
   /// 픽 카드 리스트
-  Widget _buildPickCardList() {
+  Widget _buildPickCardList(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          _buildPickCard(),
+          _buildPickCard(l10n),
           const SizedBox(height: 16),
-          _buildPickCard(),
+          _buildPickCard(l10n),
         ],
       ),
     );
   }
 
   /// 픽 카드
-  Widget _buildPickCard() {
+  Widget _buildPickCard(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -340,13 +344,13 @@ class _MyPickPageState extends State<MyPickPage> {
       child: Column(
         children: [
           // 전문가 정보
-          _buildExpertInfo(),
+          _buildExpertInfo(l10n),
           const SizedBox(height: 12),
           // 조회수
           Align(
             alignment: Alignment.centerRight,
             child: Text(
-              '조회수 NNN',
+              '${l10n.viewCount} NNN',
               style: AppTextStyles.caption1Medium.copyWith(
                 color: AppColors.labelAlternative,
               ),
@@ -360,20 +364,20 @@ class _MyPickPageState extends State<MyPickPage> {
           ),
           const SizedBox(height: 16),
           // 경기 정보
-          _buildMatchInfo(),
+          _buildMatchInfo(l10n),
           const SizedBox(height: 16),
           // 타이틀 배너
-          _buildTitleBanner(),
+          _buildTitleBanner(l10n),
           const SizedBox(height: 16),
           // 예측 버튼들
-          _buildPredictionButtons(),
+          _buildPredictionButtons(l10n),
         ],
       ),
     );
   }
 
   /// 전문가 정보
-  Widget _buildExpertInfo() {
+  Widget _buildExpertInfo(AppLocalizations l10n) {
     return Row(
       children: [
         // 프로필 이미지
@@ -397,14 +401,14 @@ class _MyPickPageState extends State<MyPickPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '전문가명',
+                l10n.expertName,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.labelNormal,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                '최근 NN게임 NN승 NN패',
+                l10n.recentGames('NN', 'NN', 'NN'),
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
@@ -438,12 +442,12 @@ class _MyPickPageState extends State<MyPickPage> {
   }
 
   /// 경기 정보
-  Widget _buildMatchInfo() {
+  Widget _buildMatchInfo(AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // 홈팀
-        _buildTeamColumn('팀명'),
+        _buildTeamColumn(l10n.teamName),
         const SizedBox(width: 22),
         // 일시
         Container(
@@ -472,7 +476,7 @@ class _MyPickPageState extends State<MyPickPage> {
         ),
         const SizedBox(width: 22),
         // 원정팀
-        _buildTeamColumn('팀명'),
+        _buildTeamColumn(l10n.teamName),
       ],
     );
   }
@@ -510,14 +514,14 @@ class _MyPickPageState extends State<MyPickPage> {
   }
 
   /// 타이틀 배너
-  Widget _buildTitleBanner() {
+  Widget _buildTitleBanner(AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       color: AppColors.primaryBackground,
       child: Center(
         child: Text(
-          '타이틀 노출',
+          l10n.titleDisplay,
           style: AppTextStyles.label1Medium.copyWith(
             color: AppColors.primaryFigma,
           ),
@@ -527,7 +531,7 @@ class _MyPickPageState extends State<MyPickPage> {
   }
 
   /// 예측 버튼들
-  Widget _buildPredictionButtons() {
+  Widget _buildPredictionButtons(AppLocalizations l10n) {
     return Row(
       children: [
         // 승패 버튼
@@ -535,7 +539,7 @@ class _MyPickPageState extends State<MyPickPage> {
           child: Column(
             children: [
               const SizedBox(height: 16),
-              _buildOutlinedButton('승패'),
+              _buildOutlinedButton(l10n.winLose),
             ],
           ),
         ),
@@ -545,7 +549,7 @@ class _MyPickPageState extends State<MyPickPage> {
           child: Column(
             children: [
               Text(
-                '승 N패',
+                l10n.win1Lose,
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
@@ -567,7 +571,7 @@ class _MyPickPageState extends State<MyPickPage> {
                 ),
               ),
               const SizedBox(height: 4),
-              _buildOutlinedButton('핸디'),
+              _buildOutlinedButton(l10n.handi),
             ],
           ),
         ),

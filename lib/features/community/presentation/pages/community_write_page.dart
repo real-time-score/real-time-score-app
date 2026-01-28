@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 게시글 등록 페이지
 class CommunityWritePage extends StatefulWidget {
@@ -18,14 +19,17 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
   final TextEditingController _contentController = TextEditingController();
   final List<int> _uploadedImages = [1, 2, 3]; // 임시 이미지 리스트
 
-  final List<String> _categories = [
-    '자유게시판',
-    '축구',
-    '야구',
-    '농구',
-    '배구',
-    '기타',
-  ];
+  List<String> _getCategories(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [
+      l10n.freeBoard,
+      l10n.soccer,
+      l10n.baseball,
+      l10n.basketball,
+      l10n.volleyball,
+      l10n.etc,
+    ];
+  }
 
   @override
   void dispose() {
@@ -41,9 +45,14 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
         child: Column(
           children: [
             // 헤더
-            AppHeader.withTitle(
-              title: '게시글 등록',
-              onBackPressed: () => Navigator.of(context).pop(),
+            Builder(
+              builder: (context) {
+                final l10n = AppLocalizations.of(context)!;
+                return AppHeader.withTitle(
+                  title: l10n.registerPost,
+                  onBackPressed: () => Navigator.of(context).pop(),
+                );
+              },
             ),
             // 컨텐츠
             Expanded(
@@ -74,12 +83,13 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
 
   /// 카테고리 선택
   Widget _buildCategorySelect() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 라벨
         Text(
-          '카테고리 선택',
+          l10n.selectCategory,
           style: AppTextStyles.label1Medium.copyWith(
             color: AppColors.labelNormal,
           ),
@@ -99,7 +109,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  _selectedCategory.isEmpty ? '카테고리 이름' : _selectedCategory,
+                  _selectedCategory.isEmpty ? l10n.categoryNameHint : _selectedCategory,
                   style: AppTextStyles.body1NormalMedium.copyWith(
                     color: _selectedCategory.isEmpty
                         ? AppColors.labelAlternative
@@ -125,13 +135,15 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
 
   /// 카테고리 바텀시트
   void _showCategoryBottomSheet() {
+    final l10n = AppLocalizations.of(context)!;
+    final categories = _getCategories(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) {
+      builder: (sheetContext) {
         return Container(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -151,14 +163,14 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
               ),
               const SizedBox(height: 16),
               Text(
-                '카테고리 선택',
+                l10n.selectCategory,
                 style: AppTextStyles.h4Bold.copyWith(
                   color: AppColors.labelNormal,
                 ),
               ),
               const SizedBox(height: 16),
-              ...List.generate(_categories.length, (index) {
-                return _buildCategoryOption(_categories[index]);
+              ...List.generate(categories.length, (index) {
+                return _buildCategoryOption(categories[index]);
               }),
               const SizedBox(height: 16),
             ],
@@ -194,12 +206,13 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
 
   /// 미디어 업로드
   Widget _buildMediaUpload() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 라벨
         Text(
-          '미디어 업로드',
+          l10n.mediaUpload,
           style: AppTextStyles.label1Medium.copyWith(
             color: AppColors.labelNormal,
           ),
@@ -240,14 +253,14 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      '이미지 업로드',
+                      l10n.imageUpload,
                       style: AppTextStyles.label1Medium.copyWith(
                         color: AppColors.labelNeutral,
                       ),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      '최대 10개 이미지 등록 가능',
+                      l10n.maxImagesInfo,
                       style: AppTextStyles.label1Medium.copyWith(
                         color: AppColors.labelAlternative,
                       ),
@@ -276,7 +289,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
         ],
         // 도움말
         Text(
-          '가장 앞에 있는 이미지가 썸네일로 설정됩니다.',
+          l10n.thumbnailInfo,
           style: AppTextStyles.caption1Medium.copyWith(
             color: AppColors.labelNeutral,
           ),
@@ -340,18 +353,23 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
               left: 0,
               right: 0,
               child: Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryFigma,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Text(
-                    '썸네일',
-                    style: AppTextStyles.caption1Medium.copyWith(
-                      color: AppColors.white,
-                    ),
-                  ),
+                child: Builder(
+                  builder: (context) {
+                    final l10n = AppLocalizations.of(context)!;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryFigma,
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Text(
+                        l10n.thumbnail,
+                        style: AppTextStyles.caption1Medium.copyWith(
+                          color: AppColors.white,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -362,12 +380,13 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
 
   /// 내용 입력
   Widget _buildContentInput() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 라벨
         Text(
-          '내용',
+          l10n.content,
           style: AppTextStyles.label1Medium.copyWith(
             color: AppColors.labelNeutral,
           ),
@@ -404,6 +423,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
 
   /// 등록 버튼
   Widget _buildSubmitButton() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -411,7 +431,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            AppColors.white.withOpacity(0),
+            AppColors.white.withValues(alpha: 0),
             AppColors.white,
           ],
         ),
@@ -430,7 +450,7 @@ class _CommunityWritePageState extends State<CommunityWritePage> {
             ),
             child: Center(
               child: Text(
-                '등록하기',
+                l10n.register,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.white,
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../core/constants/app_icons.dart';
+import '../../l10n/app_localizations.dart';
 
 /// 네비게이션 바 메뉴 아이템 정의
 enum AppNavigationItem {
@@ -24,7 +25,24 @@ enum AppNavigationItem {
 
 /// AppNavigationItem 확장
 extension AppNavigationItemExtension on AppNavigationItem {
-  /// 메뉴 아이템의 한글 라벨
+  /// 메뉴 아이템의 라벨 (다국어 지원)
+  String getLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (this) {
+      case AppNavigationItem.home:
+        return l10n.home;
+      case AppNavigationItem.pickExpert:
+        return l10n.pickExpert;
+      case AppNavigationItem.community:
+        return l10n.community;
+      case AppNavigationItem.ranking:
+        return l10n.ranking;
+      case AppNavigationItem.my:
+        return l10n.my;
+    }
+  }
+
+  /// 메뉴 아이템의 라벨 (fallback용)
   String get label {
     switch (this) {
       case AppNavigationItem.home:
@@ -207,9 +225,9 @@ class _NavigationBarItem extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 2),
-            // 라벨
+            // 라벨 (다국어 지원)
             Text(
-              item.label,
+              item.getLabel(context),
               style: textStyle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

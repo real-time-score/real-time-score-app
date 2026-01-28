@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 포인트 거래 타입
 enum PointTransactionType { charge, use, cancel }
@@ -29,13 +28,14 @@ class PointManagementPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
             // 헤더
-            _buildHeader(context),
+            _buildHeader(context, l10n),
             // 컨텐츠
             Expanded(
               child: SingleChildScrollView(
@@ -44,13 +44,13 @@ class PointManagementPage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 16),
                     // 정책 안내
-                    _buildPolicyInfo(),
+                    _buildPolicyInfo(l10n),
                     const SizedBox(height: 16),
                     // 현재 포인트
-                    _buildCurrentPoints(context),
+                    _buildCurrentPoints(context, l10n),
                     const SizedBox(height: 24),
                     // 상세 내역
-                    _buildDetailHistory(),
+                    _buildDetailHistory(l10n),
                   ],
                 ),
               ),
@@ -62,15 +62,15 @@ class PointManagementPage extends StatelessWidget {
   }
 
   /// 헤더
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
     return AppHeader.withTitle(
-      title: '포인트 관리',
+      title: l10n.pointManagement,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 정책 안내
-  Widget _buildPolicyInfo() {
+  Widget _buildPolicyInfo(AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -82,23 +82,17 @@ class PointManagementPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '포인트 이용 정책 안내',
+            l10n.pointPolicyTitle,
             style: AppTextStyles.body1NormalBold.copyWith(
               color: AppColors.labelNormal,
             ),
           ),
           const SizedBox(height: 12),
-          _buildPolicyItem(
-            '포인트는 현금으로 환전되거나 금전적 가치로 교환되지 않습니다. 회원 간 전달, 출금, 외부 결제 수단과의 교환은 불가능합니다.',
-          ),
+          _buildPolicyItem(l10n.pointPolicy1),
           const SizedBox(height: 8),
-          _buildPolicyItem(
-            '포인트는 서비스 내 전문가 분석 콘텐츠(Pick) 구매 용도로만 사용되며, 경기 결과에 따른 보상, 배당, 수익 분배와는 무관합니다.',
-          ),
+          _buildPolicyItem(l10n.pointPolicy2),
           const SizedBox(height: 8),
-          _buildPolicyItem(
-            '본 서비스의 포인트는 콘텐츠 이용을 위한 내부 결제 수단입니다.',
-          ),
+          _buildPolicyItem(l10n.pointPolicy3),
         ],
       ),
     );
@@ -129,7 +123,7 @@ class PointManagementPage extends StatelessWidget {
   }
 
   /// 현재 포인트
-  Widget _buildCurrentPoints(BuildContext context) {
+  Widget _buildCurrentPoints(BuildContext context, AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -162,7 +156,7 @@ class PointManagementPage extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'NN,NNN 포인트',
+                'NN,NNN ${l10n.point}',
                 style: AppTextStyles.h3Bold.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -185,7 +179,7 @@ class PointManagementPage extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  '충전하기',
+                  l10n.chargeAction,
                   style: AppTextStyles.body1NormalBold.copyWith(
                     color: AppColors.white,
                   ),
@@ -209,7 +203,7 @@ class PointManagementPage extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  '본인인증',
+                  l10n.identityVerification,
                   style: AppTextStyles.body1NormalBold.copyWith(
                     color: AppColors.primaryFigma,
                   ),
@@ -223,7 +217,7 @@ class PointManagementPage extends StatelessWidget {
   }
 
   /// 상세 내역
-  Widget _buildDetailHistory() {
+  Widget _buildDetailHistory(AppLocalizations l10n) {
     final transactions = _getTransactions();
 
     return Padding(
@@ -233,21 +227,21 @@ class PointManagementPage extends StatelessWidget {
         children: [
           // 섹션 타이틀
           Text(
-            '상세 내역',
+            l10n.detailHistory,
             style: AppTextStyles.body1NormalBold.copyWith(
               color: AppColors.labelNormal,
             ),
           ),
           const SizedBox(height: 16),
           // 거래 리스트
-          ...transactions.map((transaction) => _buildTransactionItem(transaction)),
+          ...transactions.map((transaction) => _buildTransactionItem(transaction, l10n)),
         ],
       ),
     );
   }
 
   /// 거래 아이템
-  Widget _buildTransactionItem(PointTransaction transaction) {
+  Widget _buildTransactionItem(PointTransaction transaction, AppLocalizations l10n) {
     final isPositive = transaction.type != PointTransactionType.use;
     final amountPrefix = isPositive ? '+' : '-';
     final amountColor = isPositive ? AppColors.labelNormal : AppColors.labelNormal;
@@ -274,7 +268,7 @@ class PointManagementPage extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               // 타입 뱃지
-              _buildTypeBadge(transaction.type),
+              _buildTypeBadge(transaction.type, l10n),
               const Spacer(),
               // 충전 취소 버튼
               if (transaction.canCancel)
@@ -283,7 +277,7 @@ class PointManagementPage extends StatelessWidget {
                     // 충전 취소 처리
                   },
                   child: Text(
-                    '충전취소',
+                    l10n.cancelCharge,
                     style: AppTextStyles.label1Medium.copyWith(
                       color: AppColors.primaryFigma,
                     ),
@@ -305,24 +299,24 @@ class PointManagementPage extends StatelessWidget {
   }
 
   /// 타입 뱃지
-  Widget _buildTypeBadge(PointTransactionType type) {
+  Widget _buildTypeBadge(PointTransactionType type, AppLocalizations l10n) {
     String label;
     Color backgroundColor;
     Color textColor;
 
     switch (type) {
       case PointTransactionType.charge:
-        label = '충전';
+        label = l10n.charge;
         backgroundColor = AppColors.primaryBackground;
         textColor = AppColors.primaryFigma;
         break;
       case PointTransactionType.use:
-        label = '사용';
+        label = l10n.use;
         backgroundColor = Colors.transparent;
         textColor = AppColors.labelNeutral;
         break;
       case PointTransactionType.cancel:
-        label = '취소';
+        label = l10n.cancel;
         backgroundColor = const Color(0xFFFFF0E6);
         textColor = const Color(0xFFFF6B00);
         break;

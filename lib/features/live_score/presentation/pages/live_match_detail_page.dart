@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 경기 상태 타입
 enum MatchStatus {
@@ -51,7 +52,10 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
   String? _mentionTargetUser; // 멘션 대상 사용자
   final TextEditingController _cheerMessageController = TextEditingController();
 
-  final List<String> _tabs = ['라이브', '차트', '라인업', '예측게임'];
+  List<String> _getTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.liveTab, l10n.chart, l10n.lineup, l10n.predictionGame];
+  }
 
   @override
   void dispose() {
@@ -136,7 +140,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
-        children: _tabs.asMap().entries.map((entry) {
+        children: _getTabs(context).asMap().entries.map((entry) {
           final index = entry.key;
           final label = entry.value;
           final isSelected = index == _selectedTabIndex;
@@ -201,11 +205,16 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       color: AppColors.primaryContainer,
       child: Center(
-        child: Text(
-          '운영자 등록글 노출',
-          style: AppTextStyles.label1NormalMedium.copyWith(
-            color: AppColors.primaryFigma,
-          ),
+        child: Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return Text(
+              l10n.adminNotice,
+              style: AppTextStyles.label1NormalMedium.copyWith(
+                color: AppColors.primaryFigma,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -218,11 +227,16 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
       child: Column(
         children: [
           // 예측 결과 텍스트
-          Text(
-            '[예측결과] 팀명 NN% 승 / 핸패 / 오버',
-            style: AppTextStyles.label1NormalMedium.copyWith(
-              color: AppColors.labelNeutral,
-            ),
+          Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return Text(
+                l10n.predictionResult,
+                style: AppTextStyles.label1NormalMedium.copyWith(
+                  color: AppColors.labelNeutral,
+                ),
+              );
+            },
           ),
           const SizedBox(height: 4),
           // 배당률 테이블
@@ -340,17 +354,18 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 경기 전 정보 (예상 스코어 + 시간)
   Widget _buildBeforeMatchInfo() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // 홈팀
-        _buildTeamWithScore(teamName: '팀명', score: '1'),
+        _buildTeamWithScore(teamName: l10n.teamName, score: '1'),
         const SizedBox(width: 8),
         // 시간 / 예상 스코어
         Column(
           children: [
             Text(
-              '예상 스코어',
+              l10n.expectedScore,
               style: AppTextStyles.label1NormalMedium.copyWith(
                 color: AppColors.labelNeutral,
               ),
@@ -391,19 +406,20 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
         ),
         const SizedBox(width: 8),
         // 원정팀
-        _buildTeamWithScore(teamName: '팀명', score: '5'),
+        _buildTeamWithScore(teamName: l10n.teamName, score: '5'),
       ],
     );
   }
 
   /// 경기 중/종료 라이브 스코어 정보
   Widget _buildLiveScoreInfo() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         // 홈팀
-        _buildTeamWithName(teamName: '팀명'),
+        _buildTeamWithName(teamName: l10n.teamName),
         const SizedBox(width: 16),
         // 홈 스코어
         Text(
@@ -425,7 +441,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                widget.matchStatus == MatchStatus.finished ? '종료' : '8회 초',
+                widget.matchStatus == MatchStatus.finished ? l10n.finished : l10n.inningTop,
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -445,7 +461,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
         ),
         const SizedBox(width: 16),
         // 원정팀
-        _buildTeamWithName(teamName: '팀명'),
+        _buildTeamWithName(teamName: l10n.teamName),
       ],
     );
   }
@@ -538,6 +554,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 채팅 메시지 리스트
   Widget _buildChatList() {
+    final l10n = AppLocalizations.of(context)!;
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -554,9 +571,9 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: _buildChatMessage(
             index: index,
-            username: '도라에몽',
-            rank: '뉴비',
-            message: '메세지 노출',
+            username: l10n.nickname,
+            rank: l10n.newbie,
+            message: l10n.messageDisplay,
             time: '오후 hh:mm',
             isHomeTeam: isHomeTeam,
             isBlocked: isBlocked,
@@ -689,19 +706,24 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                           ],
                         ),
                         // 멘션 버튼
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isMentionMode = true;
-                              _mentionTargetUser = username;
-                            });
+                        Builder(
+                          builder: (context) {
+                            final l10n = AppLocalizations.of(context)!;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isMentionMode = true;
+                                  _mentionTargetUser = username;
+                                });
+                              },
+                              child: Text(
+                                '@${l10n.mention}',
+                                style: AppTextStyles.caption1Medium.copyWith(
+                                  color: AppColors.primaryFigma,
+                                ),
+                              ),
+                            );
                           },
-                          child: Text(
-                            '@멘션',
-                            style: AppTextStyles.caption1Medium.copyWith(
-                              color: AppColors.primaryFigma,
-                            ),
-                          ),
                         ),
                       ],
                     ),
@@ -754,6 +776,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 태깅 배지 (구중/진중)
   Widget _buildTagBadge(TagType tagType) {
+    final l10n = AppLocalizations.of(context)!;
     final isGujung = tagType == TagType.gujung;
     final bgColor = isGujung
         ? const Color(0xFFFDECEE) // error container
@@ -762,7 +785,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
         ? const Color(0xFFE6533E) // error
         : const Color(0xFF3F94EE); // decrease
     final textColor = borderColor;
-    final label = isGujung ? '구중' : '진중';
+    final label = isGujung ? l10n.gujung : l10n.jinjung;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -786,6 +809,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 사용자 인터랙션 메뉴
   Widget _buildUserInteractionMenu(int userIndex) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: 144,
       decoration: BoxDecoration(
@@ -797,7 +821,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
         children: [
           _buildMenuTableItem(
             icon: Icons.auto_awesome,
-            label: '진중',
+            label: l10n.jinjung,
             onTap: () {
               setState(() {
                 _taggedUsers[userIndex] = TagType.jinjung;
@@ -807,7 +831,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
           ),
           _buildMenuTableItem(
             icon: Icons.settings,
-            label: '구중',
+            label: l10n.gujung,
             onTap: () {
               setState(() {
                 _taggedUsers[userIndex] = TagType.gujung;
@@ -817,7 +841,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
           ),
           _buildMenuTableItem(
             icon: Icons.campaign_outlined,
-            label: '신고',
+            label: l10n.report,
             onTap: () {
               setState(() {
                 _showMenuForIndex = null;
@@ -827,7 +851,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
           ),
           _buildMenuTableItem(
             icon: Icons.block,
-            label: '차단',
+            label: l10n.block,
             onTap: () {
               setState(() {
                 _blockedUsers.add(userIndex);
@@ -913,6 +937,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 홈팀 응원 버튼 (녹색, 아이콘 왼쪽)
   Widget _buildHomeCheerButton({required String count}) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -948,7 +973,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '응원',
+                l10n.cheer,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.positiveGreen,
                 ),
@@ -969,6 +994,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 원정팀 응원 버튼 (파란색, 아이콘 오른쪽)
   Widget _buildAwayCheerButton({required String count}) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -998,7 +1024,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  '응원',
+                  l10n.cheer,
                   style: AppTextStyles.body1NormalBold.copyWith(
                     color: AppColors.positive,
                   ),
@@ -1029,7 +1055,8 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 응원 메시지 입력 바
   Widget _buildCheerInputBar() {
-    final teamName = _isHomeTeamCheer ? '홈팀' : '원정팀';
+    final l10n = AppLocalizations.of(context)!;
+    final teamName = _isHomeTeamCheer ? l10n.homeTeam : l10n.awayTeam;
     final headerColor = _isHomeTeamCheer
         ? AppColors.positiveGreen
         : AppColors.positive;
@@ -1046,7 +1073,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '($teamName)응원 메세지',
+                l10n.cheerMessage(teamName),
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.white,
                 ),
@@ -1098,7 +1125,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                   child: TextField(
                     controller: _cheerMessageController,
                     decoration: InputDecoration(
-                      hintText: '응원 메시지 입력',
+                      hintText: l10n.cheerMessageHint,
                       hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                         color: AppColors.labelAlternative,
                       ),
@@ -1151,6 +1178,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
 
   /// 멘션 입력 바
   Widget _buildMentionInputBar() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -1163,7 +1191,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '($_mentionTargetUser)멘션',
+                l10n.mentionMessage(_mentionTargetUser ?? ''),
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.white,
                 ),
@@ -1216,7 +1244,7 @@ class _LiveMatchDetailPageState extends State<LiveMatchDetailPage> {
                   child: TextField(
                     controller: _cheerMessageController,
                     decoration: InputDecoration(
-                      hintText: '응원 메시지 입력',
+                      hintText: l10n.cheerMessageHint,
                       hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                         color: AppColors.labelAlternative,
                       ),

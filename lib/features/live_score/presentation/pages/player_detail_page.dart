@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 선수 상세 페이지
 class PlayerDetailPage extends StatelessWidget {
@@ -11,6 +12,7 @@ class PlayerDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -18,7 +20,7 @@ class PlayerDetailPage extends StatelessWidget {
           children: [
             // 헤더
             AppHeader.withTitle(
-              title: '선수명',
+              title: l10n.playerName,
               onBackPressed: () => Navigator.of(context).pop(),
             ),
             // 컨텐츠
@@ -30,18 +32,18 @@ class PlayerDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 선수 정보 영역
-                      _buildPlayerInfoSection(),
+                      _buildPlayerInfoSection(l10n),
                       const SizedBox(height: 24),
                       // 출전결과 타이틀
                       Text(
-                        '출전결과',
+                        l10n.appearanceResult,
                         style: AppTextStyles.h4Bold.copyWith(
                           color: AppColors.labelNormal,
                         ),
                       ),
                       const SizedBox(height: 8),
                       // 경기 리스트
-                      _buildMatchHistoryList(),
+                      _buildMatchHistoryList(l10n),
                     ],
                   ),
                 ),
@@ -54,7 +56,7 @@ class PlayerDetailPage extends StatelessWidget {
   }
 
   /// 선수 정보 영역 (사진 + 스탯)
-  Widget _buildPlayerInfoSection() {
+  Widget _buildPlayerInfoSection(AppLocalizations l10n) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -84,11 +86,11 @@ class PlayerDetailPage extends StatelessWidget {
             height: 180,
             child: Column(
               children: [
-                _buildStatItem(label: '득점', value: 'NN'),
+                _buildStatItem(label: l10n.scoring, value: 'NN'),
                 const SizedBox(height: 8),
-                _buildStatItem(label: '도움', value: 'NN'),
+                _buildStatItem(label: l10n.assist, value: 'NN'),
                 const SizedBox(height: 8),
-                _buildStatItem(label: '평득', value: 'NN'),
+                _buildStatItem(label: l10n.avgScore, value: 'NN'),
               ],
             ),
           ),
@@ -128,32 +130,35 @@ class PlayerDetailPage extends StatelessWidget {
   }
 
   /// 경기 히스토리 리스트
-  Widget _buildMatchHistoryList() {
+  Widget _buildMatchHistoryList(AppLocalizations l10n) {
     return Column(
       children: [
         _buildMatchHistoryCard(
-          leagueName: '리그명 mm/dd/mm',
-          starterInfo: '선발(NN)',
-          homeTeam: '팀명',
-          awayTeam: '팀명',
+          l10n: l10n,
+          leagueName: '${l10n.leagueName} mm/dd/mm',
+          starterInfo: '${l10n.starter}(NN)',
+          homeTeam: l10n.teamName,
+          awayTeam: l10n.teamName,
           homeScore: 1,
           awayScore: 5,
         ),
         const SizedBox(height: 8),
         _buildMatchHistoryCard(
-          leagueName: '리그명 mm/dd/mm',
-          starterInfo: '선발(NN)',
-          homeTeam: '팀명',
-          awayTeam: '팀명',
+          l10n: l10n,
+          leagueName: '${l10n.leagueName} mm/dd/mm',
+          starterInfo: '${l10n.starter}(NN)',
+          homeTeam: l10n.teamName,
+          awayTeam: l10n.teamName,
           homeScore: 1,
           awayScore: 5,
         ),
         const SizedBox(height: 8),
         _buildMatchHistoryCard(
-          leagueName: '리그명 mm/dd/mm',
-          starterInfo: '선발(NN)',
-          homeTeam: '팀명',
-          awayTeam: '팀명',
+          l10n: l10n,
+          leagueName: '${l10n.leagueName} mm/dd/mm',
+          starterInfo: '${l10n.starter}(NN)',
+          homeTeam: l10n.teamName,
+          awayTeam: l10n.teamName,
           homeScore: 1,
           awayScore: 5,
         ),
@@ -163,6 +168,7 @@ class PlayerDetailPage extends StatelessWidget {
 
   /// 경기 히스토리 카드
   Widget _buildMatchHistoryCard({
+    required AppLocalizations l10n,
     required String leagueName,
     required String starterInfo,
     required String homeTeam,
@@ -291,11 +297,16 @@ class PlayerDetailPage extends StatelessWidget {
             color: AppColors.containerNormal,
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            '종료',
-            style: AppTextStyles.label1Medium.copyWith(
-              color: AppColors.labelNeutral,
-            ),
+          child: Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return Text(
+                l10n.finished,
+                style: AppTextStyles.label1Medium.copyWith(
+                  color: AppColors.labelNeutral,
+                ),
+              );
+            },
           ),
         ),
         const SizedBox(width: 8),

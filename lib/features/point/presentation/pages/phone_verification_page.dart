@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 휴대폰 인증 페이지
 class PhoneVerificationPage extends StatefulWidget {
@@ -16,6 +15,7 @@ class PhoneVerificationPage extends StatefulWidget {
 class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _codeController = TextEditingController();
+  // ignore: unused_field - 인증 완료 상태 (추후 구현 예정)
   bool _codeSent = false;
 
   @override
@@ -27,13 +27,14 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
             // 헤더
-            _buildHeader(),
+            _buildHeader(l10n),
             // 컨텐츠
             Expanded(
               child: SingleChildScrollView(
@@ -43,10 +44,10 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
                   children: [
                     const SizedBox(height: 16),
                     // 안내 문구
-                    _buildInfoText(),
+                    _buildInfoText(l10n),
                     const SizedBox(height: 24),
                     // 휴대폰 번호 섹션
-                    _buildPhoneSection(),
+                    _buildPhoneSection(l10n),
                   ],
                 ),
               ),
@@ -58,15 +59,15 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   /// 헤더
-  Widget _buildHeader() {
+  Widget _buildHeader(AppLocalizations l10n) {
     return AppHeader.withTitle(
-      title: '회원 재인증',
+      title: l10n.memberReVerification,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 안내 문구
-  Widget _buildInfoText() {
+  Widget _buildInfoText(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -74,7 +75,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        '고객님의 정보보호와 안전한 서비스 이용을 위해 앱 재설치 및 데이터 삭제 시 재인증이 필요합니다.',
+        l10n.reVerificationInfo,
         style: AppTextStyles.body2NormalMedium.copyWith(
           color: AppColors.labelNeutral,
           height: 1.4,
@@ -84,29 +85,29 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   /// 휴대폰 번호 섹션
-  Widget _buildPhoneSection() {
+  Widget _buildPhoneSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 섹션 타이틀
         Text(
-          '휴대폰 번호',
+          l10n.phoneNumber,
           style: AppTextStyles.body1NormalBold.copyWith(
             color: AppColors.labelNormal,
           ),
         ),
         const SizedBox(height: 16),
         // 전화번호 입력
-        _buildPhoneInput(),
+        _buildPhoneInput(l10n),
         const SizedBox(height: 12),
         // 인증번호 입력
-        _buildCodeInput(),
+        _buildCodeInput(l10n),
       ],
     );
   }
 
   /// 전화번호 입력
-  Widget _buildPhoneInput() {
+  Widget _buildPhoneInput(AppLocalizations l10n) {
     return Row(
       children: [
         // 입력 필드
@@ -121,7 +122,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               controller: _phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
-                hintText: '전화번호를 입력해주세요',
+                hintText: l10n.enterPhoneNumber,
                 hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelAlternative,
                 ),
@@ -155,7 +156,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             ),
             child: Center(
               child: Text(
-                '전송',
+                l10n.send,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.white,
                 ),
@@ -168,7 +169,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
   }
 
   /// 인증번호 입력
-  Widget _buildCodeInput() {
+  Widget _buildCodeInput(AppLocalizations l10n) {
     return Row(
       children: [
         // 입력 필드
@@ -183,7 +184,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
               controller: _codeController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                hintText: '인증 번호를 입력해주세요.',
+                hintText: l10n.enterVerificationCode,
                 hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelAlternative,
                 ),
@@ -214,7 +215,7 @@ class _PhoneVerificationPageState extends State<PhoneVerificationPage> {
             ),
             child: Center(
               child: Text(
-                '인증',
+                l10n.verify,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.white,
                 ),

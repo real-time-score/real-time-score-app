@@ -1,21 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 뱃지 정보 모델
 class BadgeInfo {
-  final String name;
+  final String nameKey;
   final String icon;
   final bool isEarned;
 
   const BadgeInfo({
-    required this.name,
+    required this.nameKey,
     required this.icon,
     this.isEarned = false,
   });
+
+  String getName(AppLocalizations l10n) {
+    switch (nameKey) {
+      case 'cheerWarrior':
+        return l10n.badgeCheerWarrior;
+      case 'predictionMaster':
+        return l10n.badgePredictionMaster;
+      case 'hotPoster':
+        return l10n.badgeHotPoster;
+      case 'likeFairy':
+        return l10n.badgeLikeFairy;
+      case 'commentLeader':
+        return l10n.badgeCommentLeader;
+      case 'attendanceKing':
+        return l10n.badgeAttendanceKing;
+      case 'pickConsumer':
+        return l10n.badgePickConsumer;
+      case 'passionUser':
+        return l10n.badgePassionUser;
+      case 'temperatureGuardian':
+        return l10n.badgeTemperatureGuardian;
+      default:
+        return nameKey;
+    }
+  }
 }
 
 /// 인증뱃지 페이지
@@ -29,13 +53,14 @@ class CertificationBadgePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
             // 헤더
-            _buildHeader(context),
+            _buildHeader(context, l10n),
             // 컨텐츠
             Expanded(
               child: SingleChildScrollView(
@@ -44,10 +69,10 @@ class CertificationBadgePage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 24),
                     // 인증뱃지 획득 수
-                    _buildBadgeCount(),
+                    _buildBadgeCount(l10n),
                     const SizedBox(height: 32),
                     // 뱃지 그리드
-                    _buildBadgeGrid(),
+                    _buildBadgeGrid(l10n),
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -60,19 +85,19 @@ class CertificationBadgePage extends StatelessWidget {
   }
 
   /// 헤더
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
     return AppHeader.withTitle(
-      title: '인증뱃지',
+      title: l10n.certificationBadge,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 뱃지 획득 수
-  Widget _buildBadgeCount() {
+  Widget _buildBadgeCount(AppLocalizations l10n) {
     return Column(
       children: [
         Text(
-          '인증뱃지 획득 수',
+          l10n.badgeCount,
           style: AppTextStyles.body1NormalMedium.copyWith(
             color: AppColors.labelNeutral,
           ),
@@ -89,7 +114,7 @@ class CertificationBadgePage extends StatelessWidget {
   }
 
   /// 뱃지 그리드
-  Widget _buildBadgeGrid() {
+  Widget _buildBadgeGrid(AppLocalizations l10n) {
     final badges = _getBadges();
 
     return GridView.builder(
@@ -103,13 +128,13 @@ class CertificationBadgePage extends StatelessWidget {
       ),
       itemCount: badges.length,
       itemBuilder: (context, index) {
-        return _buildBadgeItem(badges[index]);
+        return _buildBadgeItem(badges[index], l10n);
       },
     );
   }
 
   /// 뱃지 아이템
-  Widget _buildBadgeItem(BadgeInfo badge) {
+  Widget _buildBadgeItem(BadgeInfo badge, AppLocalizations l10n) {
     final isEarned = showUnearned ? false : badge.isEarned;
 
     return GestureDetector(
@@ -134,7 +159,7 @@ class CertificationBadgePage extends StatelessWidget {
           const SizedBox(height: 8),
           // 뱃지 이름
           Text(
-            badge.name,
+            badge.getName(l10n),
             style: AppTextStyles.label1Medium.copyWith(
               color: isEarned ? AppColors.labelNormal : AppColors.labelAlternative,
             ),
@@ -235,15 +260,15 @@ class CertificationBadgePage extends StatelessWidget {
   /// 뱃지 목록
   List<BadgeInfo> _getBadges() {
     return const [
-      BadgeInfo(name: '응원의 전사', icon: 'swords', isEarned: true),
-      BadgeInfo(name: '예측 마스터', icon: 'target', isEarned: true),
-      BadgeInfo(name: '핫게시터', icon: 'hotspring', isEarned: true),
-      BadgeInfo(name: '좋아요 요정', icon: 'fairy', isEarned: true),
-      BadgeInfo(name: '댓글 리더', icon: 'bubbles', isEarned: false),
-      BadgeInfo(name: '출석왕', icon: 'sun', isEarned: true),
-      BadgeInfo(name: '픽 소비자', icon: 'document', isEarned: false),
-      BadgeInfo(name: '열정유저', icon: 'fire', isEarned: true),
-      BadgeInfo(name: '온도 수호자', icon: 'thermometer', isEarned: false),
+      BadgeInfo(nameKey: 'cheerWarrior', icon: 'swords', isEarned: true),
+      BadgeInfo(nameKey: 'predictionMaster', icon: 'target', isEarned: true),
+      BadgeInfo(nameKey: 'hotPoster', icon: 'hotspring', isEarned: true),
+      BadgeInfo(nameKey: 'likeFairy', icon: 'fairy', isEarned: true),
+      BadgeInfo(nameKey: 'commentLeader', icon: 'bubbles', isEarned: false),
+      BadgeInfo(nameKey: 'attendanceKing', icon: 'sun', isEarned: true),
+      BadgeInfo(nameKey: 'pickConsumer', icon: 'document', isEarned: false),
+      BadgeInfo(nameKey: 'passionUser', icon: 'fire', isEarned: true),
+      BadgeInfo(nameKey: 'temperatureGuardian', icon: 'thermometer', isEarned: false),
     ];
   }
 }

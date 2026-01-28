@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 포인트 충전 페이지
 class PointChargePage extends StatefulWidget {
@@ -15,7 +14,7 @@ class PointChargePage extends StatefulWidget {
 
 class _PointChargePageState extends State<PointChargePage> {
   final TextEditingController _amountController = TextEditingController();
-  int _currentPoints = 10000; // 현재 포인트 (예시)
+  final int _currentPoints = 10000; // 현재 포인트 (예시)
   int _chargeAmount = 0;
 
   @override
@@ -54,13 +53,14 @@ class _PointChargePageState extends State<PointChargePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
             // 헤더
-            _buildHeader(),
+            _buildHeader(l10n),
             // 컨텐츠
             Expanded(
               child: SingleChildScrollView(
@@ -70,19 +70,19 @@ class _PointChargePageState extends State<PointChargePage> {
                   children: [
                     const SizedBox(height: 24),
                     // 금액 입력
-                    _buildAmountInput(),
+                    _buildAmountInput(l10n),
                     const SizedBox(height: 16),
                     // 금액 버튼들
                     _buildAmountButtons(),
                     const SizedBox(height: 24),
                     // 충전 요약
-                    _buildChargeSummary(),
+                    _buildChargeSummary(l10n),
                   ],
                 ),
               ),
             ),
             // 하단 충전 버튼
-            _buildBottomButton(),
+            _buildBottomButton(l10n),
           ],
         ),
       ),
@@ -90,15 +90,15 @@ class _PointChargePageState extends State<PointChargePage> {
   }
 
   /// 헤더
-  Widget _buildHeader() {
+  Widget _buildHeader(AppLocalizations l10n) {
     return AppHeader.withTitle(
-      title: '충전하기',
+      title: l10n.chargeAction,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 금액 입력
-  Widget _buildAmountInput() {
+  Widget _buildAmountInput(AppLocalizations l10n) {
     return Container(
       height: 56,
       decoration: BoxDecoration(
@@ -110,7 +110,7 @@ class _PointChargePageState extends State<PointChargePage> {
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         decoration: InputDecoration(
-          hintText: '충전할 금액을 입력해주세요.',
+          hintText: l10n.chargeAmountHint,
           hintStyle: AppTextStyles.body1NormalMedium.copyWith(
             color: AppColors.labelAlternative,
           ),
@@ -161,7 +161,7 @@ class _PointChargePageState extends State<PointChargePage> {
   }
 
   /// 충전 요약
-  Widget _buildChargeSummary() {
+  Widget _buildChargeSummary(AppLocalizations l10n) {
     final afterPoints = _currentPoints + _chargeAmount;
 
     return Container(
@@ -177,14 +177,14 @@ class _PointChargePageState extends State<PointChargePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '충전전',
+                l10n.beforeCharge,
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
               ),
               const SizedBox(width: 12),
               Text(
-                '${_formatNumber(_currentPoints)} 포인트',
+                '${_formatNumber(_currentPoints)} ${l10n.point}',
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
@@ -197,14 +197,14 @@ class _PointChargePageState extends State<PointChargePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '충전후',
+                l10n.afterCharge,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.labelNormal,
                 ),
               ),
               const SizedBox(width: 12),
               Text(
-                '${_formatNumber(afterPoints)} 포인트',
+                '${_formatNumber(afterPoints)} ${l10n.point}',
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -217,7 +217,7 @@ class _PointChargePageState extends State<PointChargePage> {
   }
 
   /// 하단 충전 버튼
-  Widget _buildBottomButton() {
+  Widget _buildBottomButton(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: GestureDetector(
@@ -241,7 +241,7 @@ class _PointChargePageState extends State<PointChargePage> {
               ),
               const SizedBox(width: 8),
               Text(
-                '충전하기',
+                l10n.chargeAction,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.white,
                 ),

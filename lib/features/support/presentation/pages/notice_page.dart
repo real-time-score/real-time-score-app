@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 공지사항 아이템
 class NoticeItem {
@@ -31,7 +30,7 @@ class NoticePage extends StatelessWidget {
             _buildHeader(context),
             // 공지사항 리스트
             Expanded(
-              child: _buildNoticeList(),
+              child: _buildNoticeList(context),
             ),
           ],
         ),
@@ -41,15 +40,16 @@ class NoticePage extends StatelessWidget {
 
   /// 헤더
   Widget _buildHeader(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return AppHeader.withTitle(
-      title: '공지사항',
+      title: l10n.notice,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 공지사항 리스트
-  Widget _buildNoticeList() {
-    final notices = _getNotices();
+  Widget _buildNoticeList(BuildContext context) {
+    final notices = _getNotices(context);
 
     return ListView.builder(
       itemCount: notices.length,
@@ -100,11 +100,12 @@ class NoticePage extends StatelessWidget {
   }
 
   /// 공지사항 데이터
-  List<NoticeItem> _getNotices() {
+  List<NoticeItem> _getNotices(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return List.generate(
       7,
-      (index) => const NoticeItem(
-        title: '[공지] 공지사항 이름이에요 두줄도 가능하죠 여러줄도 가능하니 대응해야합니다.',
+      (index) => NoticeItem(
+        title: l10n.noticeSampleTitle,
         date: '2025.04.12',
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 랭킹 타입
 enum RankingType { notification, prediction }
@@ -32,8 +33,12 @@ class RankingPage extends StatefulWidget {
 class _RankingPageState extends State<RankingPage> {
   late RankingType _selectedType;
   late RankingPeriod _selectedPeriod;
-  String _selectedCategory = '전체';
-  final List<String> _categories = ['전체', '축구', '야구', '농구', '배구', 'e스포츠'];
+  int _selectedCategoryIndex = 0;
+
+  List<String> _getCategories(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, l10n.soccer, l10n.baseball, l10n.basketball, l10n.volleyball, l10n.esports];
+  }
 
   @override
   void initState() {
@@ -73,13 +78,14 @@ class _RankingPageState extends State<RankingPage> {
 
   /// 헤더
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '랭킹',
+            l10n.ranking,
             style: AppTextStyles.h3Bold.copyWith(
               color: AppColors.labelStrong,
             ),
@@ -118,7 +124,7 @@ class _RankingPageState extends State<RankingPage> {
                 ),
                 child: Center(
                   child: Text(
-                    '알림 랭킹',
+                    AppLocalizations.of(context)!.notificationRanking,
                     style: _selectedType == RankingType.notification
                         ? AppTextStyles.body1NormalBold.copyWith(
                             color: AppColors.white,
@@ -149,7 +155,7 @@ class _RankingPageState extends State<RankingPage> {
                 ),
                 child: Center(
                   child: Text(
-                    '예측게임 랭킹',
+                    AppLocalizations.of(context)!.predictionRanking,
                     style: _selectedType == RankingType.prediction
                         ? AppTextStyles.body1NormalBold.copyWith(
                             color: AppColors.white,
@@ -197,7 +203,7 @@ class _RankingPageState extends State<RankingPage> {
                 ),
               ),
               child: Text(
-                '투데이',
+                AppLocalizations.of(context)!.todayPeriod,
                 style: _selectedPeriod == RankingPeriod.today
                     ? AppTextStyles.body1NormalBold.copyWith(
                         color: AppColors.primaryFigma,
@@ -228,7 +234,7 @@ class _RankingPageState extends State<RankingPage> {
                 ),
               ),
               child: Text(
-                '전체',
+                AppLocalizations.of(context)!.allPeriod,
                 style: _selectedPeriod == RankingPeriod.all
                     ? AppTextStyles.body1NormalBold.copyWith(
                         color: AppColors.primaryFigma,
@@ -246,6 +252,7 @@ class _RankingPageState extends State<RankingPage> {
 
   /// 카테고리 드롭다운 (예측게임 랭킹용)
   Widget _buildCategoryDropdown() {
+    final categories = _getCategories(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: GestureDetector(
@@ -260,7 +267,7 @@ class _RankingPageState extends State<RankingPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                _selectedCategory,
+                categories[_selectedCategoryIndex],
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -284,13 +291,14 @@ class _RankingPageState extends State<RankingPage> {
 
   /// 카테고리 선택 바텀시트
   void _showCategoryBottomSheet() {
+    final categories = _getCategories(context);
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) {
+      builder: (sheetContext) {
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -315,13 +323,13 @@ class _RankingPageState extends State<RankingPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '카테고리',
+                      AppLocalizations.of(context)!.category,
                       style: AppTextStyles.h4Bold.copyWith(
                         color: AppColors.labelNormal,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
+                      onTap: () => Navigator.of(sheetContext).pop(),
                       child: const Icon(
                         Icons.close,
                         size: 24,
@@ -333,14 +341,16 @@ class _RankingPageState extends State<RankingPage> {
               ),
               const SizedBox(height: 16),
               // 카테고리 목록
-              ..._categories.map((category) {
-                final isSelected = category == _selectedCategory;
+              ...categories.asMap().entries.map((entry) {
+                final index = entry.key;
+                final category = entry.value;
+                final isSelected = index == _selectedCategoryIndex;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      _selectedCategory = category;
+                      _selectedCategoryIndex = index;
                     });
-                    Navigator.of(context).pop();
+                    Navigator.of(sheetContext).pop();
                   },
                   child: Container(
                     width: double.infinity,
@@ -372,7 +382,7 @@ class _RankingPageState extends State<RankingPage> {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
               const SizedBox(height: 16),
             ],
           ),
@@ -433,7 +443,7 @@ class _RankingPageState extends State<RankingPage> {
                 Row(
                   children: [
                     Text(
-                      '닉네임',
+                      AppLocalizations.of(context)!.nickname,
                       style: AppTextStyles.body1NormalBold.copyWith(
                         color: AppColors.labelNormal,
                       ),
@@ -462,7 +472,7 @@ class _RankingPageState extends State<RankingPage> {
                 Row(
                   children: [
                     Text(
-                      '예측성공',
+                      AppLocalizations.of(context)!.predictionSuccess,
                       style: AppTextStyles.label1Medium.copyWith(
                         color: AppColors.labelNeutral,
                       ),
@@ -551,7 +561,7 @@ class _RankingPageState extends State<RankingPage> {
             ),
             boxShadow: [
               BoxShadow(
-                color: medalColors[0].withOpacity(0.5),
+                color: medalColors[0].withValues(alpha: 0.5),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -564,7 +574,7 @@ class _RankingPageState extends State<RankingPage> {
           height: 20,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withValues(alpha: 0.3),
           ),
           alignment: Alignment.center,
           child: Text(
@@ -581,6 +591,7 @@ class _RankingPageState extends State<RankingPage> {
 
   /// 하단 네비게이션
   Widget _buildBottomNavigation() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -595,11 +606,11 @@ class _RankingPageState extends State<RankingPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildNavItem(AppIcons.home, '홈', false),
-              _buildNavItem(AppIcons.check, '픽전문가', false),
-              _buildNavItem(AppIcons.persons, '커뮤니티', false),
-              _buildNavItem(AppIcons.trophy, '랭킹', true),
-              _buildNavItem(AppIcons.person, 'MY', false),
+              _buildNavItem(AppIcons.home, l10n.home, '/main', false),
+              _buildNavItem(AppIcons.check, l10n.pickExpert, '/main/pick-expert', false),
+              _buildNavItem(AppIcons.persons, l10n.community, '/main/community', false),
+              _buildNavItem(AppIcons.trophy, l10n.ranking, '', true),
+              _buildNavItem(AppIcons.person, l10n.my, '/main/my', false),
             ],
           ),
         ),
@@ -608,18 +619,11 @@ class _RankingPageState extends State<RankingPage> {
   }
 
   /// 네비게이션 아이템
-  Widget _buildNavItem(String iconPath, String label, bool isActive) {
+  Widget _buildNavItem(String iconPath, String label, String route, bool isActive) {
     return GestureDetector(
       onTap: () {
-        // 네비게이션 처리
-        if (label == '홈') {
-          Navigator.pushReplacementNamed(context, '/main');
-        } else if (label == '픽전문가') {
-          Navigator.pushReplacementNamed(context, '/main/pick-expert');
-        } else if (label == '커뮤니티') {
-          Navigator.pushReplacementNamed(context, '/main/community');
-        } else if (label == 'MY') {
-          Navigator.pushReplacementNamed(context, '/main/my');
+        if (route.isNotEmpty) {
+          Navigator.pushReplacementNamed(context, route);
         }
       },
       child: Container(

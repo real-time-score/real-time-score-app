@@ -6,6 +6,7 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_navigation_bar.dart';
 import '../../../../shared/widgets/app_toggle.dart';
 import '../../../../shared/widgets/app_chip.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 픽 유형
 enum PickType { paid, free }
@@ -31,10 +32,16 @@ class _PickExpertPageState extends State<PickExpertPage> {
   late int _toggleIndex;
   int _sportCategoryIndex = 0;
   int _subCategoryIndex = 0;
-  int _bottomNavIndex = 1; // 픽전문가 탭
+  final int _bottomNavIndex = 1; // 픽전문가 탭
 
-  final List<String> _sportCategories = ['전체', 'e스포츠', '축구', '야구', '농구', '배구', '하키', '미식축구'];
-  final List<String> _subCategories = ['전체', '카테고리1', '카테고리2', '카테고리3', '카테고리4'];
+  List<String> _getSportCategories(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, l10n.esports, l10n.soccer, l10n.baseball, l10n.basketball, l10n.volleyball, l10n.hockey, l10n.americanFootball];
+  }
+  List<String> _getSubCategories(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, 'Category1', 'Category2', 'Category3', 'Category4'];
+  }
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -117,6 +124,7 @@ class _PickExpertPageState extends State<PickExpertPage> {
 
   /// 헤더
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       height: 48,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -124,7 +132,7 @@ class _PickExpertPageState extends State<PickExpertPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '픽 전문가',
+            l10n.pickExpert,
             style: AppTextStyles.h3Bold.copyWith(
               color: AppColors.labelStrong,
             ),
@@ -134,7 +142,7 @@ class _PickExpertPageState extends State<PickExpertPage> {
               Navigator.of(context).pushNamed('/my-pick');
             },
             child: Text(
-              'MY 픽',
+              l10n.myPick,
               style: AppTextStyles.body1NormalBold.copyWith(
                 color: AppColors.primaryFigma,
               ),
@@ -150,10 +158,11 @@ class _PickExpertPageState extends State<PickExpertPage> {
 
   /// 유료픽/무료픽 토글
   Widget _buildToggle() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: AppToggle(
-        labels: const ['유료픽', '무료픽'],
+        labels: [l10n.paidPick, l10n.freePick],
         selectedIndex: _toggleIndex,
         onChanged: (index) {
           setState(() {
@@ -168,12 +177,13 @@ class _PickExpertPageState extends State<PickExpertPage> {
 
   /// 스포츠 카테고리 탭
   Widget _buildSportCategoryTabs() {
+    final sportCategories = _getSportCategories(context);
     return SizedBox(
       height: 32,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: _sportCategories.length,
+        itemCount: sportCategories.length,
         itemBuilder: (context, index) {
           final isSelected = index == _sportCategoryIndex;
           return GestureDetector(
@@ -194,7 +204,7 @@ class _PickExpertPageState extends State<PickExpertPage> {
               ),
               child: Center(
                 child: Text(
-                  _sportCategories[index],
+                  sportCategories[index],
                   style: isSelected
                       ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.primaryFigma)
                       : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelAlternative),
@@ -209,18 +219,19 @@ class _PickExpertPageState extends State<PickExpertPage> {
 
   /// 서브 카테고리 칩
   Widget _buildSubCategoryChips() {
+    final subCategories = _getSubCategories(context);
     return SizedBox(
       height: 28,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: _subCategories.length,
+        itemCount: subCategories.length,
         itemBuilder: (context, index) {
           final isSelected = index == _subCategoryIndex;
           return Padding(
-            padding: EdgeInsets.only(right: index < _subCategories.length - 1 ? 4 : 0),
+            padding: EdgeInsets.only(right: index < subCategories.length - 1 ? 4 : 0),
             child: Chips(
-              label: _subCategories[index],
+              label: subCategories[index],
               status: isSelected ? ChipStatus.active : ChipStatus.defaultStatus,
               onTap: () {
                 setState(() {
@@ -236,9 +247,10 @@ class _PickExpertPageState extends State<PickExpertPage> {
 
   /// 검색 입력창
   Widget _buildSearchInput() {
+    final l10n = AppLocalizations.of(context)!;
     final hintText = _isPaidPick
-        ? '전문가명, 경기명을 입력해주세요'
-        : '닉네임, 경기명을 입력해주세요';
+        ? l10n.searchHintExpert
+        : l10n.searchHintNickname;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -286,38 +298,39 @@ class _PickExpertPageState extends State<PickExpertPage> {
 
   /// 픽 카드 리스트
   Widget _buildPickCardList() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           _buildPickCard(
-            expertName: '전문가명',
+            expertName: l10n.expertName,
             expertRecord: '최근 NN게임 NN승 NN패',
             expertSpecialty: _isPaidPick ? '주종목 : 야구 (일간스포츠 베팅킥)' : null,
             rating: 'N.NNN',
             viewCount: 'NNN',
             purchaseCount: 'NNN',
             price: 'n,nnn P',
-            homeTeam: '팀명',
-            awayTeam: '팀명',
+            homeTeam: l10n.teamName,
+            awayTeam: l10n.teamName,
             matchDate: '7/11 (금)',
             matchTime: '15 : 30',
-            title: '타이틀 노출',
+            title: l10n.titleDisplay,
           ),
           const SizedBox(height: 16),
           _buildPickCard(
-            expertName: '전문가명',
+            expertName: l10n.expertName,
             expertRecord: '최근 NN게임 NN승 NN패',
             expertSpecialty: _isPaidPick ? '주종목 : 야구 (일간스포츠 베팅킥)' : null,
             rating: 'N.NNN',
             viewCount: 'NNN',
             purchaseCount: 'NNN',
             price: 'n,nnn P',
-            homeTeam: '팀명',
-            awayTeam: '팀명',
+            homeTeam: l10n.teamName,
+            awayTeam: l10n.teamName,
             matchDate: '7/11 (금)',
             matchTime: '15 : 30',
-            title: '타이틀 노출',
+            title: l10n.titleDisplay,
           ),
         ],
       ),
@@ -633,11 +646,12 @@ class _PickExpertPageState extends State<PickExpertPage> {
 
   /// 예측 버튼들
   Widget _buildPredictionButtons() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         // 승패 버튼
         _buildPredictionButtonWithLabel(
-          label: '승패',
+          label: l10n.winLose,
           topLabel: '승 N패',
           topLabelColor: AppColors.labelNeutral,
         ),
@@ -651,7 +665,7 @@ class _PickExpertPageState extends State<PickExpertPage> {
         const SizedBox(width: 6),
         // 핸디 버튼
         _buildPredictionButtonWithLabel(
-          label: '핸디',
+          label: l10n.handi,
           topLabel: '+N.N',
           topLabelColor: AppColors.negative,
         ),

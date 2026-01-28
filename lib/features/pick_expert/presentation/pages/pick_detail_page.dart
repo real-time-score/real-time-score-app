@@ -4,20 +4,23 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 픽 상세보기 페이지
 class PickDetailPage extends StatelessWidget {
   final bool isPaidPick;
-  final String expertName;
+  final String? expertName;
 
   const PickDetailPage({
     super.key,
     this.isPaidPick = false,
-    this.expertName = '닉네임명',
+    this.expertName,
   });
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final displayName = expertName ?? l10n.defaultNickname;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
@@ -25,7 +28,7 @@ class PickDetailPage extends StatelessWidget {
           children: [
             // 헤더
             AppHeader.withTitle(
-              title: '(${isPaidPick ? "유료" : "무료"})$expertName',
+              title: '(${isPaidPick ? l10n.paidLabel : l10n.freeLabel})$displayName',
               onBackPressed: () => Navigator.of(context).pop(),
             ),
             // 컨텐츠
@@ -36,13 +39,13 @@ class PickDetailPage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 16),
                     // 전문가 정보 카드
-                    _buildExpertInfoCard(),
+                    _buildExpertInfoCard(l10n),
                     const SizedBox(height: 16),
                     // 집중분석 섹션
-                    _buildAnalysisSection(),
+                    _buildAnalysisSection(l10n),
                     const SizedBox(height: 16),
                     // 팀 비교 테이블
-                    _buildTeamComparisonTable(),
+                    _buildTeamComparisonTable(context, l10n),
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -55,7 +58,7 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 전문가 정보 카드
-  Widget _buildExpertInfoCard() {
+  Widget _buildExpertInfoCard(AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -67,16 +70,16 @@ class PickDetailPage extends StatelessWidget {
       child: Column(
         children: [
           // 전문가 정보 상단
-          _buildExpertHeader(),
+          _buildExpertHeader(l10n),
           const SizedBox(height: 12),
           // 유료픽: 구매/가격 버튼, 무료픽: 조회수
           if (isPaidPick) ...[
-            _buildPurchaseButtons(),
+            _buildPurchaseButtons(l10n),
           ] else ...[
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                '조회수 NNN',
+                '${l10n.viewCount} NNN',
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.labelAlternative,
                 ),
@@ -91,20 +94,20 @@ class PickDetailPage extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           // 경기 정보
-          _buildMatchInfo(),
+          _buildMatchInfo(l10n),
           const SizedBox(height: 16),
           // 타이틀 배너
-          _buildTitleBanner(),
+          _buildTitleBanner(l10n),
           const SizedBox(height: 16),
           // 예측 버튼들
-          _buildPredictionButtons(),
+          _buildPredictionButtons(l10n),
         ],
       ),
     );
   }
 
   /// 구매/가격 버튼 (유료픽 전용)
-  Widget _buildPurchaseButtons() {
+  Widget _buildPurchaseButtons(AppLocalizations l10n) {
     return Row(
       children: [
         // 구매 NNN 버튼
@@ -117,7 +120,7 @@ class PickDetailPage extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '구매 NNN',
+                '${l10n.purchase} NNN',
                 style: AppTextStyles.label1Medium.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -149,7 +152,7 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 전문가 정보 헤더
-  Widget _buildExpertHeader() {
+  Widget _buildExpertHeader(AppLocalizations l10n) {
     return Row(
       children: [
         // 전문가 프로필 이미지
@@ -173,7 +176,7 @@ class PickDetailPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '전문가명',
+                l10n.expertName,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -223,12 +226,12 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 경기 정보
-  Widget _buildMatchInfo() {
+  Widget _buildMatchInfo(AppLocalizations l10n) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // 홈팀
-        _buildTeamColumn('팀명', isHome: true),
+        _buildTeamColumn(l10n.teamName, isHome: true),
         const SizedBox(width: 22),
         // 일시
         Container(
@@ -256,7 +259,7 @@ class PickDetailPage extends StatelessWidget {
         ),
         const SizedBox(width: 22),
         // 원정팀
-        _buildTeamColumn('팀명', isHome: false),
+        _buildTeamColumn(l10n.teamName, isHome: false),
       ],
     );
   }
@@ -294,14 +297,14 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 타이틀 배너
-  Widget _buildTitleBanner() {
+  Widget _buildTitleBanner(AppLocalizations l10n) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       color: AppColors.primaryBackground,
       child: Center(
         child: Text(
-          isPaidPick ? '상세정보' : '타이틀 노출',
+          isPaidPick ? l10n.detailInfo : l10n.titleDisplay,
           style: AppTextStyles.label1Medium.copyWith(
             color: AppColors.primaryFigma,
           ),
@@ -311,7 +314,7 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 예측 버튼들
-  Widget _buildPredictionButtons() {
+  Widget _buildPredictionButtons(AppLocalizations l10n) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -322,13 +325,13 @@ class PickDetailPage extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    '승 N패',
+                    '${l10n.win} N${l10n.lose}',
                     style: AppTextStyles.caption1Medium.copyWith(
                       color: AppColors.labelNeutral,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  _buildFilledButton('승패', isSelected: true),
+                  _buildFilledButton(l10n.winLose, isSelected: true),
                 ],
               ),
             ),
@@ -338,7 +341,7 @@ class PickDetailPage extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    '승 N패',
+                    '${l10n.win} N${l10n.lose}',
                     style: AppTextStyles.caption1Medium.copyWith(
                       color: AppColors.labelNeutral,
                     ),
@@ -360,7 +363,7 @@ class PickDetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  _buildFilledButton('핸디', isSelected: true),
+                  _buildFilledButton(l10n.handi, isSelected: true),
                 ],
               ),
             ),
@@ -387,12 +390,12 @@ class PickDetailPage extends StatelessWidget {
           Positioned(
             left: -8,
             top: 10,
-            child: _buildHitBadge(),
+            child: _buildHitBadge(l10n),
           ),
           Positioned(
             left: 140,
             top: 10,
-            child: _buildHitBadge(),
+            child: _buildHitBadge(l10n),
           ),
         ],
       ],
@@ -438,7 +441,7 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 적중 뱃지
-  Widget _buildHitBadge() {
+  Widget _buildHitBadge(AppLocalizations l10n) {
     return Transform.rotate(
       angle: -0.52, // -30 degrees in radians
       child: Container(
@@ -448,7 +451,7 @@ class PickDetailPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Text(
-          '적중',
+          l10n.hit,
           style: AppTextStyles.caption1Bold.copyWith(
             color: AppColors.white,
           ),
@@ -458,14 +461,14 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 집중분석 섹션
-  Widget _buildAnalysisSection() {
+  Widget _buildAnalysisSection(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '집중분석',
+            l10n.focusAnalysis,
             style: AppTextStyles.h4Bold.copyWith(
               color: AppColors.labelNormal,
             ),
@@ -480,7 +483,7 @@ class PickDetailPage extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '이용자가 작성한 글 노출',
+                l10n.userWrittenContent,
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelAlternative,
                 ),
@@ -493,36 +496,36 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 팀 비교 테이블
-  Widget _buildTeamComparisonTable() {
+  Widget _buildTeamComparisonTable(BuildContext context, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           // 헤더 행 (팀명 + VS + 팀명)
-          _buildTeamHeaderRow(),
+          _buildTeamHeaderRow(l10n),
           // 리그명 행
-          _buildComparisonRow('리그명 노출', '무승부', '리그명 노출'),
+          _buildComparisonRow(l10n.leagueName, l10n.drawMatch, l10n.leagueName),
           // 순위 행
-          _buildComparisonRow('N위', '순위', 'N위'),
+          _buildComparisonRow('N${l10n.rankingTab}', l10n.rankingTab, 'N${l10n.rankingTab}'),
           // 전적 행
-          _buildComparisonRow('N승N패', '전적', 'N승N패'),
+          _buildComparisonRow('N${l10n.win}N${l10n.lose}', l10n.totalRecord, 'N${l10n.win}N${l10n.lose}'),
           // 최근 5경기 행
-          _buildRecent5GamesRow(),
+          _buildRecent5GamesRow(l10n),
           // 상대 전적 행
-          _buildComparisonRow('N승 N패', '상대 전적', 'N승 N패'),
+          _buildComparisonRow('N${l10n.win} N${l10n.lose}', l10n.vsRecord, 'N${l10n.win} N${l10n.lose}'),
           // 승률 행
-          _buildComparisonRow('N승 N패', '승률', 'N승 N패'),
+          _buildComparisonRow('N${l10n.win} N${l10n.lose}', l10n.winRate, 'N${l10n.win} N${l10n.lose}'),
           // 홈 승률 행
-          _buildComparisonRow('N승 N패', '홈 승률', 'N승 N패'),
+          _buildComparisonRow('N${l10n.win} N${l10n.lose}', l10n.homeWinRate, 'N${l10n.win} N${l10n.lose}'),
           // 원정 승률 행
-          _buildComparisonRow('N승 N패', '원정 승률', 'N승 N패'),
+          _buildComparisonRow('N${l10n.win} N${l10n.lose}', l10n.awayWinRate, 'N${l10n.win} N${l10n.lose}'),
         ],
       ),
     );
   }
 
   /// 팀 헤더 행
-  Widget _buildTeamHeaderRow() {
+  Widget _buildTeamHeaderRow(AppLocalizations l10n) {
     return Row(
       children: [
         // 홈팀
@@ -551,7 +554,7 @@ class PickDetailPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '팀명',
+                  l10n.teamName,
                   style: AppTextStyles.label1NormalBold.copyWith(
                     color: AppColors.labelNormal,
                   ),
@@ -609,7 +612,7 @@ class PickDetailPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '팀명',
+                  l10n.teamName,
                   style: AppTextStyles.label1NormalBold.copyWith(
                     color: AppColors.labelNormal,
                   ),
@@ -685,7 +688,7 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 최근 5경기 행 (색상 있는 텍스트)
-  Widget _buildRecent5GamesRow() {
+  Widget _buildRecent5GamesRow(AppLocalizations l10n) {
     return Row(
       children: [
         // 홈팀 최근 결과
@@ -697,7 +700,7 @@ class PickDetailPage extends StatelessWidget {
               border: Border.all(color: AppColors.borderNormal),
             ),
             child: Center(
-              child: _buildRecentGamesText(),
+              child: _buildRecentGamesText(l10n),
             ),
           ),
         ),
@@ -711,7 +714,7 @@ class PickDetailPage extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                '최근 5경기',
+                l10n.recentMatches,
                 style: AppTextStyles.body2NormalMedium.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -728,7 +731,7 @@ class PickDetailPage extends StatelessWidget {
               border: Border.all(color: AppColors.borderNormal),
             ),
             child: Center(
-              child: _buildRecentGamesText(),
+              child: _buildRecentGamesText(l10n),
             ),
           ),
         ),
@@ -737,29 +740,29 @@ class PickDetailPage extends StatelessWidget {
   }
 
   /// 최근 경기 결과 텍스트 (승/패 색상)
-  Widget _buildRecentGamesText() {
+  Widget _buildRecentGamesText(AppLocalizations l10n) {
     return RichText(
       text: TextSpan(
         style: AppTextStyles.caption1Medium,
         children: [
           TextSpan(
-            text: '(승)',
+            text: '(${l10n.win})',
             style: TextStyle(color: AppColors.negative),
           ),
           TextSpan(
-            text: '(패)',
+            text: '(${l10n.lose})',
             style: TextStyle(color: AppColors.positive),
           ),
           TextSpan(
-            text: '(승)',
+            text: '(${l10n.win})',
             style: TextStyle(color: AppColors.negative),
           ),
           TextSpan(
-            text: '(패)',
+            text: '(${l10n.lose})',
             style: TextStyle(color: AppColors.positive),
           ),
           TextSpan(
-            text: '(승)',
+            text: '(${l10n.win})',
             style: TextStyle(color: AppColors.negative),
           ),
         ],

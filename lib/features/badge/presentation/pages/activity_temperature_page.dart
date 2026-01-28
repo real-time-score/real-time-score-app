@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 활동온도 페이지
 class ActivityTemperaturePage extends StatelessWidget {
@@ -11,13 +10,14 @@ class ActivityTemperaturePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
             // 헤더
-            _buildHeader(context),
+            _buildHeader(context, l10n),
             // 컨텐츠
             Expanded(
               child: SingleChildScrollView(
@@ -26,13 +26,13 @@ class ActivityTemperaturePage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 16),
                     // 온도 카드
-                    _buildTemperatureCard(),
+                    _buildTemperatureCard(l10n),
                     const SizedBox(height: 24),
                     // 상세 활동 온도
-                    _buildDetailSection(),
+                    _buildDetailSection(l10n),
                     const SizedBox(height: 24),
                     // 설명
-                    _buildDescription(),
+                    _buildDescription(l10n),
                     const SizedBox(height: 32),
                   ],
                 ),
@@ -45,15 +45,15 @@ class ActivityTemperaturePage extends StatelessWidget {
   }
 
   /// 헤더
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, AppLocalizations l10n) {
     return AppHeader.withTitle(
-      title: '활동온도',
+      title: l10n.activityTemperature,
       onBackPressed: () => Navigator.of(context).pop(),
     );
   }
 
   /// 온도 카드
-  Widget _buildTemperatureCard() {
+  Widget _buildTemperatureCard(AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -67,7 +67,7 @@ class ActivityTemperaturePage extends StatelessWidget {
         children: [
           // 활동온도 라벨
           Text(
-            '활동온도',
+            l10n.activityTemperature,
             style: AppTextStyles.body1NormalMedium.copyWith(
               color: AppColors.labelNeutral,
             ),
@@ -87,7 +87,7 @@ class ActivityTemperaturePage extends StatelessWidget {
           // 첫 온도
           Center(
             child: Text(
-              '첫 온도 36.5°C',
+              l10n.initialTemperature,
               style: AppTextStyles.caption1Medium.copyWith(
                 color: const Color(0xFFFF9500),
               ),
@@ -127,7 +127,7 @@ class ActivityTemperaturePage extends StatelessWidget {
   }
 
   /// 상세 활동 온도 섹션
-  Widget _buildDetailSection() {
+  Widget _buildDetailSection(AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -135,29 +135,29 @@ class ActivityTemperaturePage extends StatelessWidget {
         children: [
           // 섹션 타이틀
           Text(
-            '상세 활동 온도',
+            l10n.detailActivityTemperature,
             style: AppTextStyles.body1NormalBold.copyWith(
               color: AppColors.labelNormal,
             ),
           ),
           const SizedBox(height: 16),
           // 테이블
-          _buildActivityTable(),
+          _buildActivityTable(l10n),
         ],
       ),
     );
   }
 
   /// 활동 테이블
-  Widget _buildActivityTable() {
+  Widget _buildActivityTable(AppLocalizations l10n) {
     final activities = [
-      {'name': '응원', 'value': 'NN.N°C'},
-      {'name': '예측 게임', 'value': 'NN.N°C'},
-      {'name': '게시글', 'value': 'NN.N°C'},
-      {'name': '좋아요', 'value': 'NN.N°C'},
-      {'name': '댓글', 'value': 'NN.N°C'},
-      {'name': '출석', 'value': 'NN.N°C'},
-      {'name': '픽전문', 'value': 'NN.N°C'},
+      {'name': l10n.cheer, 'value': 'NN.N°C'},
+      {'name': l10n.predictionGame, 'value': 'NN.N°C'},
+      {'name': l10n.posts, 'value': 'NN.N°C'},
+      {'name': l10n.likes, 'value': 'NN.N°C'},
+      {'name': l10n.commentLabel, 'value': 'NN.N°C'},
+      {'name': l10n.attendance, 'value': 'NN.N°C'},
+      {'name': l10n.pickExpertShort, 'value': 'NN.N°C'},
     ];
 
     return Container(
@@ -204,7 +204,7 @@ class ActivityTemperaturePage extends StatelessWidget {
   }
 
   /// 설명
-  Widget _buildDescription() {
+  Widget _buildDescription(AppLocalizations l10n) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
@@ -213,7 +213,7 @@ class ActivityTemperaturePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        '활동온도는 사용자의 활동 참여도를 시각적으로 나타내는 지표로, 예측게임 참여, 응원글 작성, 게시글 작성, 댓글, 좋아요, 출석 체크, 픽 전문가 글 구매 등의 다양한 활동을 통해 상승하며, 반대로 하루 동안 이와 같은 활동이 전혀 없을 경우에는 일정 기준에 따라 점진적으로 하락하여 사용자 활동을 휴도하는 기능입니다.',
+        l10n.activityTemperatureDescription,
         style: AppTextStyles.caption1Medium.copyWith(
           color: AppColors.labelNeutral,
           height: 1.5,

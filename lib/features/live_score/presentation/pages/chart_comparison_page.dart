@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
-import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 차트 서브 탭 타입
 enum ChartSubTab {
@@ -36,8 +35,15 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
   late ChartSubTab _selectedSubTab;
   int _selectedYear = 2025; // 선택된 년도
 
-  final List<String> _mainTabs = ['라이브', '차트', '라인업', '예측게임'];
-  final List<String> _subTabs = ['비교', '기록', '순위'];
+  List<String> _getMainTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.liveTab, l10n.chart, l10n.lineup, l10n.predictionGame];
+  }
+
+  List<String> _getSubTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.comparison, l10n.record, l10n.rankingRecord];
+  }
   final List<int> _availableYears = [2025, 2024, 2023, 2022, 2021];
 
   @override
@@ -118,7 +124,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
-        children: _mainTabs.asMap().entries.map((entry) {
+        children: _getMainTabs(context).asMap().entries.map((entry) {
           final index = entry.key;
           final label = entry.value;
           final isSelected = index == _selectedMainTabIndex;
@@ -180,7 +186,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                 ),
                 child: Center(
                   child: Text(
-                    _subTabs[index],
+                    _getSubTabs(context)[index],
                     style: isSelected
                         ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.primaryFigma)
                         : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelNeutral),
@@ -220,22 +226,34 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
           _buildBasicStatsTable(),
           const SizedBox(height: 24),
           // 공격력 비교
-          _buildSectionTitle('공격력 비교'),
+          Builder(builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return _buildSectionTitle(l10n.offensiveComparison);
+          }),
           const SizedBox(height: 8),
           _buildAttackStatsTable(),
           const SizedBox(height: 24),
           // 수비력 비교
-          _buildSectionTitle('수비력 비교'),
+          Builder(builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return _buildSectionTitle(l10n.defensiveComparison);
+          }),
           const SizedBox(height: 8),
           _buildDefenseStatsTable(),
           const SizedBox(height: 24),
           // 최근 맞대결 전적
-          _buildSectionTitle('최근 맞대결 전적'),
+          Builder(builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return _buildSectionTitle(l10n.recentHeadToHead);
+          }),
           const SizedBox(height: 8),
           _buildRecentMatchups(),
           const SizedBox(height: 24),
           // 최근 양팀 전적
-          _buildSectionTitle('최근 양팀 전적'),
+          Builder(builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return _buildSectionTitle(l10n.recentBothTeamRecord);
+          }),
           const SizedBox(height: 8),
           _buildRecentTeamRecords(),
           const SizedBox(height: 32),
@@ -272,15 +290,25 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
       children: [
         const SizedBox(height: 8),
         // 국가 필터
-        _buildFilterChips(
-          items: ['국가명', '국가명', '국가명', '국가명', '국가명', '국가명'],
-          selectedIndex: 0,
+        Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return _buildFilterChips(
+              items: List.generate(6, (_) => l10n.countryName),
+              selectedIndex: 0,
+            );
+          },
         ),
         const SizedBox(height: 8),
         // 리그 필터
-        _buildFilterChips(
-          items: ['리그명', '리그명', '리그명', '리그명', '리그명', '리그명'],
-          selectedIndex: 0,
+        Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return _buildFilterChips(
+              items: List.generate(6, (_) => l10n.leagueName),
+              selectedIndex: 0,
+            );
+          },
         ),
         const SizedBox(height: 16),
         // 정규시즌 헤더
@@ -340,11 +368,12 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 시즌 헤더
   Widget _buildSeasonHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '정규시즌',
+          l10n.regularSeason,
           style: AppTextStyles.body1NormalBold.copyWith(
             color: AppColors.labelNormal,
           ),
@@ -374,6 +403,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 년도 선택 바텀시트 표시
   void _showYearSelectionBottomSheet() {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.white,
@@ -392,7 +422,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '년도',
+                      l10n.year,
                       style: AppTextStyles.body1NormalBold.copyWith(
                         color: AppColors.labelNormal,
                       ),
@@ -453,7 +483,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
               const SizedBox(height: 16),
             ],
           ),
@@ -474,65 +504,70 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
               bottom: BorderSide(color: AppColors.borderNormal),
             ),
           ),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 40,
-                child: Text(
-                  '순위',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.caption2Medium.copyWith(
-                    color: AppColors.labelAlternative,
+          child: Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return Row(
+                children: [
+                  SizedBox(
+                    width: 40,
+                    child: Text(
+                      l10n.rankingTab,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.caption2Medium.copyWith(
+                        color: AppColors.labelAlternative,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  '팀명',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.caption2Medium.copyWith(
-                    color: AppColors.labelAlternative,
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      l10n.teamName,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.caption2Medium.copyWith(
+                        color: AppColors.labelAlternative,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '경기',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.caption2Medium.copyWith(
-                    color: AppColors.labelAlternative,
+                  Expanded(
+                    child: Text(
+                      l10n.matches,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.caption2Medium.copyWith(
+                        color: AppColors.labelAlternative,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '승점',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.caption2Medium.copyWith(
-                    color: AppColors.labelAlternative,
+                  Expanded(
+                    child: Text(
+                      l10n.points,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.caption2Medium.copyWith(
+                        color: AppColors.labelAlternative,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '승',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.caption2Medium.copyWith(
-                    color: AppColors.labelAlternative,
+                  Expanded(
+                    child: Text(
+                      l10n.win,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.caption2Medium.copyWith(
+                        color: AppColors.labelAlternative,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                child: Text(
-                  '무',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.caption2Medium.copyWith(
-                    color: AppColors.labelAlternative,
+                  Expanded(
+                    child: Text(
+                      l10n.draw,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.caption2Medium.copyWith(
+                        color: AppColors.labelAlternative,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ],
+                ],
+              );
+            },
           ),
         ),
         // 테이블 행들
@@ -647,28 +682,43 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                 topRight: Radius.circular(8),
               ),
             ),
-            child: Row(
-              children: [
-                const SizedBox(width: 80), // 팀명 영역
-                Expanded(
-                  child: _buildPeriodHeaderCell('전반'),
-                ),
-                Expanded(
-                  child: _buildPeriodHeaderCell('후반'),
-                ),
-                Expanded(
-                  child: _buildPeriodHeaderCell('연장'),
-                ),
-                Expanded(
-                  child: _buildPeriodHeaderCell('승부'),
-                ),
-              ],
+            child: Builder(
+              builder: (context) {
+                final l10n = AppLocalizations.of(context)!;
+                return Row(
+                  children: [
+                    SizedBox(width: 80, child: Center(child: Text(l10n.teamName, style: AppTextStyles.caption1Medium.copyWith(color: AppColors.labelNeutral)))),
+                    Expanded(
+                      child: _buildPeriodHeaderCell(l10n.firstHalf),
+                    ),
+                    Expanded(
+                      child: _buildPeriodHeaderCell(l10n.secondHalf),
+                    ),
+                    Expanded(
+                      child: _buildPeriodHeaderCell(l10n.extraTime),
+                    ),
+                    Expanded(
+                      child: _buildPeriodHeaderCell(l10n.shootout),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
           // 홈팀 행
-          _buildScoreRow(teamName: '팀명', scores: ['N', 'N', 'N', 'N']),
+          Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return _buildScoreRow(teamName: l10n.teamName, scores: ['N', 'N', 'N', 'N']);
+            },
+          ),
           // 원정팀 행
-          _buildScoreRow(teamName: '팀명', scores: ['N', 'N', 'N', 'N'], isLast: true),
+          Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return _buildScoreRow(teamName: l10n.teamName, scores: ['N', 'N', 'N', 'N'], isLast: true);
+            },
+          ),
         ],
       ),
     );
@@ -737,36 +787,42 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 팀 VS 팀 헤더 (선수 아이콘 포함)
   Widget _buildTeamVsHeaderWithPlayers() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 팀 VS 팀
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildTeamHeaderItem(teamName: '팀명', flagEmoji: '🇹🇱'),
+            _buildTeamHeaderItem(teamName: l10n.teamName, flagEmoji: '🇹🇱'),
             Text(
               'VS',
               style: AppTextStyles.body1NormalBold.copyWith(
                 color: AppColors.labelNeutral,
               ),
             ),
-            _buildTeamHeaderItem(teamName: '팀명', flagEmoji: '🇺🇦'),
+            _buildTeamHeaderItem(teamName: l10n.teamName, flagEmoji: '🇺🇦'),
           ],
         ),
         const SizedBox(height: 16),
         // 선수 아이콘 행
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Text('🤾', style: TextStyle(fontSize: 24)),
-            Text(
-              '선수',
-              style: AppTextStyles.caption1Medium.copyWith(
-                color: AppColors.labelNeutral,
-              ),
-            ),
-            const Text('🤾', style: TextStyle(fontSize: 24)),
-          ],
+        Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text('🤾', style: TextStyle(fontSize: 24)),
+                Text(
+                  l10n.players,
+                  style: AppTextStyles.caption1Medium.copyWith(
+                    color: AppColors.labelNeutral,
+                  ),
+                ),
+                const Text('🤾', style: TextStyle(fontSize: 24)),
+              ],
+            );
+          },
         ),
       ],
     );
@@ -774,18 +830,19 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 경기 기록 비교 테이블
   Widget _buildMatchRecordTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        _buildRecordRow(homeValue: 'NN', label: '득점', awayValue: 'NN'),
-        _buildRecordRow(homeValue: 'NN', label: '슈팅', awayValue: 'NN'),
-        _buildRecordRow(homeValue: 'NN', label: '유효슛', awayValue: 'NN', isHighlighted: true),
-        _buildRecordRow(homeValue: 'NN', label: '세이브', awayValue: 'NN'),
-        _buildRecordRow(homeValue: 'NN', label: '오프사이드', awayValue: 'NN'),
-        _buildRecordRow(homeValue: 'NN', label: '파울', awayValue: 'NN'),
-        _buildRecordRow(homeValue: 'NN', label: '경고', awayValue: 'NN'),
-        _buildRecordRow(homeValue: 'NN', label: '퇴장', awayValue: 'NN'),
-        _buildRecordRow(homeValue: 'NN', label: '코너킥', awayValue: 'NN', isHighlighted: true),
-        _buildRecordRow(homeValue: 'NN', label: '프리킥', awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.scoring, awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.shooting, awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.shotsOnTarget, awayValue: 'NN', isHighlighted: true),
+        _buildRecordRow(homeValue: 'NN', label: l10n.saves, awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.offside, awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.foul, awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.yellowCard, awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.redCard, awayValue: 'NN'),
+        _buildRecordRow(homeValue: 'NN', label: l10n.cornerKick, awayValue: 'NN', isHighlighted: true),
+        _buildRecordRow(homeValue: 'NN', label: l10n.freeKick, awayValue: 'NN'),
       ],
     );
   }
@@ -841,11 +898,12 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 팀 VS 팀 헤더
   Widget _buildTeamVsHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         // 홈팀
-        _buildTeamHeaderItem(teamName: '팀명', flagEmoji: '🇺🇦'),
+        _buildTeamHeaderItem(teamName: l10n.teamName, flagEmoji: '🇺🇦'),
         // VS
         Text(
           'VS',
@@ -854,7 +912,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
           ),
         ),
         // 원정팀
-        _buildTeamHeaderItem(teamName: '팀명', flagEmoji: '🇪🇨'),
+        _buildTeamHeaderItem(teamName: l10n.teamName, flagEmoji: '🇪🇨'),
       ],
     );
   }
@@ -904,22 +962,24 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 기본 통계 비교 테이블
   Widget _buildBasicStatsTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        _buildComparisonRow(homeValue: '리그명 노출', label: '우승후', awayValue: '리그명 노출'),
-        _buildComparisonRow(homeValue: 'N위', label: '순위', awayValue: 'N위'),
-        _buildComparisonRow(homeValue: 'N승N패', label: '전적', awayValue: 'N승N패'),
+        _buildComparisonRow(homeValue: l10n.leagueName, label: l10n.afterChampionship, awayValue: l10n.leagueName),
+        _buildComparisonRow(homeValue: 'N위', label: l10n.rankingTab, awayValue: 'N위'),
+        _buildComparisonRow(homeValue: 'N승N패', label: l10n.totalRecord, awayValue: 'N승N패'),
         _buildRecentMatchesRow(),
-        _buildComparisonRow(homeValue: 'N승 N패', label: '상대 전적', awayValue: 'N승 N패'),
-        _buildComparisonRow(homeValue: 'N승N패', label: '승률', awayValue: 'N승N패'),
-        _buildComparisonRow(homeValue: 'N승N패', label: '홈/원정 승률', awayValue: 'N승N패'),
-        _buildComparisonRow(homeValue: 'N승N패', label: '평점 승률', awayValue: 'N승N패'),
+        _buildComparisonRow(homeValue: 'N승 N패', label: l10n.vsRecord, awayValue: 'N승 N패'),
+        _buildComparisonRow(homeValue: 'N승N패', label: l10n.winRate, awayValue: 'N승N패'),
+        _buildComparisonRow(homeValue: 'N승N패', label: l10n.homeAwayWinRate, awayValue: 'N승N패'),
+        _buildComparisonRow(homeValue: 'N승N패', label: l10n.ratingWinRate, awayValue: 'N승N패'),
       ],
     );
   }
 
   /// 최근 5경기 행 (승/무/패 컬러 적용)
   Widget _buildRecentMatchesRow() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: const BoxDecoration(
@@ -935,15 +995,15 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildMatchResultBadge('승', AppColors.negative),
+                _buildMatchResultBadge(l10n.win, AppColors.negative),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('패', AppColors.positive),
+                _buildMatchResultBadge(l10n.lose, AppColors.positive),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('승', AppColors.negative),
+                _buildMatchResultBadge(l10n.win, AppColors.negative),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('무', AppColors.labelNeutral),
+                _buildMatchResultBadge(l10n.draw, AppColors.labelNeutral),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('승', AppColors.negative),
+                _buildMatchResultBadge(l10n.win, AppColors.negative),
               ],
             ),
           ),
@@ -951,7 +1011,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
           SizedBox(
             width: 80,
             child: Text(
-              '최근 5경기',
+              l10n.recentMatches,
               textAlign: TextAlign.center,
               style: AppTextStyles.caption1Medium.copyWith(
                 color: AppColors.labelAlternative,
@@ -963,15 +1023,15 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildMatchResultBadge('패', AppColors.positive),
+                _buildMatchResultBadge(l10n.lose, AppColors.positive),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('승', AppColors.negative),
+                _buildMatchResultBadge(l10n.win, AppColors.negative),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('무', AppColors.labelNeutral),
+                _buildMatchResultBadge(l10n.draw, AppColors.labelNeutral),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('승', AppColors.negative),
+                _buildMatchResultBadge(l10n.win, AppColors.negative),
                 const SizedBox(width: 2),
-                _buildMatchResultBadge('패', AppColors.positive),
+                _buildMatchResultBadge(l10n.lose, AppColors.positive),
               ],
             ),
           ),
@@ -1005,24 +1065,26 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 공격력 비교 테이블
   Widget _buildAttackStatsTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        _buildVsHeaderRow(homeTeam: '팀명', awayTeam: '팀명'),
-        _buildComparisonRow(homeValue: 'NNN', label: '득점', awayValue: 'NNN'),
-        _buildComparisonRow(homeValue: 'NN', label: '어시스트', awayValue: 'NN'),
-        _buildComparisonRow(homeValue: 'NN', label: '턴오버', awayValue: 'NN'),
+        _buildVsHeaderRow(homeTeam: l10n.teamName, awayTeam: l10n.teamName),
+        _buildComparisonRow(homeValue: 'NNN', label: l10n.scoring, awayValue: 'NNN'),
+        _buildComparisonRow(homeValue: 'NN', label: l10n.assist, awayValue: 'NN'),
+        _buildComparisonRow(homeValue: 'NN', label: l10n.turnover, awayValue: 'NN'),
       ],
     );
   }
 
   /// 수비력 비교 테이블
   Widget _buildDefenseStatsTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        _buildVsHeaderRow(homeTeam: '팀명', awayTeam: '팀명'),
-        _buildComparisonRow(homeValue: 'NNN', label: '실점', awayValue: 'NNN'),
+        _buildVsHeaderRow(homeTeam: l10n.teamName, awayTeam: l10n.teamName),
+        _buildComparisonRow(homeValue: 'NNN', label: l10n.conceded, awayValue: 'NNN'),
         _buildComparisonRow(homeValue: 'NN', label: 'S%', awayValue: 'NN'),
-        _buildComparisonRow(homeValue: 'NN', label: '리바', awayValue: 'NN'),
+        _buildComparisonRow(homeValue: 'NN', label: l10n.rebound, awayValue: 'NN'),
       ],
     );
   }
@@ -1133,6 +1195,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 최근 맞대결 전적
   Widget _buildRecentMatchups() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.borderNormal),
@@ -1154,19 +1217,19 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '팀명',
+                  l10n.teamName,
                   style: AppTextStyles.label1NormalBold.copyWith(
                     color: AppColors.negative,
                   ),
                 ),
                 Text(
-                  ' N승 ',
+                  ' N${l10n.win} ',
                   style: AppTextStyles.label1NormalBold.copyWith(
                     color: AppColors.labelNormal,
                   ),
                 ),
                 Text(
-                  'N패',
+                  'N${l10n.lose}',
                   style: AppTextStyles.label1NormalBold.copyWith(
                     color: AppColors.positive,
                   ),
@@ -1192,7 +1255,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                 ),
                 Expanded(
                   child: Text(
-                    '팀명N : N 팀명',
+                    '${l10n.teamName}N : N ${l10n.teamName}',
                     textAlign: TextAlign.center,
                     style: AppTextStyles.caption2Medium.copyWith(
                       color: AppColors.labelAlternative,
@@ -1202,7 +1265,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                 SizedBox(
                   width: 60,
                   child: Text(
-                    '(리그)',
+                    '(${l10n.league})',
                     textAlign: TextAlign.center,
                     style: AppTextStyles.caption2Medium.copyWith(
                       color: AppColors.labelAlternative,
@@ -1213,11 +1276,11 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
             ),
           ),
           // 경기 리스트
-          _buildMatchupItemRow(homeTeam: '팀명N', homeScore: 'N', awayTeam: '팀명', league: '(리그)'),
-          _buildMatchupItemRow(homeTeam: '팀명N', homeScore: 'N', awayTeam: '팀명', league: '(리그)'),
-          _buildMatchupItemRow(homeTeam: '팀명N', homeScore: 'N', awayTeam: '팀명', league: '(리그)'),
-          _buildMatchupItemRow(homeTeam: '팀명N', homeScore: 'N', awayTeam: '팀명', league: '(리그)'),
-          _buildMatchupItemRow(homeTeam: '팀명N', homeScore: 'N', awayTeam: '팀명', league: '(리그)', isLast: true),
+          _buildMatchupItemRow(homeTeam: '${l10n.teamName}N', homeScore: 'N', awayTeam: l10n.teamName, league: '(${l10n.league})'),
+          _buildMatchupItemRow(homeTeam: '${l10n.teamName}N', homeScore: 'N', awayTeam: l10n.teamName, league: '(${l10n.league})'),
+          _buildMatchupItemRow(homeTeam: '${l10n.teamName}N', homeScore: 'N', awayTeam: l10n.teamName, league: '(${l10n.league})'),
+          _buildMatchupItemRow(homeTeam: '${l10n.teamName}N', homeScore: 'N', awayTeam: l10n.teamName, league: '(${l10n.league})'),
+          _buildMatchupItemRow(homeTeam: '${l10n.teamName}N', homeScore: 'N', awayTeam: l10n.teamName, league: '(${l10n.league})', isLast: true),
         ],
       ),
     );
@@ -1266,6 +1329,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
 
   /// 최근 양팀 전적
   Widget _buildRecentTeamRecords() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: AppColors.borderNormal),
@@ -1285,7 +1349,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
             ),
             child: Center(
               child: Text(
-                '홈대 우세',
+                l10n.homeAdvantage,
                 style: AppTextStyles.label1NormalBold.copyWith(
                   color: AppColors.negative,
                 ),
@@ -1298,7 +1362,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
             color: AppColors.containerNormal,
             child: Center(
               child: Text(
-                '팀명 (N승 N패 / 원정 : N승 N패)',
+                '${l10n.teamName} (N${l10n.win} N${l10n.lose} / ${l10n.awayTeam} : N${l10n.win} N${l10n.lose})',
                 style: AppTextStyles.label1NormalMedium.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -1318,7 +1382,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                 SizedBox(
                   width: 40,
                   child: Text(
-                    '결과',
+                    l10n.result,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.caption2Medium.copyWith(
                       color: AppColors.labelAlternative,
@@ -1327,7 +1391,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                 ),
                 Expanded(
                   child: Text(
-                    '홈 vs 원정',
+                    l10n.homeVsAway,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.caption2Medium.copyWith(
                       color: AppColors.labelAlternative,
@@ -1337,7 +1401,7 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
                 SizedBox(
                   width: 100,
                   child: Text(
-                    '경기일(리그)',
+                    l10n.matchDateLeague,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.caption2Medium.copyWith(
                       color: AppColors.labelAlternative,
@@ -1348,11 +1412,11 @@ class _ChartComparisonPageState extends State<ChartComparisonPage> {
             ),
           ),
           // 경기 결과 리스트
-          _buildTeamRecordItem(result: '승', resultColor: AppColors.negative, homeTeam: '팀명N', awayTeam: 'N팀명', date: 'mm/dd(리그)'),
-          _buildTeamRecordItem(result: '패', resultColor: AppColors.positive, homeTeam: '팀명N', awayTeam: 'N팀명', date: 'mm/dd(리그)'),
-          _buildTeamRecordItem(result: '승', resultColor: AppColors.negative, homeTeam: '팀명N', awayTeam: 'N팀명', date: 'mm/dd(리그)'),
-          _buildTeamRecordItem(result: '승', resultColor: AppColors.negative, homeTeam: '팀명N', awayTeam: 'N팀명', date: 'mm/dd(리그)'),
-          _buildTeamRecordItem(result: '승', resultColor: AppColors.negative, homeTeam: '팀명N', awayTeam: 'N팀명', date: 'mm/dd(리그)'),
+          _buildTeamRecordItem(result: l10n.win, resultColor: AppColors.negative, homeTeam: '${l10n.teamName}N', awayTeam: 'N${l10n.teamName}', date: 'mm/dd(${l10n.league})'),
+          _buildTeamRecordItem(result: l10n.lose, resultColor: AppColors.positive, homeTeam: '${l10n.teamName}N', awayTeam: 'N${l10n.teamName}', date: 'mm/dd(${l10n.league})'),
+          _buildTeamRecordItem(result: l10n.win, resultColor: AppColors.negative, homeTeam: '${l10n.teamName}N', awayTeam: 'N${l10n.teamName}', date: 'mm/dd(${l10n.league})'),
+          _buildTeamRecordItem(result: l10n.win, resultColor: AppColors.negative, homeTeam: '${l10n.teamName}N', awayTeam: 'N${l10n.teamName}', date: 'mm/dd(${l10n.league})'),
+          _buildTeamRecordItem(result: l10n.win, resultColor: AppColors.negative, homeTeam: '${l10n.teamName}N', awayTeam: 'N${l10n.teamName}', date: 'mm/dd(${l10n.league})'),
         ],
       ),
     );

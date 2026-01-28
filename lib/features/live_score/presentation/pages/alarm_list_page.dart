@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 알람 목록 페이지
 class AlarmListPage extends StatefulWidget {
@@ -17,14 +18,18 @@ class _AlarmListPageState extends State<AlarmListPage> {
   // 탭 인덱스: 0=경기전, 1=경기중, 2=경기 종료
   int _selectedTabIndex = 0;
 
-  final List<String> _tabs = ['경기전', '경기중', '경기 종료'];
+  List<String> _getTabs(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.beforeMatch, l10n.duringMatch, l10n.afterMatch];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppHeader.withTitle(
-        title: '알람 목록',
+        title: l10n.alarmList,
         onBackPressed: () => Navigator.of(context).pop(),
       ),
       body: Column(
@@ -43,6 +48,7 @@ class _AlarmListPageState extends State<AlarmListPage> {
 
   /// 3단 세그먼트 토글
   Widget _buildSegmentedToggle() {
+    final tabs = _getTabs(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(4),
@@ -51,7 +57,7 @@ class _AlarmListPageState extends State<AlarmListPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
-        children: _tabs.asMap().entries.map((entry) {
+        children: tabs.asMap().entries.map((entry) {
           final index = entry.key;
           final label = entry.value;
           final isSelected = index == _selectedTabIndex;
@@ -126,11 +132,12 @@ class _AlarmListPageState extends State<AlarmListPage> {
 
   /// 리그 헤더
   Widget _buildLeagueHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         // 리그명
         Text(
-          '리그명',
+          l10n.leagueName,
           style: AppTextStyles.label1NormalBold.copyWith(
             color: AppColors.labelNormal,
           ),
@@ -144,7 +151,7 @@ class _AlarmListPageState extends State<AlarmListPage> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
-            '픽',
+            l10n.pick,
             style: AppTextStyles.caption2Bold.copyWith(
               color: AppColors.white,
             ),
@@ -172,11 +179,12 @@ class _AlarmListPageState extends State<AlarmListPage> {
 
   /// 경기 정보 (팀 + 일정)
   Widget _buildMatchInfo() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         // 홈팀
         Expanded(
-          child: _buildTeamInfo(teamName: '팀명'),
+          child: _buildTeamInfo(teamName: l10n.teamName),
         ),
         // 일정
         Container(
@@ -200,7 +208,7 @@ class _AlarmListPageState extends State<AlarmListPage> {
         ),
         // 원정팀
         Expanded(
-          child: _buildTeamInfo(teamName: '팀명'),
+          child: _buildTeamInfo(teamName: l10n.teamName),
         ),
       ],
     );
@@ -240,11 +248,12 @@ class _AlarmListPageState extends State<AlarmListPage> {
 
   /// 배당률 테이블
   Widget _buildOddsTable() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 국내
         _buildOddsRow(
-          label: '국내',
+          label: l10n.domestic,
           homeOdds: 'N.NN',
           drawOdds: '-',
           awayOdds: 'N.NN',
@@ -254,7 +263,7 @@ class _AlarmListPageState extends State<AlarmListPage> {
         const SizedBox(height: 4),
         // 해외
         _buildOddsRow(
-          label: '해외',
+          label: l10n.overseas,
           homeOdds: 'N.NN',
           drawOdds: '-',
           awayOdds: 'N.NN',

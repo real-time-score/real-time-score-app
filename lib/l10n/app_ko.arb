@@ -99,5 +99,410 @@
   "underOver": "언더오버",
   "homerun": "홈런",
   "score": "스코어",
-  "goal": "골"
+  "goal": "골",
+
+  "todayPeriod": "투데이",
+  "allPeriod": "전체",
+  "nickname": "닉네임",
+  "predictionSuccess": "예측성공",
+  "americanFootball": "미식축구",
+  "freeBoard": "자유게시판",
+  "etc": "기타",
+
+  "liveTab": "라이브",
+
+  "homeMatch": "홈",
+  "versus": "맞대결",
+
+  "posts": "게시글",
+  "cheers": "응원글",
+  "notification": "알림",
+
+  "matches": "경기",
+  "points": "승점",
+  "position": "포지션",
+  "nationality": "국적",
+  "age": "나이",
+  "defenseRate": "방어율",
+
+  "afterChampionship": "우승후",
+  "totalRecord": "전적",
+  "vsRecord": "상대 전적",
+
+  "winRate": "승률",
+  "homeAwayWinRate": "홈/원정 승률",
+  "ratingWinRate": "평점 승률",
+
+  "drawMatch": "무승부",
+  "homeWinRate": "홈 승률",
+  "awayWinRate": "원정 승률",
+
+  "appSettings": "앱설정",
+  "notificationSettings": "알림 설정",
+  "marketingConsent": "마케팅 수신 동의",
+  "allNotifications": "전체 알림",
+  "matchStartNotification": "경기 시작 전 알림",
+  "matchResultNotification": "경기 결과 알림",
+  "predictionDeadline": "예측게임 마감 임박",
+  "newExpertPick": "픽 전문가 신규 등록",
+  "popularPost": "게시글 인기 상승 중",
+  "attendanceReminder": "출석 독려",
+  "temperatureWarning": "안전온도 하락 경고",
+  "participationResult": "답 참여 결과 발표",
+  "likeCommentNotification": "좋아요, 댓글 알림",
+  "rankingEntryNotification": "랭킹 진입 알림",
+  "cheerReactionNotification": "응원메시지 반응 알림",
+  "eventBenefitInfo": "이벤트, 혜택, 상품 추천 등",
+  "consentWithdrawal": "수신 동의 철회: MY > 앱 설정",
+
+  "notificationGuide": "서비스명 알림 설정 안내",
+  "notificationQuestion": "고객님을 위한 다양한 스포츠 추천 정보와\n이벤트 알림을 받으시겠습니까?",
+  "no": "아니요",
+  "receiveNotification": "알림받기",
+
+  "winDrawLose": "승무패",
+  "win1Lose": "승1패",
+  "changeTime": "변동시간",
+  "homeLose": "홈패",
+  "homeWin": "홈승",
+  "initial": "초기",
+
+  "beforeMatch": "경기전",
+  "duringMatch": "경기중",
+  "afterMatch": "경기 종료",
+  "alarmList": "알람 목록",
+
+  "glossary": "용어 설명",
+
+  "receivedNotification": "받은 알림",
+  "certificationBadge": "인증뱃지",
+  "activityTemperature": "활동온도",
+  "point": "포인트",
+  "notice": "공지사항",
+  "event": "이벤트",
+  "inquiry": "1:1 문의하기",
+  "faq": "자주 묻는 질문",
+  "terms": "약관",
+  "expertName": "전문가명",
+  "titleDisplay": "타이틀 노출",
+  "winLose": "승패",
+  "handi": "핸디",
+  "categoryName": "카테고리 명",
+  "title": "제목",
+
+  "expectedScore": "예상 스코어",
+  "inningTop": "회 초",
+  "newbie": "뉴비",
+  "messageDisplay": "메세지 노출",
+  "gujung": "구중",
+  "jinjung": "진중",
+  "report": "신고",
+  "block": "차단",
+  "cheer": "응원",
+  "homeTeam": "홈팀",
+  "awayTeam": "원정팀",
+  "cheerMessageHint": "응원 메시지 입력",
+  "startWithKakao": "카카오로 시작하기",
+  "follow": "팔로우",
+  "following": "팔로잉",
+  "questionListPlaceholder": "여기는 자주하는 질문 리스트가 나와요",
+  "writePost": "글쓰기",
+  "writeComment": "댓글 작성",
+  "reply": "답글",
+  "profileEdit": "프로필 수정",
+  "logout": "로그아웃",
+  "withdrawal": "회원탈퇴",
+  "phoneVerification": "휴대폰 인증",
+  "pointCharge": "포인트 충전",
+  "pointHistory": "포인트 내역",
+  "purchaseHistory": "구매 내역",
+  "saleHistory": "판매 내역",
+
+  "mention": "멘션",
+  "predictionResult": "[예측결과] 팀명 NN% 승 / 핸패 / 오버",
+
+  "noticeSampleTitle": "[공지] 공지사항 이름이에요",
+  "inquiryQuestion": "서비스 이용 관련해서 궁금한 점 있으신가요?",
+  "inquiryDescription": "문의사항을 남겨 주시면 이메일 주소로 답변을 보내드립니다.",
+  "inquiryTitle": "문의 제목을 입력해주세요",
+  "inquiryContent": "문의 내용",
+  "inquiryContentHint": "문의 내용을 입력해주세요",
+  "emailAddress": "이메일 주소",
+  "emailHint": "이메일을 입력해주세요",
+  "required": "(필수)",
+  "submitInquiry": "문의하기",
+
+  "privacyPolicy": "개인정보처리방침",
+  "serviceTerms": "서비스 이용약관",
+  "eventImage": "이벤트 이미지",
+  "ongoing": "진행중",
+  "eventTitle": "이벤트 제목",
+
+  "commentLabel": "댓글",
+  "commentCount": "({count}개)",
+  "@commentCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "commentContent": "댓글에 대한 내용이 나옵니다.",
+  "postContent": "글에 대한 내용이 들어갑니다",
+  "moreReplies": "답글 {count}개 더보기",
+  "@moreReplies": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "enterComment": "댓글을 입력하세요.",
+  "minutesAgo": "{n}분 전",
+  "@minutesAgo": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "registerPost": "게시글 등록",
+  "selectCategory": "카테고리 선택",
+  "categoryNameHint": "카테고리 이름",
+  "mediaUpload": "미디어 업로드",
+  "imageUpload": "이미지 업로드",
+  "maxImagesInfo": "최대 10개 이미지 등록 가능",
+  "thumbnailInfo": "가장 앞에 있는 이미지가 썸네일로 설정됩니다.",
+  "thumbnail": "썸네일",
+  "content": "내용",
+  "enterContentHint": "콘텐츠 내용을 입력해주세요",
+  "register": "등록하기",
+  "cheerMessage": "({teamName})응원 메세지",
+  "@cheerMessage": {
+    "placeholders": {
+      "teamName": {
+        "type": "String"
+      }
+    }
+  },
+  "mentionMessage": "({userName})멘션",
+  "@mentionMessage": {
+    "placeholders": {
+      "userName": {
+        "type": "String"
+      }
+    }
+  },
+
+  "initialTemperature": "첫 온도 36.5°C",
+  "detailActivityTemperature": "상세 활동 온도",
+  "likes": "좋아요",
+  "attendance": "출석",
+  "pickExpertShort": "픽전문",
+  "activityTemperatureDescription": "활동 온도는 36.5°C에서 시작하여 응원, 예측 게임, 게시글, 좋아요, 댓글, 출석, 픽 전문가 후원 활동에 따라 증가합니다. 게임, 커뮤니티 이용 가이드를 준수하지 않을 경우 서비스 운영 정책에 따라 활동 온도가 하락할 수 있습니다. 활동 온도가 일정 기준 이하로 떨어지면 서비스 이용이 제한됩니다.",
+
+  "badgeCount": "인증뱃지 획득 수",
+  "badgeCheerWarrior": "응원의 전사",
+  "badgePredictionMaster": "예측 마스터",
+  "badgeHotPoster": "핫게시터",
+  "badgeLikeFairy": "좋아요 요정",
+  "badgeCommentLeader": "댓글 리더",
+  "badgeAttendanceKing": "출석왕",
+  "badgePickConsumer": "픽 소비자",
+  "badgePassionUser": "열정유저",
+  "badgeTemperatureGuardian": "온도 수호자",
+
+  "easyToto": "이지토토",
+  "easyTotoDesc": "소액으로 즐기는\n스포츠 복권",
+  "protoMatch": "프로토 승부식",
+  "protoMatchDesc": "나만의 경기 분석으로\n배당률 적중",
+  "sportsToto": "스포츠토토",
+  "sportsTotoDesc": "간단한 선택으로\n스포츠 즐기기",
+
+  "charge": "충전",
+  "chargeAction": "충전하기",
+  "identityVerification": "본인인증",
+  "cancelCharge": "충전취소",
+  "use": "사용",
+  "beforeCharge": "충전전",
+  "afterCharge": "충전후",
+
+  "myProfileEdit": "내 프로필 편집",
+  "complete": "완료",
+  "change": "변경",
+  "checkDuplicate": "중복확인",
+
+  "replyToComment": "답글달기",
+  "selectMatch": "경기선택",
+  "matchDateTime": "경기일시",
+  "close": "닫기",
+
+  "matchStatus": "경기상태",
+  "viewCount": "조회수",
+  "recentGames": "최근 {games}게임 {wins}승 {losses}패",
+  "@recentGames": {
+    "placeholders": {
+      "games": { "type": "String" },
+      "wins": { "type": "String" },
+      "losses": { "type": "String" }
+    }
+  },
+  "mainSport": "주종목",
+  "detailInfo": "상세정보",
+  "focusAnalysis": "집중분석",
+  "hit": "적중",
+  "miss": "실패",
+
+  "under": "언더",
+  "over": "오버",
+
+  "homeTeamLineup": "홈팀 라인업",
+  "awayTeamLineup": "원정팀 라인업",
+  "appearanceResult": "출전결과",
+
+  "paidLabel": "유료",
+  "freeLabel": "무료",
+
+  "glossaryHandicapTitle": "1. 핸디캡(Handicap, HCP)",
+  "glossaryHandicapPurpose": "목적: 실력 차이가 있는 경기에서 배당을 만들기 위해 \"가상의 점수 차\"를 미리 주고 시작하는 베팅 방식이다.",
+  "glossaryKeyConcept": "핵심 개념",
+  "glossaryHandicapBullet1": "강팀에게는 마이너스(-) 핸디캡을 줘서 가상으로 점수를 깎고,",
+  "glossaryHandicapBullet2": "약팀에게는 플러스(+) 핸디캡을 줘서 가상으로 점수를 더해주는 것",
+  "glossaryHandicapBullet3": "최종 점수에 핸디캡을 적용한 후 이긴 팀이 승리",
+  "glossaryExampleSoccer": "예시 (축구)",
+  "glossaryHandicapExample1": "맨시티 vs 노팅엄 경기에서 맨시티 핸디캡 -1.5 선택",
+  "glossaryHandicapExample2": "경기 결과 2:0 → 핸디 적용 후 0.5:0 → 맨시티가 핸디캡 승리",
+  "glossaryHandicapExample3": "경기 결과 1:0 → 핸디 적용 후 -0.5:0 → 맨시티가 핸디캡 패배",
+
+  "glossaryUnderOverTitle": "2. 언더오버(Under/Over, U/O)",
+  "glossaryUnderOverPurpose": "목적: 경기의 총 득점(양팀 합산)이 기준점보다 낮을지(Under) 높을지(Over)를 예측하는 베팅",
+  "glossaryUnderOverBullet1": "언더(Under): 기준점 미만일 것으로 예측",
+  "glossaryUnderOverBullet2": "오버(Over): 기준점 초과일 것으로 예측",
+  "glossaryUnderOverExample1": "기준점 2.5에서 경기 결과 2:1 (총 3골) → 오버 적중",
+  "glossaryUnderOverExample2": "기준점 2.5에서 경기 결과 1:0 (총 1골) → 언더 적중",
+
+  "pointManagement": "포인트 관리",
+  "pointPolicyTitle": "포인트 이용 정책 안내",
+  "pointPolicy1": "포인트는 현금으로 환전되거나 금전적 가치로 교환되지 않습니다. 회원 간 전달, 출금, 외부 결제 수단과의 교환은 불가능합니다.",
+  "pointPolicy2": "포인트는 서비스 내 전문가 분석 콘텐츠(Pick) 구매 용도로만 사용되며, 경기 결과에 따른 보상, 배당, 수익 분배와는 무관합니다.",
+  "pointPolicy3": "본 서비스의 포인트는 콘텐츠 이용을 위한 내부 결제 수단입니다.",
+  "detailHistory": "상세 내역",
+  "chargeAmountHint": "충전할 금액을 입력해주세요.",
+
+  "freePickRegister": "무료픽 등록",
+  "matchSelection": "경기 선택",
+  "matchNotice": "경기 시작 2일 전까지의 픽만 등록 가능합니다.",
+  "analysisInfo": "분석정보",
+  "enterTitle": "제목을 입력해주세요",
+  "enterAnalysis": "분석 내용을 입력해주세요",
+
+  "scoring": "득점",
+  "assist": "도움",
+  "avgScore": "평득",
+  "regularSeason": "정규시즌",
+  "year": "년도",
+  "countryName": "국가명",
+
+  "firstHalf": "전반",
+  "secondHalf": "후반",
+  "extraTime": "연장",
+  "shootout": "승부",
+
+  "shooting": "슈팅",
+  "shotsOnTarget": "유효슛",
+  "saves": "세이브",
+  "offside": "오프사이드",
+  "foul": "파울",
+  "yellowCard": "경고",
+  "redCard": "퇴장",
+  "cornerKick": "코너킥",
+  "freeKick": "프리킥",
+  "turnover": "턴오버",
+  "conceded": "실점",
+  "rebound": "리바",
+
+  "result": "결과",
+  "info": "정보",
+
+  "name": "이름",
+  "backNumber": "백넘버",
+  "heightWeight": "신장/몸무게",
+
+  "send": "전송",
+  "verify": "인증",
+  "textPlaceholder": "텍스트홀더",
+
+  "lotteryTypeSportsBetting": "복권형 스포츠 배팅",
+  "skillBasedSportsLottery": "실력형 스포츠 복권",
+  "sportsBetting": "스포츠 베팅",
+
+  "viewOtherVersions": "다른 버전 보기",
+  "selectVersion": "버전 선택",
+  "article1Purpose": "제 1 조 (목적)",
+  "article2Effectiveness": "제 2 조 (약관의 효력 및 변경)",
+  "article3Definitions": "제 3 조 (용어의 정의)",
+  "article4Service": "제 4 조 (서비스의 제공)",
+  "article5ServiceHours": "제 5 조 (서비스 이용시간)",
+  "article4Contract": "제 4 조 (이용 계약의 성립)",
+  "article5Withdrawal": "제 5 조 (회원 탈퇴 및 자격 상실)",
+  "article6ServiceSuspension": "제 6 조 (서비스의 중단)",
+
+  "privacyPolicyLink": "스포츠 스코어 픽 개인정보처리방침",
+
+  "teamInfo": "팀 정보",
+  "titleLabel": "타이틀",
+  "registrationComplete": "등록 완료",
+  "freePickRegistered": "무료픽이 등록되었습니다.",
+  "starter": "선발",
+  "substitute": "교체",
+
+  "memberReVerification": "회원 재인증",
+  "reVerificationInfo": "고객님의 정보보호와 안전한 서비스 이용을 위해 앱 재설치 및 데이터 삭제 시 재인증이 필요합니다.",
+  "phoneNumber": "휴대폰 번호",
+  "enterPhoneNumber": "전화번호를 입력해주세요",
+  "enterVerificationCode": "인증 번호를 입력해주세요.",
+  "purchasedPick": "구매한 픽",
+  "alertedPick": "알림한 픽",
+
+  "offensiveComparison": "공격력 비교",
+  "defensiveComparison": "수비력 비교",
+  "homeVsAway": "홈 vs 원정",
+  "matchDateLeague": "경기일(리그)",
+  "homeAdvantage": "홈대 우세",
+  "gifAnimationArea": "GIF 애니메이션 영역",
+  "highlightGolScenes": "경기 하이라이트, 골 장면 등",
+  "atMention": "@멘션",
+
+  "userSentNotification": "님이 알림을 보냈습니다.",
+  "purchase": "구매",
+  "userWrittenContent": "이용자가 작성한 글 노출",
+
+  "defaultNickname": "닉네임명",
+  "league": "리그",
+  "sampleTeamLiverpool": "리버풀",
+  "sampleTeamManUtd": "맨체스터 유나이티드",
+
+  "termsArticle1Content": "이 약관은 @@@@(이하 \"사이트\"라 합니다)에서 제공하는 인터넷서비스(이하 \"서비스\"라 합니다)의 이용 조건 및 절차에 관한 기본적인 사항을 규정함을 목적으로 합니다.",
+  "termsArticle2Item1": "이 약관은 서비스 화면이나 기타의 방법으로 이용고객에게 공지함으로써 효력을 발생합니다.",
+  "termsArticle2Item2": "사이트는 이 약관의 내용을 변경할 수 있으며, 변경된 약관은 제1항과 같은 방법으로 공지 또는 통지함으로써 효력을 발생합니다.",
+  "termsArticle3Intro": "이 약관에서 사용하는 용어의 정의는 다음과 같습니다.",
+  "termsArticle3Item1": "회원 : 사이트와 서비스 이용계약을 체결하거나 이용자 아이디(ID)를 부여받은 개인 또는 단체를 말합니다.",
+  "termsArticle3Item2": "신청자 : 회원가입을 신청하는 개인 또는 단체를 말합니다.",
+  "termsArticle3Item3": "아이디(ID) : 회원의 식별과 서비스 이용을 위하여 회원이 정하고 사이트가 승인하는 문자와 숫자의 조합을 말합니다.",
+  "termsArticle3Item4": "비밀번호 : 회원이 부여 받은 아이디(ID)와 일치된 회원임을 확인하고, 회원 자신의 비밀을 보호하기 위하여 회원이 정한 문자와 숫자의 조합을 말합니다.",
+  "termsArticle4Intro": "사이트는 다음과 같은 서비스를 제공합니다.",
+  "termsArticle4Item1": "스포츠 경기 정보 및 실시간 스코어 서비스",
+  "termsArticle4Item2": "예측 게임 및 포인트 적립 서비스",
+  "termsArticle4Item3": "커뮤니티 서비스",
+  "termsArticle4Item4": "기타 사이트가 정하는 서비스",
+  "termsArticle5ContractItem1": "이용계약은 이용자의 이용신청에 대하여 사이트가 승낙함으로써 성립합니다.",
+  "termsArticle5ContractItem2": "이용계약의 성립 시기는 사이트가 가입완료를 신청절차 상에서 표시한 시점으로 합니다.",
+  "termsArticle5WithdrawalItem1": "회원은 사이트에 언제든지 탈퇴를 요청할 수 있으며, 사이트는 즉시 회원탈퇴를 처리합니다.",
+
+  "sportsScorePickServiceTerms": "스포츠 스코어 픽 서비스 이용약관",
+  "termsArticle5ServiceHoursContent": "서비스의 이용은 사이트의 업무상 또는 기술상 특별한 지장이 없는 한 연중무휴 1일 24시간을 원칙으로 합니다. 다만, 정기점검 등의 필요로 사이트가 정한 날이나 시간은 그러하지 아니합니다.",
+  "termsArticle5WithdrawalItem2": "회원이 다음 각 호의 사유에 해당하는 경우, 사이트는 회원자격을 제한 및 정지시킬 수 있습니다.",
+  "termsArticle5WithdrawalItem3": "가입 신청 시에 허위 내용을 등록한 경우",
+  "termsArticle5WithdrawalItem4": "다른 사람의 서비스 이용을 방해하거나 그 정보를 도용하는 등 전자상거래 질서를 위협하는 경우",
+  "termsArticle6Content": "사이트는 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신의 두절 등의 사유가 발생한 경우에는 서비스의 제공을 일시적으로 중단할 수 있습니다. 이 경우 사이트는 회원에게 통지합니다."
 }

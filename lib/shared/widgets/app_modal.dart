@@ -35,7 +35,7 @@ class AppModal extends StatelessWidget {
     this.secondaryButtonText,
     this.onPrimaryPressed,
     this.onSecondaryPressed,
-    this.primaryButtonType = AppButtonType.primary,
+    this.primaryButtonStatus = AppButtonStatus.active,
     this.size = AppModalSize.medium,
     this.showCloseButton = false,
     this.isDismissible = true,
@@ -52,7 +52,7 @@ class AppModal extends StatelessWidget {
   final String? secondaryButtonText;
   final VoidCallback? onPrimaryPressed;
   final VoidCallback? onSecondaryPressed;
-  final AppButtonType primaryButtonType;
+  final AppButtonStatus primaryButtonStatus;
   final AppModalSize size;
   final bool showCloseButton;
   final bool isDismissible;
@@ -194,7 +194,7 @@ class AppModal extends StatelessWidget {
       // 단일 버튼 (Figma: 40px height - medium)
       return AppButton(
         text: primaryButtonText!,
-        type: primaryButtonType,
+        status: primaryButtonStatus,
         size: AppButtonSize.medium,
         isFullWidth: true,
         onPressed: onPrimaryPressed ?? () => Navigator.of(context).pop(true),
@@ -207,7 +207,7 @@ class AppModal extends StatelessWidget {
         Expanded(
           child: AppButton(
             text: secondaryButtonText!,
-            type: AppButtonType.neutral,
+            status: AppButtonStatus.neutral,
             size: AppButtonSize.large,
             onPressed: onSecondaryPressed ?? () => Navigator.of(context).pop(false),
           ),
@@ -216,7 +216,7 @@ class AppModal extends StatelessWidget {
         Expanded(
           child: AppButton(
             text: primaryButtonText!,
-            type: primaryButtonType,
+            status: primaryButtonStatus,
             size: AppButtonSize.large,
             onPressed: onPrimaryPressed ?? () => Navigator.of(context).pop(true),
           ),
@@ -277,7 +277,7 @@ class AppModal extends StatelessWidget {
         iconColor: iconColor ?? (isDanger ? AppColors.error : null),
         primaryButtonText: confirmText,
         secondaryButtonText: cancelText,
-        primaryButtonType: isDanger ? AppButtonType.danger : AppButtonType.primary,
+        primaryButtonStatus: isDanger ? AppButtonStatus.error : AppButtonStatus.active,
         onPrimaryPressed: () => Navigator.of(context).pop(true),
         onSecondaryPressed: () => Navigator.of(context).pop(false),
       ),
@@ -563,7 +563,7 @@ class _AppInputModalState extends State<AppInputModal> {
                   Expanded(
                     child: AppButton(
                       text: widget.cancelText,
-                      type: AppButtonType.neutral,
+                      status: AppButtonStatus.neutral,
                       size: AppButtonSize.large,
                       onPressed: () => Navigator.of(context).pop(),
                     ),
@@ -572,7 +572,7 @@ class _AppInputModalState extends State<AppInputModal> {
                   Expanded(
                     child: AppButton(
                       text: widget.confirmText,
-                      type: AppButtonType.primary,
+                      status: AppButtonStatus.active,
                       size: AppButtonSize.large,
                       onPressed: _onConfirm,
                     ),
@@ -757,7 +757,7 @@ class _AppSelectModalState<T> extends State<AppSelectModal<T>> {
                   Expanded(
                     child: AppButton(
                       text: widget.cancelText,
-                      type: AppButtonType.neutral,
+                      status: AppButtonStatus.neutral,
                       size: AppButtonSize.large,
                       onPressed: () => Navigator.of(context).pop(),
                     ),
@@ -766,7 +766,7 @@ class _AppSelectModalState<T> extends State<AppSelectModal<T>> {
                   Expanded(
                     child: AppButton(
                       text: widget.confirmText,
-                      type: AppButtonType.primary,
+                      status: AppButtonStatus.active,
                       size: AppButtonSize.large,
                       onPressed: () => Navigator.of(context).pop(_selectedValue),
                     ),

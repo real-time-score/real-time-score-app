@@ -6,6 +6,7 @@ import '../../../../core/constants/app_icons.dart';
 import '../../../../shared/widgets/app_navigation_bar.dart';
 import '../../../../shared/widgets/app_toggle.dart';
 import '../../../../shared/widgets/app_chip.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 라이브 스코어 메인 페이지 (홈 탭)
 class LiveScoreMainPage extends StatefulWidget {
@@ -30,13 +31,19 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
   int _toggleIndex = 0; // LIVE / 프로토
   int _sportCategoryIndex = 2; // 전체, e스포츠, 축구, 야구, 농구...
   int _subCategoryIndex = 1; // 전체, 카테고리1, 카테고리2...
-  int _bottomNavIndex = 0; // 하단 네비게이션
+  final int _bottomNavIndex = 0; // 하단 네비게이션
 
-  // 스포츠 카테고리 목록
-  final List<String> _sportCategories = ['전체', 'e스포츠', '축구', '야구', '농구', '배구', '하키', '테니스'];
+  // 스포츠 카테고리 목록 (다국어)
+  List<String> _getSportCategories(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, l10n.esports, l10n.soccer, l10n.baseball, l10n.basketball, l10n.volleyball, l10n.hockey, l10n.tennis];
+  }
 
-  // 서브 카테고리 목록
-  final List<String> _subCategories = ['전체', '카테고리1', '카테고리2', '카테고리3', '카테고리4'];
+  // 서브 카테고리 목록 (다국어)
+  List<String> _getSubCategories(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.all, 'Category1', 'Category2', 'Category3', 'Category4'];
+  }
 
   // 배너 페이지
   final int _bannerPage = 0;
@@ -116,9 +123,9 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           // 로고
           _buildLogo(),
           const SizedBox(width: 8),
-          // 타이틀
+          // 타이틀 (다국어)
           Text(
-            'リアルタイムスコア',
+            AppLocalizations.of(context)!.appTitle,
             style: AppTextStyles.h4Bold.copyWith(
               color: AppColors.primaryFigma,
             ),
@@ -236,10 +243,11 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// LIVE / 프로토 토글
   Widget _buildToggle() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: AppToggle(
-        labels: const ['LIVE', '프로토'],
+        labels: [l10n.live, l10n.proto],
         selectedIndex: _toggleIndex,
         onChanged: (index) {
           setState(() {
@@ -254,16 +262,17 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// 스포츠 카테고리 탭 (수평 스크롤)
   Widget _buildSportCategoryTabs() {
+    final sportCategories = _getSportCategories(context);
     return SizedBox(
       height: 32,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: _sportCategories.length,
+        itemCount: sportCategories.length,
         itemBuilder: (context, index) {
           final isSelected = index == _sportCategoryIndex;
           return Padding(
-            padding: EdgeInsets.only(right: index < _sportCategories.length - 1 ? 0 : 0),
+            padding: EdgeInsets.only(right: index < sportCategories.length - 1 ? 0 : 0),
             child: GestureDetector(
               onTap: () {
                 setState(() {
@@ -282,7 +291,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
                 ),
                 child: Center(
                   child: Text(
-                    _sportCategories[index],
+                    sportCategories[index],
                     style: isSelected
                         ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.labelNormal)
                         : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelAlternative),
@@ -298,18 +307,19 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// 서브 카테고리 칩 (수평 스크롤)
   Widget _buildSubCategoryChips() {
+    final subCategories = _getSubCategories(context);
     return SizedBox(
       height: 28,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: _subCategories.length,
+        itemCount: subCategories.length,
         itemBuilder: (context, index) {
           final isSelected = index == _subCategoryIndex;
           return Padding(
-            padding: EdgeInsets.only(right: index < _subCategories.length - 1 ? 4 : 0),
+            padding: EdgeInsets.only(right: index < subCategories.length - 1 ? 4 : 0),
             child: Chips(
-              label: _subCategories[index],
+              label: subCategories[index],
               status: isSelected ? ChipStatus.active : ChipStatus.defaultStatus,
               onTap: () {
                 setState(() {
@@ -418,18 +428,19 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// 경기 리스트
   Widget _buildMatchList() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 첫 번째 리그 경기
         _buildMatchSection(
-          leagueName: '리그명',
+          leagueName: l10n.leagueName,
           hasPick: true,
           temperature: '12°C',
         ),
         const SizedBox(height: 8),
         // 두 번째 리그 경기
         _buildMatchSection(
-          leagueName: '리그명',
+          leagueName: l10n.leagueName,
           hasPick: true,
           temperature: '12°C',
         ),
@@ -491,18 +502,23 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
         const SizedBox(width: 8),
         // 픽 뱃지
         if (hasPick)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
-              color: AppColors.negative,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              '픽',
-              style: AppTextStyles.caption2Bold.copyWith(
-                color: AppColors.white,
-              ),
-            ),
+          Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.negative,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  l10n.pick,
+                  style: AppTextStyles.caption2Bold.copyWith(
+                    color: AppColors.white,
+                  ),
+                ),
+              );
+            },
           ),
         const SizedBox(width: 8),
         // 날씨 아이콘 + 온도
@@ -544,6 +560,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// 운영자 등록글 노출 배너
   Widget _buildAdminNotice() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -553,7 +570,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
       ),
       child: Center(
         child: Text(
-          '운영자 등록글 노출',
+          l10n.adminNotice,
           style: AppTextStyles.caption1Medium.copyWith(
             color: AppColors.labelNeutral,
           ),
@@ -572,26 +589,23 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
     int awayScore = 0,
   }) {
     // 경기 상태에 따른 색상 결정
-    Color statusColor;
     Color scoreColor;
     String statusText;
 
+    final l10n = AppLocalizations.of(context)!;
     switch (matchStatus) {
       case 'scheduled':
-        statusColor = AppColors.labelNeutral;
         scoreColor = AppColors.labelNeutral;
-        statusText = '예정';
+        statusText = l10n.scheduled;
         break;
       case 'live':
-        statusColor = AppColors.negative;
         scoreColor = AppColors.negative;
         statusText = 'LIVE';
         break;
       case 'finished':
       default:
-        statusColor = AppColors.labelAlternative;
         scoreColor = AppColors.labelNormal;
-        statusText = '종료';
+        statusText = l10n.finished;
         break;
     }
 
@@ -627,8 +641,8 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
               // 홈팀
               Expanded(
                 child: _buildTeamInfo(
-                  teamName: '팀명',
-                  ranking: '순위',
+                  teamName: l10n.teamName,
+                  ranking: l10n.rankingTab,
                   isHome: true,
                   isWinning: matchStatus == 'live' && isHomeWinning,
                   isLosing: matchStatus == 'finished' && !isHomeWinning && !isDraw,
@@ -667,8 +681,8 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
               // 원정팀
               Expanded(
                 child: _buildTeamInfo(
-                  teamName: '팀명',
-                  ranking: '순위',
+                  teamName: l10n.teamName,
+                  ranking: l10n.rankingTab,
                   isHome: false,
                   isWinning: matchStatus == 'live' && isAwayWinning,
                   isLosing: matchStatus == 'finished' && !isAwayWinning && !isDraw,
@@ -735,6 +749,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// 배당률 테이블
   Widget _buildOddsTable() {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         Navigator.of(context).pushNamed('/match-full-mode');
@@ -743,7 +758,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
         children: [
           // 국내
           _buildOddsRow(
-            label: '국내',
+            label: l10n.domestic,
             homeOdds: 'N.NN',
             drawOdds: '-',
             awayOdds: 'N.NN',
@@ -753,7 +768,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           const SizedBox(height: 4),
           // 해외
           _buildOddsRow(
-            label: '해외',
+            label: l10n.overseas,
             homeOdds: 'N.NN',
             drawOdds: '-',
             awayOdds: 'N.NN',
@@ -840,15 +855,16 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// 프로토 프로모션 카드들
   Widget _buildProtoPromotionCards() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           // 복권형 스포츠 배팅
           _buildProtoPromotionCard(
-            title: '복권형 스포츠 배팅',
-            subtitle: '이지토토',
-            description: '소액으로 즐기는\n스포츠 복권',
+            title: l10n.lotteryTypeSportsBetting,
+            subtitle: l10n.easyToto,
+            description: l10n.easyTotoDesc,
             gradientColors: [
               const Color(0xFF6366F1),
               const Color(0xFF8B5CF6),
@@ -857,9 +873,9 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           const SizedBox(height: 12),
           // 실력형 스포츠 복권
           _buildProtoPromotionCard(
-            title: '실력형 스포츠 복권',
-            subtitle: '프로토 승부식',
-            description: '나만의 경기 분석으로\n배당률 적중',
+            title: l10n.skillBasedSportsLottery,
+            subtitle: l10n.protoMatch,
+            description: l10n.protoMatchDesc,
             gradientColors: [
               const Color(0xFF3B82F6),
               const Color(0xFF06B6D4),
@@ -868,9 +884,9 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
           const SizedBox(height: 12),
           // 스포츠 베팅
           _buildProtoPromotionCard(
-            title: '스포츠 베팅',
-            subtitle: '스포츠토토',
-            description: '간단한 선택으로\n스포츠 즐기기',
+            title: l10n.sportsBetting,
+            subtitle: l10n.sportsToto,
+            description: l10n.sportsTotoDesc,
             gradientColors: [
               const Color(0xFF10B981),
               const Color(0xFF34D399),
@@ -956,6 +972,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
 
   /// 프로토 경기 섹션
   Widget _buildProtoMatchSection() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(12),
@@ -968,7 +985,7 @@ class _LiveScoreMainPageState extends State<LiveScoreMainPage> {
         children: [
           // 리그 헤더
           _buildLeagueHeader(
-            leagueName: '리그명',
+            leagueName: l10n.leagueName,
             hasPick: true,
             temperature: '12°C',
           ),

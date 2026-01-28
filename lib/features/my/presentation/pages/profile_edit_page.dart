@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
-import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 프로필 편집 페이지
 class ProfileEditPage extends StatefulWidget {
@@ -24,13 +24,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Column(
           children: [
             // 헤더
-            _buildHeader(),
+            _buildHeader(l10n),
             // 컨텐츠
             Expanded(
               child: SingleChildScrollView(
@@ -39,10 +40,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   children: [
                     const SizedBox(height: 24),
                     // 프로필 이미지
-                    _buildProfileImage(),
+                    _buildProfileImage(l10n),
                     const SizedBox(height: 24),
                     // 닉네임 입력
-                    _buildNicknameInput(),
+                    _buildNicknameInput(l10n),
                   ],
                 ),
               ),
@@ -54,8 +55,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   /// 헤더 (텍스트 액션 버튼 포함)
-  Widget _buildHeader() {
-    return Container(
+  Widget _buildHeader(AppLocalizations l10n) {
+    return SizedBox(
       height: 48,
       child: Stack(
         alignment: Alignment.center,
@@ -89,7 +90,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           ),
           // 타이틀
           Text(
-            '내 프로필 편집',
+            l10n.myProfileEdit,
             style: AppTextStyles.h4Medium,
           ),
           // 완료 버튼
@@ -101,7 +102,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 Navigator.of(context).pop();
               },
               child: Text(
-                '완료',
+                l10n.complete,
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelNormal,
                 ),
@@ -114,7 +115,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   /// 프로필 이미지
-  Widget _buildProfileImage() {
+  Widget _buildProfileImage(AppLocalizations l10n) {
     return GestureDetector(
       onTap: () {
         // 이미지 선택
@@ -146,7 +147,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                '변경',
+                l10n.change,
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.white,
                 ),
@@ -159,7 +160,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   /// 닉네임 입력
-  Widget _buildNicknameInput() {
+  Widget _buildNicknameInput(AppLocalizations l10n) {
     return Row(
       children: [
         // 텍스트 입력
@@ -173,7 +174,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             child: TextField(
               controller: _nicknameController,
               decoration: InputDecoration(
-                hintText: '닉네임',
+                hintText: l10n.nickname,
                 hintStyle: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.labelAlternative,
                 ),
@@ -204,7 +205,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             ),
             child: Center(
               child: Text(
-                '중복확인',
+                l10n.checkDuplicate,
                 style: AppTextStyles.body1NormalBold.copyWith(
                   color: AppColors.white,
                 ),

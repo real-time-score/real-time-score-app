@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// MY 페이지
 class MyPage extends StatelessWidget {
@@ -122,18 +123,23 @@ class MyPage extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 right: 0,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.contentsNeutral,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    '수정',
-                    style: AppTextStyles.caption1Medium.copyWith(
-                      color: AppColors.white,
-                    ),
-                  ),
+                child: Builder(
+                  builder: (context) {
+                    final l10n = AppLocalizations.of(context)!;
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppColors.contentsNeutral,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        l10n.edit,
+                        style: AppTextStyles.caption1Medium.copyWith(
+                          color: AppColors.white,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -141,55 +147,60 @@ class MyPage extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         // 닉네임 + 통계
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 닉네임
-            Text(
-              '닉네임',
-              style: AppTextStyles.h3Bold.copyWith(
-                color: AppColors.labelNormal,
-              ),
-            ),
-            const SizedBox(height: 4),
-            // 받은 알림
-            Row(
+        Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // 닉네임
                 Text(
-                  '받은 알림',
-                  style: AppTextStyles.label1Medium.copyWith(
-                    color: AppColors.labelNeutral,
+                  l10n.nickname,
+                  style: AppTextStyles.h3Bold.copyWith(
+                    color: AppColors.labelNormal,
                   ),
                 ),
-                const SizedBox(width: 4),
-                Text(
-                  'NN',
-                  style: AppTextStyles.label1Bold.copyWith(
-                    color: AppColors.decrease,
-                  ),
+                const SizedBox(height: 4),
+                // 받은 알림
+                Row(
+                  children: [
+                    Text(
+                      l10n.receivedNotification,
+                      style: AppTextStyles.label1Medium.copyWith(
+                        color: AppColors.labelNeutral,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'NN',
+                      style: AppTextStyles.label1Bold.copyWith(
+                        color: AppColors.decrease,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                // 예측성공
+                Row(
+                  children: [
+                    Text(
+                      l10n.predictionSuccess,
+                      style: AppTextStyles.label1Medium.copyWith(
+                        color: AppColors.labelNeutral,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'NN%/NNN',
+                      style: AppTextStyles.label1Bold.copyWith(
+                        color: AppColors.negative,
+                      ),
+                    ),
+                  ],
                 ),
               ],
-            ),
-            const SizedBox(height: 4),
-            // 예측성공
-            Row(
-              children: [
-                Text(
-                  '예측성공',
-                  style: AppTextStyles.label1Medium.copyWith(
-                    color: AppColors.labelNeutral,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  'NN%/NNN',
-                  style: AppTextStyles.label1Bold.copyWith(
-                    color: AppColors.negative,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            );
+          },
         ),
       ],
     );
@@ -197,6 +208,7 @@ class MyPage extends StatelessWidget {
 
   /// 통계 카드
   Widget _buildStatCards(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 인증뱃지 + 활동온도
@@ -205,14 +217,14 @@ class MyPage extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/certification-badge'),
-                child: _buildStatCard('인증뱃지', 'N개'),
+                child: _buildStatCard(l10n.certificationBadge, 'N개'),
               ),
             ),
             const SizedBox(width: 8),
             Expanded(
               child: GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/activity-temperature'),
-                child: _buildStatCard('활동온도', '42.9°C'),
+                child: _buildStatCard(l10n.activityTemperature, '42.9°C'),
               ),
             ),
           ],
@@ -223,7 +235,7 @@ class MyPage extends StatelessWidget {
           width: double.infinity,
           child: GestureDetector(
             onTap: () => Navigator.pushNamed(context, '/point-management'),
-            child: _buildStatCard('포인트', 'NNN,NNN P'),
+            child: _buildStatCard(l10n.point, 'NNN,NNN P'),
           ),
         ),
       ],
@@ -372,11 +384,16 @@ class MyPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            '닉네임',
-            style: AppTextStyles.caption1Medium.copyWith(
-              color: AppColors.labelNeutral,
-            ),
+          Builder(
+            builder: (context) {
+              final l10n = AppLocalizations.of(context)!;
+              return Text(
+                l10n.nickname,
+                style: AppTextStyles.caption1Medium.copyWith(
+                  color: AppColors.labelNeutral,
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -385,31 +402,32 @@ class MyPage extends StatelessWidget {
 
   /// 메뉴 리스트
   Widget _buildMenuList(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          _buildMenuItem(AppIcons.megaphone, '공지사항', () {
+          _buildMenuItem(AppIcons.megaphone, l10n.notice, () {
             Navigator.pushNamed(context, '/notice');
           }),
           const SizedBox(height: 8),
-          _buildMenuItem(AppIcons.sparkle, '이벤트', () {
+          _buildMenuItem(AppIcons.sparkle, l10n.event, () {
             Navigator.pushNamed(context, '/event');
           }),
           const SizedBox(height: 8),
-          _buildMenuItem(AppIcons.bubble, '1:1 문의하기', () {
+          _buildMenuItem(AppIcons.bubble, l10n.inquiry, () {
             Navigator.pushNamed(context, '/inquiry');
           }),
           const SizedBox(height: 8),
-          _buildMenuItem(AppIcons.circleQuestion, '자주 묻는 질문', () {
+          _buildMenuItem(AppIcons.circleQuestion, l10n.faq, () {
             Navigator.pushNamed(context, '/faq');
           }),
           const SizedBox(height: 8),
-          _buildMenuItem(AppIcons.setting, '앱 설정', () {
+          _buildMenuItem(AppIcons.setting, l10n.appSettings, () {
             Navigator.pushNamed(context, '/app-settings');
           }),
           const SizedBox(height: 8),
-          _buildMenuItem(AppIcons.documentText, '약관', () {
+          _buildMenuItem(AppIcons.documentText, l10n.terms, () {
             Navigator.pushNamed(context, '/terms');
           }),
         ],
@@ -454,6 +472,7 @@ class MyPage extends StatelessWidget {
 
   /// 하단 네비게이션
   Widget _buildBottomNavigation(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -468,11 +487,11 @@ class MyPage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildNavItem(context, AppIcons.home, '홈', false),
-              _buildNavItem(context, AppIcons.check, '픽전문가', false),
-              _buildNavItem(context, AppIcons.persons, '커뮤니티', false),
-              _buildNavItem(context, AppIcons.trophy, '랭킹', false),
-              _buildNavItem(context, AppIcons.person, 'MY', true),
+              _buildNavItem(context, AppIcons.home, l10n.home, '/main', false),
+              _buildNavItem(context, AppIcons.check, l10n.pickExpert, '/main/pick-expert', false),
+              _buildNavItem(context, AppIcons.persons, l10n.community, '/main/community', false),
+              _buildNavItem(context, AppIcons.trophy, l10n.ranking, '/main/ranking', false),
+              _buildNavItem(context, AppIcons.person, l10n.my, '', true),
             ],
           ),
         ),
@@ -481,18 +500,11 @@ class MyPage extends StatelessWidget {
   }
 
   /// 네비게이션 아이템
-  Widget _buildNavItem(BuildContext context, String iconPath, String label, bool isActive) {
+  Widget _buildNavItem(BuildContext context, String iconPath, String label, String route, bool isActive) {
     return GestureDetector(
       onTap: () {
-        // 네비게이션 처리
-        if (label == '홈') {
-          Navigator.pushReplacementNamed(context, '/main');
-        } else if (label == '픽전문가') {
-          Navigator.pushReplacementNamed(context, '/main/pick-expert');
-        } else if (label == '커뮤니티') {
-          Navigator.pushReplacementNamed(context, '/main/community');
-        } else if (label == '랭킹') {
-          Navigator.pushReplacementNamed(context, '/main/ranking');
+        if (route.isNotEmpty) {
+          Navigator.pushReplacementNamed(context, route);
         }
       },
       child: Container(

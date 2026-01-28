@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 경기 배당률 모드 타입
 enum OddsMode {
@@ -36,7 +37,10 @@ class MatchFullModePage extends StatefulWidget {
 class _MatchFullModePageState extends State<MatchFullModePage> {
   late OddsMode _selectedMode;
 
-  final List<String> _modeLabels = ['승무패', '승1패', '핸디캡', '언더오버'];
+  List<String> _getModeLabels(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.winDrawLose, l10n.win1Lose, l10n.handicap, l10n.underOver];
+  }
 
   @override
   void initState() {
@@ -71,15 +75,25 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
                     _buildMatchInfo(),
                     const SizedBox(height: 40),
                     // 국내 배당률
-                    _buildOddsSection(
-                      title: '국내',
-                      odds: _buildDomesticOdds(),
+                    Builder(
+                      builder: (context) {
+                        final l10n = AppLocalizations.of(context)!;
+                        return _buildOddsSection(
+                          title: l10n.domestic,
+                          odds: _buildDomesticOdds(),
+                        );
+                      },
                     ),
                     const SizedBox(height: 24),
                     // 해외 배당률
-                    _buildOddsSection(
-                      title: '해외',
-                      odds: _buildOverseasOdds(),
+                    Builder(
+                      builder: (context) {
+                        final l10n = AppLocalizations.of(context)!;
+                        return _buildOddsSection(
+                          title: l10n.overseas,
+                          odds: _buildOverseasOdds(),
+                        );
+                      },
                     ),
                     const SizedBox(height: 32),
                   ],
@@ -160,6 +174,7 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
 
   /// 4단 모드 토글
   Widget _buildModeToggle() {
+    final modeLabels = _getModeLabels(context);
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -188,7 +203,7 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
                 ),
                 child: Center(
                   child: Text(
-                    _modeLabels[index],
+                    modeLabels[index],
                     style: isSelected
                         ? AppTextStyles.body1NormalBold.copyWith(color: AppColors.white)
                         : AppTextStyles.body1NormalMedium.copyWith(color: AppColors.labelNormal),
@@ -204,11 +219,12 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
 
   /// 경기 정보 (팀 + 시간)
   Widget _buildMatchInfo() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // 홈팀
-        _buildTeamInfo(teamName: '팀명'),
+        _buildTeamInfo(teamName: l10n.teamName),
         const SizedBox(width: 22),
         // 시간
         Container(
@@ -226,7 +242,7 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
         ),
         const SizedBox(width: 22),
         // 원정팀
-        _buildTeamInfo(teamName: '팀명'),
+        _buildTeamInfo(teamName: l10n.teamName),
       ],
     );
   }
@@ -336,11 +352,16 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
           changeTime: '(변동없음)',
         ),
         // 요약 행
-        _buildOddsSummaryRow(
-          homeOdds: 'N.NN',
-          drawOdds: '-',
-          awayOdds: 'N.NN',
-          changeTime: '초기',
+        Builder(
+          builder: (context) {
+            final l10n = AppLocalizations.of(context)!;
+            return _buildOddsSummaryRow(
+              homeOdds: 'N.NN',
+              drawOdds: '-',
+              awayOdds: 'N.NN',
+              changeTime: l10n.initial,
+            );
+          },
         ),
       ],
     );
@@ -348,7 +369,7 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
 
   /// 배당률 헤더 행
   Widget _buildOddsHeaderRow() {
-    final headers = _getHeaderLabels();
+    final headers = _getHeaderLabels(context);
     return Row(
       children: headers.map((label) {
         return Expanded(
@@ -373,8 +394,9 @@ class _MatchFullModePageState extends State<MatchFullModePage> {
   }
 
   /// 모드에 따른 헤더 라벨 (모든 모드에서 동일)
-  List<String> _getHeaderLabels() {
-    return ['홈패', '무승부', '홈승', '변동시간'];
+  List<String> _getHeaderLabels(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [l10n.homeLose, l10n.drawMatch, l10n.homeWin, l10n.changeTime];
   }
 
   /// 배당률 데이터 행

@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/constants/app_icons.dart';
-import '../../../../shared/widgets/app_header.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// 사용자 프로필 탭 타입
 enum UserProfileTab { posts, cheers, prediction, notification }
@@ -63,7 +63,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 헤더 (텍스트 액션 버튼 포함)
   Widget _buildHeader() {
-    return Container(
+    final l10n = AppLocalizations.of(context)!;
+    return SizedBox(
       height: 48,
       child: Stack(
         alignment: Alignment.center,
@@ -103,7 +104,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 // 신고 처리
               },
               child: Text(
-                '신고',
+                l10n.report,
                 style: AppTextStyles.body1NormalMedium.copyWith(
                   color: AppColors.decrease,
                 ),
@@ -148,6 +149,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 프로필 상단
   Widget _buildProfileTop() {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         // 프로필 이미지
@@ -177,7 +179,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  '수정',
+                  l10n.edit,
                   style: AppTextStyles.caption1Medium.copyWith(
                     color: AppColors.white,
                   ),
@@ -193,7 +195,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           children: [
             // 닉네임
             Text(
-              '닉네임',
+              l10n.nickname,
               style: AppTextStyles.h3Bold.copyWith(
                 color: AppColors.labelNormal,
               ),
@@ -203,7 +205,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             Row(
               children: [
                 Text(
-                  '받은 알림',
+                  l10n.receivedNotification,
                   style: AppTextStyles.label1Medium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -222,7 +224,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             Row(
               children: [
                 Text(
-                  '예측성공',
+                  l10n.predictionSuccess,
                   style: AppTextStyles.label1Medium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -244,21 +246,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 통계 카드
   Widget _buildStatCards() {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
         // 인증뱃지 + 활동온도
         Row(
           children: [
-            Expanded(child: _buildStatCard('인증뱃지', 'N개')),
+            Expanded(child: _buildStatCard(l10n.certificationBadge, 'N')),
             const SizedBox(width: 8),
-            Expanded(child: _buildStatCard('활동온도', '42.9°C')),
+            Expanded(child: _buildStatCard(l10n.activityTemperature, '42.9°C')),
           ],
         ),
         const SizedBox(height: 8),
         // 포인트
         SizedBox(
           width: double.infinity,
-          child: _buildStatCard('포인트', 'NNN,NNN P'),
+          child: _buildStatCard(l10n.point, 'NNN,NNN P'),
         ),
       ],
     );
@@ -388,6 +391,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 사용자 아바타
   Widget _buildUserAvatar() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Column(
@@ -407,7 +411,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
           const SizedBox(height: 4),
           Text(
-            '닉네임',
+            l10n.nickname,
             style: AppTextStyles.caption1Medium.copyWith(
               color: AppColors.labelNeutral,
             ),
@@ -419,6 +423,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 탭
   Widget _buildTabs() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -427,10 +432,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
       child: Row(
         children: [
-          _buildTabItem('게시글', UserProfileTab.posts),
-          _buildTabItem('응원글', UserProfileTab.cheers),
-          _buildTabItem('예측게임', UserProfileTab.prediction),
-          _buildTabItem('알림', UserProfileTab.notification),
+          _buildTabItem(l10n.posts, UserProfileTab.posts),
+          _buildTabItem(l10n.cheers, UserProfileTab.cheers),
+          _buildTabItem(l10n.predictionGame, UserProfileTab.prediction),
+          _buildTabItem(l10n.notification, UserProfileTab.notification),
         ],
       ),
     );
@@ -501,6 +506,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 게시글 카드
   Widget _buildPostCard() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -524,7 +530,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
-                    '자유게시판',
+                    l10n.freeBoard,
                     style: AppTextStyles.caption1Medium.copyWith(
                       color: AppColors.primaryFigma,
                     ),
@@ -655,6 +661,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 응원글 카드
   Widget _buildCheerCard() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -669,7 +676,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           Row(
             children: [
               Text(
-                '프리미어리그',
+                l10n.leagueName,
                 style: AppTextStyles.caption1Medium.copyWith(
                   color: AppColors.labelNeutral,
                 ),
@@ -718,6 +725,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 예측게임 카드
   Widget _buildPredictionCard(bool isWin) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -735,7 +743,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
-              isWin ? '적중' : '실패',
+              isWin ? l10n.hit : l10n.miss,
               style: AppTextStyles.caption1Bold.copyWith(
                 color: AppColors.white,
               ),
@@ -748,7 +756,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '프리미어리그',
+                  l10n.leagueName,
                   style: AppTextStyles.caption1Medium.copyWith(
                     color: AppColors.labelNeutral,
                   ),
@@ -789,6 +797,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   /// 알림 카드
   Widget _buildNotificationCard() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -821,14 +830,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 Row(
                   children: [
                     Text(
-                      '닉네임',
+                      l10n.nickname,
                       style: AppTextStyles.label1Bold.copyWith(
                         color: AppColors.labelNormal,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      '님이 알림을 보냈습니다.',
+                      l10n.userSentNotification,
                       style: AppTextStyles.label1Medium.copyWith(
                         color: AppColors.labelNeutral,
                       ),
